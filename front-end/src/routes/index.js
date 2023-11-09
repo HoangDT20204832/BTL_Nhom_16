@@ -1,4 +1,5 @@
 import HomePage from "../pages/HomePage/HomePage"
+<<<<<<< HEAD
 import OrderPage from "../pages/OrderPage"
 import ProductsPage from "../pages/ProductsPage/ProductsPage"
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage"
@@ -12,6 +13,12 @@ import PaymentPage from "../pages/PaymentPage"
 import OrderSuccess from "../pages/OrderSuccess"
 import MyOrderPage from "../pages/MyOrderPage"
 import DetailsOrderPage from "../pages/DetailsOrderPage"
+=======
+import OrderPage from "../pages/OrderPage/OrderPage"
+import ProductsPage from "../pages/ProductsPage/ProductsPage"
+import NotFoundPage from "../pages/NotFoundPage/NotFoundPage"
+
+>>>>>>> 1102743 (first commit)
 export const routers = [
     {
         path: '/',
@@ -29,6 +36,7 @@ export const routers = [
         isShowHeader: true,
     },
     {
+<<<<<<< HEAD
         path: '/product/:type',
         page: TypeProductPage,
         isShowHeader: true,
@@ -80,6 +88,8 @@ export const routers = [
         isPrivate: true,
     },
     {
+=======
+>>>>>>> 1102743 (first commit)
         path: '*',
         page: NotFoundPage,
         isShowHeader: false,

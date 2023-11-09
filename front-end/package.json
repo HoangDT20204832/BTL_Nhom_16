@@ -4,12 +4,16 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.6",
+<<<<<<< HEAD
     "@tanstack/react-query": "^4.2.9",
     "@tanstack/react-query-devtools": "^4.2.9",
+=======
+>>>>>>> 1102743 (first commit)
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.23.6",
+<<<<<<< HEAD
     "antd-img-crop": "^4.17.0",
     "axios": "^1.6.2",
     "clsx": "^2.0.0",
@@ -25,6 +29,13 @@
     "react-slick": "^0.29.0",
     "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
+=======
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.4",
+    "react-router-dom": "^6.4.3",
+    "react-scripts": "5.0.1",
+>>>>>>> 1102743 (first commit)
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"
   },
@@ -51,6 +62,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+<<<<<<< HEAD
   },
   "proxy": "http://localhost:3001"
+=======
+  }
+>>>>>>> 1102743 (first commit)
 }

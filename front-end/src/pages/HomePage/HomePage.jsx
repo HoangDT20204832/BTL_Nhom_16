@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useRef, useState } from "react";
 import TypeProduct from "../../components/TypeProduct/TypeProduct";
 import { WrapperHeadingProduct,WrapperListProduct,WrapperProduct } from "./styles";
@@ -129,3 +130,14 @@ useEffect(() =>{
 };
 
 export default HomePage;
+=======
+import React from "react";
+
+const HomePage = () =>{
+    return (
+        <div>HomePage</div>
+    )
+}
+
+export default HomePage
+>>>>>>> 1102743 (first commit)

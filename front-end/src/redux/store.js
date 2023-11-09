@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import counterReducer from './slides/counterSlide'
 import userReducer from './slides/userSlide'
@@ -41,3 +42,12 @@ export const store = configureStore({
 })
 
 export let persistor = persistStore(store)
+=======
+import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from './slides/counterSlide'
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+  },
+})
+>>>>>>> 1102743 (first commit)
