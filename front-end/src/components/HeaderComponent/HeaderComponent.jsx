@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row, Input } from "antd";
+import { Col } from "antd";
 import {
   WrapperHeader,
   WrapperTextHeader,
@@ -19,7 +19,7 @@ import {
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
-const { Search } = Input;
+// const { Search } = Input;
 function HeaderComponent() {
   return (
     <div>
@@ -30,11 +30,11 @@ function HeaderComponent() {
           </WrapperHeaderNavbarItem>
           <WrapperHeaderNavbarItem>
             <span>Kết nối</span>
-            <a href="" style={{ display: "block", margin: "0 5px" }}>
+            <a href="https://www.facebook.com/" style={{ display: "block", margin: "0 5px" }}>
               <FacebookOutlined style={{ color: "#fff", fontSize: "16px" }} />
             </a>
 
-            <a href="" style={{ display: "block" }}>
+            <a href="https://www.instagram.com/Shopee_VN" style={{ display: "block" }}>
               <InstagramOutlined style={{ color: "#fff", fontSize: "16px" }} />
             </a>
           </WrapperHeaderNavbarItem>
