@@ -3,6 +3,7 @@ import OrderPage from "../pages/OrderPage/OrderPage"
 import ProductsPage from "../pages/ProductsPage/ProductsPage"
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage"
 import AccountPage from "../pages/AccountPage"
+import TypeProductPage from "../pages/TypeProductPage"
 export const routers = [
     {
         path: '/',
@@ -17,6 +18,11 @@ export const routers = [
     {
         path: '/products',
         page: ProductsPage,
+        isShowHeader: true,
+    },
+    {
+        path: '/type',
+        page: TypeProductPage,
         isShowHeader: true,
     },
     {

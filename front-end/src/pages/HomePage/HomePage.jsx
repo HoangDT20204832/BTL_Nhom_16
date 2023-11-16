@@ -1,13 +1,14 @@
 import React from "react";
 import TypeProduct from "../../components/TypeProduct/TypeProduct";
 import { WrapperHeadingProduct,WrapperListProduct,WrapperProduct } from "./styles";
-import SliderComponent from "../../components/SliderComponent/SLliderComponent";
+import SliderComponent from "../../components/SliderComponent/SliderComponent";
 import slider_1 from "../../assets/img/slider_1.jpg"
 import slider_2 from "../../assets/img/slider_2.jpg"
 import slider_3 from "../../assets/img/slider_3.jpg"
 import slider_4 from "../../assets/img/slider_4.jpg"
 import CardProductComp from "../../components/CardProductComp";
 import { Pagination, Row } from "antd";
+import NavbarComp from "../../components/NavbarComp";
 const HomePage = () => {
   const arr = [{name:"TV", img:"https://sudospaces.com/viomivietnam-vn/2022/05/tivi-xiaomi-mi-tv-p1-55-inch-hang-xuat-eu-chinh-hang-gia-re-nhat-1-large.jpg"},
 {name:"Máy tính", img:"https://laptop88.vn/media/news/2910_hinhanhmaytinhxachtay4.jpg"},
@@ -40,7 +41,7 @@ const onChange = ()=>{}
         <CardProductComp />
         </Row>
 
-        <Pagination defaultCurrent={1} total={500} onChange={onChange} style={{textAlign:"center", marginTop:"15px"}} />;
+        <Pagination defaultCurrent={1} total={500} onChange={onChange} style={{textAlign:"center", marginTop:"20px"}} />
     </div>
   );
 };
