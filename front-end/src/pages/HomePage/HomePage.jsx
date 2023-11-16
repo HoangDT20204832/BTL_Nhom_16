@@ -15,7 +15,7 @@ const HomePage = () => {
 
 const onChange = ()=>{}
   return (
-    <div id="container"style={{ padding: "0px 60px", backgroundColor:"#F5F5F5" }}>
+    <div id="container"style={{ padding: "0px 60px 20px", backgroundColor:"#F5F5F5" }}>
       <SliderComponent  arrImages={[slider_1, slider_2, slider_3, slider_4]} />
 
       <WrapperListProduct >
