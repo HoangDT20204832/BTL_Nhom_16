@@ -8,7 +8,6 @@ import slider_3 from "../../assets/img/slider_3.jpg"
 import slider_4 from "../../assets/img/slider_4.jpg"
 import CardProductComp from "../../components/CardProductComp";
 import { Pagination, Row } from "antd";
-import NavbarComp from "../../components/NavbarComp";
 const HomePage = () => {
   const arr = [{name:"TV", img:"https://sudospaces.com/viomivietnam-vn/2022/05/tivi-xiaomi-mi-tv-p1-55-inch-hang-xuat-eu-chinh-hang-gia-re-nhat-1-large.jpg"},
 {name:"Máy tính", img:"https://laptop88.vn/media/news/2910_hinhanhmaytinhxachtay4.jpg"},
