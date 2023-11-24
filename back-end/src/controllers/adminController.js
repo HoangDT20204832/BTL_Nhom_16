@@ -1,4 +1,5 @@
 const Product = require('../models/productModel')
+const User = require('../models/userModel')
 
 class AdminController{
 
@@ -28,6 +29,26 @@ class AdminController{
     async deleteProduct(req,res){
         await Product.deleteOne({_id:req.params.id})
         res.send('delete success')
+    }
+// [PUT] Update info user
+    async updateAcc(req,res){
+        const user = await User.updateOne({_id:req.params.id}, req.body)
+        res.status(200).json(user);
+    }
+// [DELETE] Delete user
+    async deleteUser(req,res){
+        await User.deleteOne({_id:req.params.id})
+        res.send('delete success')
+    }
+// [GET] get all users
+    async getAllUsers(req,res){
+        const users = await User.find({});
+        res.status(200).json(users)
+    }
+// [GET] find 1 user by Id
+    async findUserById(req,res){
+        const user = await User.findById(req.params.id);
+        res.status(200).json(user);
     }
 
 }

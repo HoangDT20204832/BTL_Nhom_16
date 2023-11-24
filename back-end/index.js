@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const adminRoute = require('./src/routes/adminRoute')
+const authRoute = require('./src/routes/authRoute')
 const app = express();
 
 dotenv.config()
@@ -15,6 +16,7 @@ app.get('/', (req, res) =>{
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(adminRoute)
+app.use(authRoute);
 
 
 //connect to MongoDB

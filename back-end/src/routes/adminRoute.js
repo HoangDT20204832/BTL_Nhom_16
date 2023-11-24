@@ -9,4 +9,10 @@ router.get('/product/:id', adminController.findProduct)
 router.put('/update/product/:id', adminController.updateProduct)
 router.delete('/product/:id', adminController.deleteProduct)
 
+router.put('/user/:id', adminController.updateAcc)
+router.delete('/user/:id', adminController.deleteUser)
+router.get('/users', adminController.getAllUsers)
+router.get('/user/:id', adminController.findUserById)
+
+
 module.exports = router;
