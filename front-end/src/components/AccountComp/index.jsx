@@ -1,35 +1,18 @@
 import { Col, Input, Radio, Row, Select, Button, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-<<<<<<< HEAD
 import ImgCrop from "antd-img-crop";
-=======
 // import ImgCrop from "antd-img-crop";
->>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 import { useDispatch, useSelector } from "react-redux";
 import * as messagee from "../MessageComp/index"
 import {WrapperUploadFile } from './styles'
 import { UploadOutlined} from '@ant-design/icons'
-<<<<<<< HEAD
-
-
-import {
-  EditOutlined,
-  UserOutlined,
-  BellOutlined,
-  ShopOutlined,
-} from "@ant-design/icons";
-=======
->>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 import clsx from "clsx";
 import ButtonComponent from "../ButtonComp/index";
 import * as userService from "../../services/userService"
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import { updateUser } from "../../redux/slides/userSlide";
-<<<<<<< HEAD
-=======
 import NavbarAcountComp from "../NavbarAcountComp/index";
->>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 
 const AccountComp = () => {
 
@@ -75,19 +58,16 @@ const AccountComp = () => {
     ( data) =>{ 
       const {id, ...rest} = data;
       console.log("test datta", data)
-<<<<<<< HEAD
       userService.updateUserInfor(id, rest)}
  )
   const {data, isSuccess, isError} = mutation
 console.log("mutationn", mutation)
-=======
       const res = userService.updateUserInfor(id, rest)
       return res
     }
- )
+ 
   const {data: dataUser} = mutation
 // console.log("mutationUser", mutation)
->>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 
   const handleChangeSex = ({ target: { value } }) => {
     console.log("radio1 checked", value);
@@ -102,7 +82,6 @@ console.log("mutationn", mutation)
   },[user])
 
   useEffect(() =>{
-<<<<<<< HEAD
     if(isSuccess){
       messagee.success()
       setTimeout(()=>{
@@ -112,7 +91,6 @@ console.log("mutationn", mutation)
       messagee.error()
     }
   }, [isSuccess, isError])
-=======
     if( dataUser?.status ==="OK"){
       messagee.success("Cập nhập người dùng thành công")
       setTimeout(()=>{
@@ -122,8 +100,7 @@ console.log("mutationn", mutation)
     // else{
     //   messagee.error("Cập nhập người dùng thất bại")
     // }
-  }, [dataUser])
->>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
+  // }, [dataUser])
 
   const handleGetDetailUser = async(id, access_token) =>{
     const res = await userService.getDetailUser(id, access_token)
@@ -142,15 +119,12 @@ console.log("mutationn", mutation)
   const handleChangePhone = (e) =>{
       setPhone(e.target.value)
   }
-<<<<<<< HEAD
   const handleChangeAddress = () =>{
     //  setAddress(e.target.value)
   }
-=======
   // const handleChangeAddress = () =>{
   //   //  setAddress(e.target.value)
   // }
->>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
   //up file  ảnh đại diện
 
   const getBase64 = (file) =>
@@ -160,10 +134,6 @@ console.log("mutationn", mutation)
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-<<<<<<< HEAD
-=======
-
->>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
   const handleChangeAvatar = async ({fileList}) => {
     const file = fileList[0]
     if (!file.url && !file.preview) {
@@ -181,7 +151,7 @@ console.log("mutationn", mutation)
   return (
     <div className={styles.wrapAccount}>
       <Row className="grid">
-<<<<<<< HEAD
+{/* <<<<<<< HEAD */}
         <Col span={4} className={styles.navbar}>
           <div className={styles.navbarHeader}>
             <img
@@ -226,9 +196,7 @@ console.log("mutationn", mutation)
             </div>
           </div>
         </Col>
-=======
         <NavbarAcountComp />
->>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
         <Col span={20} className={styles.container}>
           <div className={styles.containerHeader}>Hồ Sơ Của Tôi</div>
           <Row className={styles.containerContent}>
@@ -358,6 +326,6 @@ console.log("mutationn", mutation)
       </Row>
     </div>
   );
-};
+// };
 
 export default AccountComp;

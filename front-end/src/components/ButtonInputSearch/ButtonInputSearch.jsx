@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+// <<<<<<< HEAD
 import React from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import InputComponent from "../InputComponent/InputComponent";
@@ -38,33 +38,3 @@ const ButtonInputSearch = (props) => {
     </div>
   );
 };
-
-export default ButtonInputSearch;
-=======
-import React from 'react'
-import { Button, Input } from 'antd'
-import {SearchOutlined} from '@ant-design/icons'
-const ButtonInputSearch = (props) => {
-  const {size, placeholder, textButton,
-         bordered, backgroundColorInput = "#fff",
-        backgroundColorButton = "rgb(13,92,182)",
-        colorButton="#fff"} = props
-  return (
-    <div style={{display: "flex"}}>
-      <Input 
-         size={size} 
-         placeholder={placeholder}
-         bordered={bordered}
-         style={{backgroundColor: backgroundColorInput}}/>
-      <Button 
-      size={size} 
-      style={{backgroundColor: backgroundColorButton, border: !bordered && 'none'}}
-      icon={<SearchOutlined  style={{color: colorButton}}/>}>
-        <span style={{color: colorButton}}>{textButton}</span>
-      </Button>
-    </div>
-  )
-}
-
-export default ButtonInputSearch
->>>>>>> ab69ca5 (hoàn thành giao diện header)
