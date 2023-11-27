@@ -15,32 +15,35 @@ const HomePage = () => {
 
 const onChange = ()=>{}
   return (
-    <div id="container"style={{ padding: "0px 60px 20px", backgroundColor:"#F5F5F5" }}>
+    <div id="container" style={{ backgroundColor:"#F5F5F5" }}>
+      <div className="grid">
       <SliderComponent  arrImages={[slider_1, slider_2, slider_3, slider_4]} />
 
-      <WrapperListProduct >
-        <WrapperHeadingProduct >DANH MỤC</WrapperHeadingProduct>
-        <WrapperProduct>
-          {arr.map((product, index) => (
-            <TypeProduct name={product.name} img={product.img} key={index} />
-          ))}
-        </WrapperProduct>
-      </WrapperListProduct>
+<WrapperListProduct >
+  <WrapperHeadingProduct >DANH MỤC</WrapperHeadingProduct>
+  <WrapperProduct>
+    {arr.map((product, index) => (
+      <TypeProduct name={product.name} img={product.img} key={index} />
+    ))}
+  </WrapperProduct>
+</WrapperListProduct>
 
-      <Row style={{marginTop:"20px", gap:"20px", justifyContent:"center"}}>
-        <CardProductComp />
-        <CardProductComp />
-        <CardProductComp />
-        <CardProductComp />
-        <CardProductComp />
-        <CardProductComp />
-        <CardProductComp />
-        <CardProductComp />
-        <CardProductComp />
-        <CardProductComp />
-        </Row>
+<Row style={{marginTop:"20px", gap:"20px", justifyContent:"center"}}>
+  <CardProductComp />
+  <CardProductComp />
+  <CardProductComp />
+  <CardProductComp />
+  <CardProductComp />
+  <CardProductComp />
+  <CardProductComp />
+  <CardProductComp />
+  <CardProductComp />
+  <CardProductComp />
+  </Row>
 
-        <Pagination defaultCurrent={1} total={500} onChange={onChange} style={{textAlign:"center", marginTop:"20px"}} />
+  <Pagination defaultCurrent={1} total={500} onChange={onChange} style={{textAlign:"center", padding:"20px 0"}} />
+      </div>
+      
     </div>
   );
 };

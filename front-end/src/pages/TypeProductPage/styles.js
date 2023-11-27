@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Row, Col } from "antd";
 
 export const WrapperProductType = styled(Row)`
-  padding: 0 60px 20px;
+  padding-bottom: 20px;
   background-color: var(--background-color);
   flex-wrap: nowrap;
   padding-top: 20px;

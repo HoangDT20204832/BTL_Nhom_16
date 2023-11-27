@@ -1,7 +1,7 @@
 import React from 'react'
-import Slider from "react-slick"
 import {Image, Row, Col} from "antd"
-import "./style.css"
+import styles from "./styles.module.css"
+import {SliderImg} from "./styles"
 const SliderComponent = ({arrImages}) => {
   const settings = {
     dots: true,
@@ -15,17 +15,17 @@ const SliderComponent = ({arrImages}) => {
   return (
     <Row style={{paddingTop:"20px"}}>
     <Col span={16} >
-    <Slider {...settings} >
+    <SliderImg {...settings} className={styles.sliderImg}>
       {arrImages.map(img =>{
         return (
           <Image src={img} alt="slider" style={{height: "calc(width /3);"}}/>
         )
       })}
-     </Slider>
+     </SliderImg>
     </Col>
-    <Col span={8} className='wrapper-img'>
-      <Image className='img'  src= "https://cf.shopee.vn/file/vn-50009109-0949ec209e4bf197a9b67c98f3e2172c_xhdpi"/>
-      <Image className='img' src= "https://cf.shopee.vn/file/vn-50009109-0949ec209e4bf197a9b67c98f3e2172c_xhdpi"/>
+    <Col span={8} className={styles.wrapperImg}>
+      <Image className={styles.imgNextToSlider}  src= "https://cf.shopee.vn/file/vn-50009109-0949ec209e4bf197a9b67c98f3e2172c_xhdpi"/>
+      <Image className={styles.imgNextToSlider} src= "https://cf.shopee.vn/file/vn-50009109-0949ec209e4bf197a9b67c98f3e2172c_xhdpi"/>
     </Col>
   </Row>
 

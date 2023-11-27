@@ -84,7 +84,7 @@ const AccountComp = () => {
 
   return (
     <div className={styles.wrapAccount}>
-      <Row>
+      <Row className="grid">
         <Col span={4} className={styles.navbar}>
           <div className={styles.navbarHeader}>
             <img

@@ -6,8 +6,8 @@ import { WrapperProductType, WrapperNavbar, WrapperProducts } from "./styles";
 const TypeProductPage = () => {
   const onChange = () => {};
   return (
-    <div>
-      <WrapperProductType>
+    <div style={{ backgroundColor: "var(--background-color)"}}>
+      <WrapperProductType className="grid">
         <WrapperNavbar span={4}>
           <NavbarComp />
         </WrapperNavbar>
@@ -27,7 +27,7 @@ const TypeProductPage = () => {
               defaultCurrent={1}
               total={500}
               onChange={onChange}
-              style={{ textAlign: "center", marginTop: "20px" }}
+              style={{ textAlign: "center", padding: "20px 0" }}
             />
         </Col>
       </WrapperProductType>

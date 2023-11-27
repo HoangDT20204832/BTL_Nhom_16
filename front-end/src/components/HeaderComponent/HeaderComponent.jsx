@@ -22,8 +22,8 @@ import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 // const { Search } = Input;
 function HeaderComponent() {
   return (
-    <div>
-      <WrapperHeaderNavbar>
+    <div style={{backgroundColor:"var(--primary-color)"}}>
+      <WrapperHeaderNavbar  className="grid">
         <WrapperHeaderNavbarList>
           <WrapperHeaderNavbarItem>
             Chào mừng đến với cửa hàng{" "}
@@ -52,7 +52,7 @@ function HeaderComponent() {
           </WrapperHeaderNavbarItem>
         </WrapperHeaderNavbarList>
       </WrapperHeaderNavbar>
-      <WrapperHeader gutter={16}>
+      <WrapperHeader gutter={16} className="grid">
         <Col span={4}>
           <WrapperTextHeader>SHOP BAN HANG</WrapperTextHeader>
         </Col>
@@ -65,7 +65,7 @@ function HeaderComponent() {
             // onSearch={onSearch}
           />
         </Col>
-        <Col span={6} style={{ display: "flex", gap: "20px" }}>
+        <Col span={6} style={{ display: "flex", gap: "20px", alignItems:"center" }}>
           <WrapperHeaderAcount>
             <UserOutlined style={{ fontSize: "30px" }} />
             <div>
