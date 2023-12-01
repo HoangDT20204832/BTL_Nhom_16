@@ -19,8 +19,16 @@ import {
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
+import {useNavigate} from "react-router-dom"
 // const { Search } = Input;
 function HeaderComponent() {
+  const navigate = useNavigate()
+  const handleNavgLogin = () => {
+    navigate("/sign-in")
+  }
+  const handleNavgSignUp = () =>{
+    navigate("/sign-up")
+  }
   return (
     <div style={{backgroundColor:"var(--primary-color)"}}>
       <WrapperHeaderNavbar  className="grid">
@@ -68,8 +76,9 @@ function HeaderComponent() {
         <Col span={6} style={{ display: "flex", gap: "20px", alignItems:"center" }}>
           <WrapperHeaderAcount>
             <UserOutlined style={{ fontSize: "30px" }} />
-            <div>
-              <span>Đăng nhập/Đăng ký</span>
+            <div style={{cursor:"pointer"}}>
+              <span onClick={handleNavgLogin}>Đăng nhập</span>
+              <span onClick={handleNavgSignUp}>/Đăng ký</span>
               <div>
                 <span>Tài khoản</span>
                 <CaretDownOutlined />

@@ -12,7 +12,7 @@ const ButtonComponent = ({
   return (
     <Button
       size={size}
-      style={{...styleButton,background: disabled ? "#ccc" : styleButton.background,}}
+      style={{...styleButton,background: disabled ? "#ccc" : styleButton.background}}
       // icon={<SearchOutlined style={{ color: colorButton }} />}
       {...rest}
     >
