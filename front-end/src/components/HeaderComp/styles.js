@@ -2,13 +2,13 @@ import {Row} from 'antd'
 import style from 'styled-components'
 
 export const WrapperHeaderNavbar = style.div`
-    padding: 5px 0;
-    background-color:rgb(0,159,255);
+    padding: 10px 0 10px;
+    background-color:var(--primary-color);
     align-items: center;
     display: flex;
     justify-content: space-between;
     color: #fff;
-
+    
 `
 
 export const WrapperHeaderNavbarList = style.div`
@@ -23,8 +23,8 @@ export const WrapperHeaderNavbarItem = style.div`
 `
 
 export const WrapperHeader = style(Row)`
-    padding: 10px 0px;
-    background-color:rgb(0,159,255);
+    padding: 10px 0px 20px;
+    background-color:var(--primary-color);
     align-items: center;
     margin: 0 auto !important;
 `

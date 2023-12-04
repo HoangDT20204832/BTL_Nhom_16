@@ -1,7 +1,7 @@
 import { Col, Image, Row, InputNumber } from "antd";
 import styles from "./styles.module.css";
 import { PlusOutlined, MinusOutlined, StarFilled } from "@ant-design/icons";
-import ButtonComponent from "../ButtonComponent/ButtonComponent";
+import ButtonComponent from "../ButtonComp/index";
 import React from "react";
 
 const ProductDetailComp = () => {

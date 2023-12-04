@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import FormInput from '../../components/FormInput/index'
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
 import styles from "./styles.module.css";
-import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
+import ButtonComponent from '../../components/ButtonComp/index';
 import {useNavigate} from "react-router-dom"
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import * as userService from "../../services/userService"

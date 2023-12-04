@@ -5,7 +5,7 @@ const ButtonComponent = ({
   size,
   styleButton,
   styleTextButton,
-  textButton,
+  textButton, 
   disabled,
   ...rest
 }) => {

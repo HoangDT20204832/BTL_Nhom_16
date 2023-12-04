@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 import {Rate} from "antd"
-import ButtonComponent from "../ButtonComponent/ButtonComponent";
+import ButtonComponent from "../ButtonComp/index";
 const WrapperRatingComp = () => {
   return (
     <div className={styles.wrapperProductRating}>

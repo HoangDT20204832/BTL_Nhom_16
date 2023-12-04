@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
+import ButtonComponent from '../../components/ButtonComp/index'
 import FormInput from '../../components/FormInput/index'
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
 import styles from "./styles.module.css";
@@ -7,11 +7,15 @@ import {useNavigate} from "react-router-dom"
 import * as userService from "../../services/userService"
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import * as message from "../../components/MessageComp"
+import { jwtDecode } from "jwt-decode";
+import {useDispatch} from "react-redux"
+import { updateUser } from '../../redux/slides/userSlide';
 
 const SignInPage = () => {
 
   const[email, setEmail] = useState('') 
   const[password, setPassword] = useState('') 
+  const dispatch = useDispatch()
 
   const mutation = useMutationHooks(
      (data) => userService.loginUser(data)
@@ -19,15 +23,31 @@ const SignInPage = () => {
   const {data} = mutation
   console.log("mutation", mutation)
  const statusData = data?.status
- 
+
   useEffect(()=>{
     if(statusData==="ERROR") {
       message.error()
     } else if(statusData==="OK") {
       message.success()
       navigate('/')
+      //lưu access_token vào localStorage
+      localStorage.setItem("access_token", JSON.stringify(data?.access_token))
+
+      if(data?.access_token) {
+        const decoded = jwtDecode(data?.access_token);
+        console.log("decoded",decoded);
+        if(decoded?.id){
+          handleGetDetailUser(decoded?.id, data?.access_token)
+        }
+      }
+
     }
  }, [statusData])
+ const handleGetDetailUser = async(id, access_token) =>{
+      const res = await userService.getDetailUser(id, access_token)
+      console.log("res", res) // gồm data, status, message
+      dispatch(updateUser({...res?.data, access_token}))
+ }
 
   const handleChangeEmail = (value) =>{
     setEmail(value)

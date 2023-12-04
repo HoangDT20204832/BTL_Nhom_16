@@ -1,7 +1,12 @@
-import { Col, Input, Radio, Row, Select, Upload, message } from "antd";
-import React, { useState } from "react";
+import { Col, Input, Radio, Row, Select, Button, Upload } from "antd";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import ImgCrop from "antd-img-crop";
+import { useDispatch, useSelector } from "react-redux";
+import * as messagee from "../MessageComp/index"
+import {WrapperUploadFile } from './styles'
+import { UploadOutlined} from '@ant-design/icons'
+
 
 import {
   EditOutlined,
@@ -10,13 +15,12 @@ import {
   ShopOutlined,
 } from "@ant-design/icons";
 import clsx from "clsx";
+import ButtonComponent from "../ButtonComp/index";
+import * as userService from "../../services/userService"
+import { useMutationHooks } from "../../hooks/useMutationHook";
+import { updateUser } from "../../redux/slides/userSlide";
+
 const AccountComp = () => {
-  const plainOptions = ["Nam", "Nữ", "Khác"];
-  const [value1, setValue1] = useState("Apple");
-  const onChange1 = ({ target: { value } }) => {
-    console.log("radio1 checked", value);
-    setValue1(value);
-  };
 
   const options1 = [];
   for (let i = 1; i <= 31; i++) {
@@ -47,40 +51,89 @@ const AccountComp = () => {
     setSize(e.target.value);
   };
 
+  const user = useSelector((state) => state.user)
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState(0);
+  const [address, setAddress] = useState('');
+  const [avatar, setAvatar] = useState("");
+  const plainOptions = ["Nam", "Nữ", "Khác"];
+  const [sex, setSex] = useState("Nam");
+  const dispatch = useDispatch()
+  const mutation = useMutationHooks(
+    ( data) =>{ 
+      const {id, ...rest} = data;
+      console.log("test datta", data)
+      userService.updateUserInfor(id, rest)}
+ )
+  const {data, isSuccess, isError} = mutation
+console.log("mutationn", mutation)
+
+  const handleChangeSex = ({ target: { value } }) => {
+    console.log("radio1 checked", value);
+    setSex(value);
+  };
+  useEffect(() =>{
+    setName(user?.name)
+    setEmail(user?.email)
+    setAddress(user?.address)
+    setPhone(user?.phone)
+    setAvatar(user?.avatar)
+  },[user])
+
+  useEffect(() =>{
+    if(isSuccess){
+      messagee.success()
+      setTimeout(()=>{
+      handleGetDetailUser(user?.id, user?.access_token)
+      },2000)      
+    }else if(isError){
+      messagee.error()
+    }
+  }, [isSuccess, isError])
+
+  const handleGetDetailUser = async(id, access_token) =>{
+    const res = await userService.getDetailUser(id, access_token)
+    console.log("res", res) // gồm data, status, message
+    dispatch(updateUser({...res?.data, access_token}))
+}
+
+  const handleChangeName = (e) =>{
+    setName(e.target.value)
+    console.log(e.target.value)
+  }
+  const handleChangeEmail = (e) =>{
+    setEmail(e.target.value)
+  }
+
+  const handleChangePhone = (e) =>{
+      setPhone(e.target.value)
+  }
+  const handleChangeAddress = () =>{
+    //  setAddress(e.target.value)
+  }
   //up file  ảnh đại diện
-  const [fileList, setFileList] = useState([
-    {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url: "https://down-vn.img.susercontent.com/file/05a0107098a8f6c0d51c214e9b2920ed_tn",
-    },
-  ]);
-  const onChange = ({ fileList: newFileList, file }) => {
-    // Chỉ giữ lại một file trong fileList
-    setFileList([file]);
 
-    // Hiển thị thông báo khi có nhiều hơn 1 file
-    if (newFileList.length > 1) {
-      message.warning("Chỉ được upload một ảnh duy nhất.");
+  const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+  const handleChangeAvatar = async ({fileList}) => {
+    const file = fileList[0]
+    if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj );
     }
-  };
+    setAvatar(file.preview)
+}
 
-  const onPreview = async (file) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
 
+  const handleUpdateUser = () =>{
+    mutation.mutate({id: user?.id, name, email, phone, address, avatar, sex});
+    console.log('update user', name, email, phone, address, avatar, sex)
+  }
 
   return (
     <div className={styles.wrapAccount}>
@@ -89,11 +142,11 @@ const AccountComp = () => {
           <div className={styles.navbarHeader}>
             <img
               className={styles.navbarImg}
-              src="https://down-vn.img.susercontent.com/file/05a0107098a8f6c0d51c214e9b2920ed_tn"
-              alt=""
+              src={avatar}
+              alt="Ảnh đại diện"
             />
             <div className={styles.navbarName}>
-              <div className={styles.navbarNameText}>hoangg1704</div>
+              <div className={styles.navbarNameText}>{name}</div>
               <div className={styles.navbarNameEdit}>
                 <EditOutlined />
                 Sửa Hồ Sơ
@@ -135,7 +188,7 @@ const AccountComp = () => {
             <Col span={17} className={styles.containerInfor}>
               <div className={styles.containerItem}>
                 <div className={styles.containerItemText}>Tên đăng nhập</div>
-                <div>hoangg1704</div>
+                <div>{name}</div>
               </div>
 
               <div className={styles.containerItem}>
@@ -146,6 +199,7 @@ const AccountComp = () => {
                     style={{
                       padding: "8px",
                     }}
+                    value={name} onChange={handleChangeName}
                   />
                 </div>
               </div>
@@ -153,16 +207,26 @@ const AccountComp = () => {
               <div className={styles.containerItem}>
                 <div className={styles.containerItemText}>Email</div>
                 <div>
-                  <span>duongtienhoang@gmail.com</span>
-                  <span>Thay đổi</span>
+                <Input
+                    placeholder="Nhap ten"
+                    style={{
+                      padding: "8px",
+                    }}
+                    value={email} onChange={handleChangeEmail}
+                  />
                 </div>
               </div>
 
               <div className={styles.containerItem}>
                 <div className={styles.containerItemText}>Số điện thoại</div>
                 <div>
-                  <span>0934902934924</span>
-                  <span>Thay đổi</span>
+                <Input
+                    placeholder="Nhập số điện thoại"
+                    style={{
+                      padding: "8px",
+                    }}
+                    value={phone} onChange={handleChangePhone}
+                  />
                 </div>
               </div>
 
@@ -171,8 +235,8 @@ const AccountComp = () => {
                 <div>
                   <Radio.Group
                     options={plainOptions}
-                    onChange={onChange1}
-                    value={value1}
+                    onChange={handleChangeSex}
+                    value={sex}
                   />
                 </div>
               </div>
@@ -212,19 +276,35 @@ const AccountComp = () => {
                   />
                 </div>
               </div>
+
+              <ButtonComponent
+                  onClick={handleUpdateUser}
+                  styleButton={{
+                      padding:'5px', height:'38px', width:'70px', background:'var(--primary-color)',
+                      borderRadius:'5px',
+                      marginTop:'30px',
+                      marginLeft:"180px"
+                  }}
+                  textButton={'Lưu'}
+                  styleTextButton={{color:'#fff', fontSize:'15px', fontWeight:'bold'}}
+                  size={40}
+              >
+              </ButtonComponent>
             </Col>
+
             <Col span={7} className={styles.containerImg}>
-              <ImgCrop rotationSlider >
-                <Upload
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  listType="picture-card"
-                  fileList={fileList}
-                  onChange={onChange}
-                  onPreview={onPreview}
-                >
-                  {fileList.length < 5 && "+ Upload"}
-                </Upload>
-              </ImgCrop>
+            <div>{avatar && (
+                    <img src={avatar} style={{
+                        height: '100px',
+                        width: '100px',
+                        borderRadius: '50%',
+                        objectFit: 'cover'
+                    }} alt="avatar"/>
+                )}</div>
+              <WrapperUploadFile onChange={handleChangeAvatar} maxCount={1}>
+                <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
+              </WrapperUploadFile>
+              
             </Col>
           </Row>
         </Col>

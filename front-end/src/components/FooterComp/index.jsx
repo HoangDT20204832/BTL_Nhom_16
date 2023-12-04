@@ -119,13 +119,7 @@ const FooterComp = () => {
                         className="footer__top-pay-img"
                       />
                     </a>
-                    <a href="/" className="footer__top-pay-link">
-                      <img
-                        src="../../assets/img/thanhtoan7.png"
-                        alt=""
-                        className="footer__top-pay-img"
-                      />
-                    </a>
+            
                   </div>
                 </div>
               </div>

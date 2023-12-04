@@ -1,11 +1,11 @@
 import React from 'react'
-import HeaderComponent from '../HeaderComponent/HeaderComponent'
+import HeaderComponent from '../HeaderComp/index'
 import FooterComp from '../FooterComp'
 
 const DefaultComponent = ({children}) => {
   return (
     <div>
-        <HeaderComponent/>
+        <HeaderComponent/> 
         {children}
         <FooterComp />
     </div>
