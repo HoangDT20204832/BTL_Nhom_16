@@ -7,6 +7,7 @@ import TypeProductPage from "../pages/TypeProductPage"
 import SignInPage from "../pages/SignInPage"
 import SignUpPage from "../pages/SignUpPage"
 import ProductPageDetail from "../pages/ProductPageDetail"
+import AdminPage from "../pages/AminPage"
 export const routers = [
     {
         path: '/',
@@ -47,6 +48,12 @@ export const routers = [
         path: "/sign-up",
         page: SignUpPage,
         isShowHeader: false,
+    },
+    {
+        path: "/system/admin",
+        page: AdminPage,
+        isShowHeader: true,
+        isPrivate: true,
     },
     {
         path: '*',

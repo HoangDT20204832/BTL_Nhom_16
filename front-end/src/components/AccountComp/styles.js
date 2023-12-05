@@ -10,4 +10,7 @@ export const WrapperUploadFile = styled(Upload)`
     & .ant-upload-list-item-info {
         display: none
     }
+    & .ant-upload-list-item {
+        display: none
+    }
 `

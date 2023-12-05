@@ -56,7 +56,10 @@ function HeaderComponent() {
 
   const content = (
     <div >
-      <p onClick={() => {navigate("/account")} } >Tài khoản của tôi</p>
+      <p style={{cursor: "pointer"}} onClick={() => {navigate("/account")} } >Tài khoản của tôi</p>
+      {user?.isAdmin &&(
+        <p style={{cursor: "pointer"}} onClick={() => {navigate("/system/admin")} } >Quản lý hệ thống</p>
+      )}
       <p style={{cursor: "pointer"}} onClick={handleLogoutUser}>Đăng xuất</p>
     </div>
   );

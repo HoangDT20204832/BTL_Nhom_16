@@ -10,7 +10,7 @@ import {
 import { isJsonString } from "./utils";
 import { jwtDecode } from "jwt-decode";
 import * as userService from "./services/userService";
-import {useDispatch} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import { updateUser } from "./redux/slides/userSlide";
 
 
@@ -29,6 +29,7 @@ function App() {
 // console.log("query", query)
 
   const dispatch = useDispatch()
+  const user = useSelector((state)=> state.user)
   
   useEffect(() =>{
     const{ storgateData, decoded} = handleDecoded()
@@ -82,11 +83,12 @@ function App() {
             {routers.map((route) => {
               //những trang nào có isShowHeader = true thì sẽ có HeaderComponent
               const Layout = route.isShowHeader ? DefaultComponent : Fragment;
+              const isCheckAuth = !route.isPrivate || user.isAdmin
               return (
                 <Route
                   key={route.path}
                   //path: chỉ đường dẫn hướng tới trang của element={<Page/>}
-                  path={route.path}
+                  path={isCheckAuth && route.path}
                   // element để chỉ trang hiển thị
                   element={
                     <Layout>
