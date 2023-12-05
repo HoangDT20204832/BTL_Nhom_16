@@ -60,7 +60,7 @@ const TableComponent = (props) => {
         }}
         columns={columns}
         dataSource={dataSource}
-        // {...props}
+        {...props}
       />
      </div>
   )
