@@ -8,9 +8,13 @@ import * as productService from "../../services/productService"
 import {useMutationHooks} from "../../hooks/useMutationHook"
 import * as messagee from "../../components/MessageComp"
 import {useQuery} from "@tanstack/react-query"
+import { PlusOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
+
 
 
 const ProductInForAd = () => {
+  
+
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -51,7 +55,82 @@ const ProductInForAd = () => {
 
   const {data: products } = useQuery(['products'],getAllProduct)
   console.log('products', products)
-  
+  const renderAction = () => {
+    return (
+      <div>
+                <DeleteOutlined style={{ color: 'red', fontSize: '30px', cursor: 'pointer' }} onClick={() => {}} />
+        <EditOutlined style={{ color: 'orange', fontSize: '30px', cursor: 'pointer' }} onClick={()=>{}} />
+        {/* <DeleteOutlined style={{ color: 'red', fontSize: '30px', cursor: 'pointer' }} onClick={() => setIsModalOpenDelete(true)} />
+        <EditOutlined style={{ color: 'orange', fontSize: '30px', cursor: 'pointer' }} onClick={handleDetailsProduct} /> */}
+      </div>
+    )
+  }
+
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      render: (text) => <a>{text}</a>
+      // sorter: (a, b) => a.name.length - b.name.length,
+      // ...getColumnSearchProps('name')
+    },
+    {
+      title: 'Price',
+      dataIndex: 'priceNew',
+      // sorter: (a, b) => a.price - b.price,
+      // filters: [
+      //   {
+      //     text: '>= 50',
+      //     value: '>=',
+      //   },
+      //   {
+      //     text: '<= 50',
+      //     value: '<=',
+      //   }
+      // ],
+      // onFilter: (value, record) => {
+      //   if (value === '>=') {
+      //     return record.price >= 50
+      //   }
+      //   return record.price <= 50
+      // },
+    },
+    {
+      title: 'Rating',
+      dataIndex: 'rating',
+      // sorter: (a, b) => a.rating - b.rating,
+      // filters: [
+      //   {
+      //     text: '>= 3',
+      //     value: '>=',
+      //   },
+      //   {
+      //     text: '<= 3',
+      //     value: '<=',
+      //   }
+      // ],
+      // onFilter: (value, record) => {
+      //   if (value === '>=') {
+      //     return Number(record.rating) >= 3
+      //   }
+      //   return Number(record.rating) <= 3
+      // },
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      render: renderAction
+    },
+  ];
+  const dataTable = products?.data?.length && products?.data?.map((product) => {
+    return { ...product, key: product._id }
+  })
+
+  //nếu ấn nút submit tạo sản phẩm thành coogn thì sẽ tự động đóng cửa sổ , thống báo thành công
   useEffect(()=> {
     if(isSuccess && data?.status === 'OK'){
       messagee.success()
@@ -60,6 +139,8 @@ const ProductInForAd = () => {
       messagee.error()
     }
   },[isSuccess, isError])
+
+  //hàm xử lý khi thoát ra hỏi cửa sổ thêm sản phẩm
   const handleCancel = () => {
     setIsModalOpen(false);
     setStateProduct({
@@ -114,9 +195,9 @@ const ProductInForAd = () => {
       <div className={styles.headerUser}>Quản lý sản phẩm</div>
       <Button className={styles.buttonAdd} onClick={() =>setIsModalOpen(true)}>Thêm người dùng mới</Button>
 
-      {/* <div>
-        <TableComponent products={products?.data}/>
-      </div> */}
+      <div style={{marginTop: "20px"}}>
+        <TableComponent columns={columns} data={dataTable}/>
+      </div>
 
       <Modal title="Tạo sản phẩm" open={isModalOpen}  onCancel={handleCancel} footer={null}>
       <Form

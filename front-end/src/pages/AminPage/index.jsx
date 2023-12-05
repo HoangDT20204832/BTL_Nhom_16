@@ -18,7 +18,7 @@ const AdminPage = () => {
         getItem('Sản phẩm', 'product', <AppstoreOutlined />),
     
       ];
-  const rootSubmenuKeys = ["user", "product"];
+  // const rootSubmenuKeys = ["user", "product"];
 //   const [openKeys, setOpenKeys] = useState(["user"]);
   const [keySelected, setKeySelected] = useState('')
 //   const onOpenChange = (keys) => {
@@ -60,7 +60,7 @@ const handleOnClickMenu = ({key}) =>{
         onClick={handleOnClickMenu}
       />
 
-      <div style={{padding:"13px 20px"}}>
+      <div style={{padding:"13px 20px", flex:"1"}}>
          {renderPage(keySelected)}
       </div>
     </div>
