@@ -68,6 +68,15 @@ const [rowSelected,setRowSelected] = useState("")
     },
 )
 
+const mutationDelete = useMutationHooks(
+  ( data) =>{ 
+    const {id ,  ...rest } = data;
+    console.log("test datta delete", data)
+    const res = productService.deleteProductInfor(id, {...rest} )
+    return res
+    },
+)
+
  // hàm lấy toàn bộ thông tin sản phẩm
  const getAllProduct = async() =>{
   const res = await productService.getAllProducts()
@@ -78,6 +87,8 @@ const [rowSelected,setRowSelected] = useState("")
   const {data, isSuccess, isError} = mutationCreate
   const {data: dataUpdated, isSuccess: isSuccessUpdated, isError:isErrorUpdated} = mutationUpdate
   console.log("mutationUpdate", mutationUpdate)
+  const {data: dataDeleted, isSuccess: isSuccessDeleted, isError:isErrorDeleted} = mutationDelete
+
 
   // const {data: products } = useQuery(['products'],getAllProduct)
   // const queryProduct = useQuery({ queryKey: ['products'], queryFn: getAllProduct }) 
@@ -89,7 +100,7 @@ const [rowSelected,setRowSelected] = useState("")
   const renderAction = () => {
     return (
       <div>
-        <DeleteOutlined style={{ color: 'red', fontSize: '30px', cursor: 'pointer' }} onClick={() => {}} />
+        <DeleteOutlined style={{ color: 'red', fontSize: '30px', cursor: 'pointer' }} onClick={onDeleteProduct} />
         <EditOutlined style={{ color: 'orange', fontSize: '30px', cursor: 'pointer' }} onClick={handleGetDetailProduct} />
         {/* <DeleteOutlined style={{ color: 'red', fontSize: '30px', cursor: 'pointer' }} onClick={() => setIsModalOpenDelete(true)} />
         <EditOutlined style={{ color: 'orange', fontSize: '30px', cursor: 'pointer' }} onClick={handleDetailsProduct} /> */}
@@ -148,35 +159,26 @@ console.log("resProduct", stateProductDetail)
     {
       title: 'Name',
       dataIndex: 'name',
-      render: (text) => <a>{text}</a>
-      // sorter: (a, b) => a.name.length - b.name.length,
+      render: (text) => <a>{text}</a>,
+      sorter: (a, b) => a.name.length - b.name.length,
       // ...getColumnSearchProps('name')
     },
     {
-      title: 'Price',
+      title: 'Giá mới',
       dataIndex: 'priceNew',
-      // sorter: (a, b) => a.price - b.price,
-      // filters: [
-      //   {
-      //     text: '>= 50',
-      //     value: '>=',
-      //   },
-      //   {
-      //     text: '<= 50',
-      //     value: '<=',
-      //   }
-      // ],
-      // onFilter: (value, record) => {
-      //   if (value === '>=') {
-      //     return record.price >= 50
-      //   }
-      //   return record.price <= 50
-      // },
+      sorter: (a, b) => a.priceNew - b.priceNew,
+
+    },
+    {
+      title: 'Số lượng ',
+      dataIndex: 'countInStock',
+      sorter: (a, b) => a.countInStock - b.countInStock,
+
     },
     {
       title: 'Rating',
       dataIndex: 'rating',
-      // sorter: (a, b) => a.rating - b.rating,
+      sorter: (a, b) => a.rating - b.rating,
       // filters: [
       //   {
       //     text: '>= 3',
@@ -226,6 +228,16 @@ console.log("resProduct", stateProductDetail)
       messagee.error()
     }
   },[isSuccessUpdated, isErrorUpdated])
+
+  
+  useEffect(()=> {
+    if(isSuccessDeleted && dataDeleted?.status === 'OK'){
+      messagee.success()
+      // handleCloseDrawer()
+    } else if(isErrorUpdated){
+      messagee.error()
+    }
+  },[isSuccessDeleted, isErrorDeleted])
 
   //hàm xử lý khi thoát ra hỏi cửa sổ thêm sản phẩm
   const handleCancel = () => {
@@ -327,6 +339,16 @@ const onUpdateProduct = () =>{
       }
     })
 }
+
+const onDeleteProduct = () =>{
+  mutationDelete.mutate({id: rowSelected },{
+    onSettled: () =>{
+      queryProduct.refetch()
+    }
+  })
+}
+
+
 // console.log(access_token)
   return (
     <div>
