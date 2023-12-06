@@ -12,6 +12,10 @@ export const signUpUser  = async(data) =>{
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-up`, data);
     return res.data
 }
+export const getAllUsers  = async() =>{
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/user/get-all-user`);
+    return res.data
+}
 
 export const getDetailUser  = async(id, access_token) =>{
     const res = await axiosJWT.get(`${process.env.REACT_APP_API_URL}/user/get-details-user/${id}`, {
@@ -36,6 +40,22 @@ export const logoutUser  = async() =>{
 
 export const updateUserInfor  = async(id, data, access_token) =>{
     const res = await axiosJWT.put(`${process.env.REACT_APP_API_URL}/user/update-user/${id}`, data,
+    // {
+    //     headers: {
+    //         token: `Bearer ${access_token}`
+    //     }
+    // }
+    );
+    return res.data
+}
+
+// export const createUser  = async(data) =>{
+//     const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-up`,data);
+//     return res.data
+// }
+
+export const deleteUserInfor  = async(id) =>{
+    const res = await axios.delete(`${process.env.REACT_APP_API_URL}/user/delete-user/${id}`, 
     // {
     //     headers: {
     //         token: `Bearer ${access_token}`

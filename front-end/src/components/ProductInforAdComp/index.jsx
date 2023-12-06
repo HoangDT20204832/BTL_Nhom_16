@@ -46,6 +46,7 @@ const [rowSelected,setRowSelected] = useState("")
   })
 
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
+  const [isOpenDrawer2, setIsOpenDrawer2] = useState(false)
 
   const [form] = Form.useForm()
 
@@ -100,8 +101,9 @@ const mutationDelete = useMutationHooks(
   const renderAction = () => {
     return (
       <div>
-        <DeleteOutlined style={{ color: 'red', fontSize: '30px', cursor: 'pointer' }} onClick={onDeleteProduct} />
-        <EditOutlined style={{ color: 'orange', fontSize: '30px', cursor: 'pointer' }} onClick={handleGetDetailProduct} />
+        <Button style={{ color: 'red', fontSize: '14px', cursor: 'pointer', marginRight:'5px' }} onClick={onDetailProduct} >Chi tiết </Button>
+        <Button style={{ color: 'red', fontSize: '14px', cursor: 'pointer', marginRight:'5px' }} onClick={onDeleteProduct} >Xóa </Button>
+        <Button style={{ color: 'orange', fontSize: '14px', cursor: 'pointer' }} onClick={handleGetDetailProduct} > Sửa</Button>
         {/* <DeleteOutlined style={{ color: 'red', fontSize: '30px', cursor: 'pointer' }} onClick={() => setIsModalOpenDelete(true)} />
         <EditOutlined style={{ color: 'orange', fontSize: '30px', cursor: 'pointer' }} onClick={handleDetailsProduct} /> */}
       </div>
@@ -339,7 +341,22 @@ const onUpdateProduct = () =>{
       }
     })
 }
+// const onDetailProduct = () =>{
+//   mutationDelete.mutate({id: rowSelected },{
+//     onSettled: () =>{
+//       queryProduct.refetch()
+//     }
+//   })
+// }
 
+//hàm để hiển thị chi tiết sản phẩm 
+const onDetailProduct = () =>{
+   // console.log('GetDetailProduct', rowSelected)
+   if(rowSelected){
+    fetchGetDetailProduct(rowSelected)
+  }
+  setIsOpenDrawer2(true)
+}
 const onDeleteProduct = () =>{
   mutationDelete.mutate({id: rowSelected },{
     onSettled: () =>{
@@ -353,7 +370,7 @@ const onDeleteProduct = () =>{
   return (
     <div>
       <div className={styles.headerUser}>Quản lý sản phẩm</div>
-      <Button className={styles.buttonAdd} onClick={() =>setIsModalOpen(true)}>Thêm người dùng mới</Button>
+      <Button className={styles.buttonAdd} onClick={() =>setIsModalOpen(true)}>Thêm sản phẩm mới</Button>
 
       <div style={{marginTop: "20px"}}>
         <TableComponent columns={columns} data={dataTable}  onRow={(record, rowIndex) => {//record:là dữ liệu của dòng đó trong table
@@ -486,7 +503,7 @@ const onDeleteProduct = () =>{
         </Form.Item>
         </Form>
       </Modal>
-
+{/* //Drawer Update */}
       <DrawerComp title="Chi tiết sản phẩm" isOpen={isOpenDrawer} width="50%" onClose={() => setIsOpenDrawer(false)}>
         <Form
         name="basic"
@@ -605,6 +622,129 @@ const onDeleteProduct = () =>{
           <Button type="primary" htmlType="submit">
             Apply
           </Button>
+        </Form.Item>
+        </Form>
+      </DrawerComp>
+
+{/* Drawer Detail */}
+      <DrawerComp title="Chi tiết sản phẩm" isOpen={isOpenDrawer2} width="50%" onClose={() => setIsOpenDrawer2(false)}>
+        <Form
+        name="basic"
+        labelCol={{
+          span: 7,
+        }}
+        wrapperCol={{
+          span: 17,
+        }}
+        // onFinish={onUpdateProduct}
+        autoComplete="on"
+        form={form} 
+      >
+        <Form.Item
+          label="Tên sản phẩm"
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your name!',
+            },
+          ]}
+        >
+          <InputComponent value={stateProductDetail.name} name="name"  />
+        </Form.Item>
+
+        <Form.Item
+          label="Loại sản phẩm" name="type"
+          rules={[{required: true, message: 'Please input your type!',},]}
+        >
+          <InputComponent value={stateProductDetail.type} name="type"  />
+        </Form.Item>
+
+        
+        <Form.Item
+          label="Giá cũ"
+          name="priceOld"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your priceOld!',
+            },
+          ]}
+        >
+          <InputComponent value={stateProductDetail.priceOld} name="priceOld"  />
+        </Form.Item>
+
+        <Form.Item
+          label="Giá mới" name="priceNew" 
+          rules={[{required: true,message: 'Please input your priceNew!',}]}
+        >
+          <InputComponent value={stateProductDetail.priceNew} name="priceNew" />
+        </Form.Item>
+
+        <Form.Item
+          label="Số lượng còn lại" name="countInStock" 
+          rules={[{required: true,message: 'Please input your countInStock!',}]}
+        >
+          <InputComponent value={stateProductDetail.countInStock} name="countInStock" />
+        </Form.Item>
+
+        <Form.Item
+          label="Đánh giá" name="rating" 
+          rules={[{required: true,message: 'Please input your rating!',}]}
+        >
+          <InputComponent value={stateProductDetail.rating} name="rating" />
+        </Form.Item>
+
+        <Form.Item
+          label="Giảm giá %" name="discount" 
+          rules={[{required: true,message: 'Please input your discount!',}]}
+        >
+          <InputComponent value={stateProductDetail.discount} name="discount" />
+        </Form.Item>
+
+        <Form.Item
+          label="Số lượng đã bán" name="selled" 
+          rules={[{required: true,message: 'Please input your selled!',}]}
+        >
+          <InputComponent value={stateProductDetail.selled} name="selled"  />
+        </Form.Item>
+
+        <Form.Item
+          label="Mô tả sản phẩm" name="description" 
+          rules={[{required: true,message: 'Please input your description!',}]}
+        >
+          <InputComponent value={stateProductDetail.description} name="description"  />
+        </Form.Item>
+
+        <Form.Item
+          label="Ảnh" name="image" 
+          rules={[{required: true,message: 'Please input your image!',}]}
+        >
+          <WrapperUploadFile onChange={handleChangeAvatarDetail} maxCount={1}>
+                  <Button >Chọn ảnh</Button>
+                  {stateProductDetail?.image && (
+                      <img src={stateProductDetail?.image} style={{
+                          height: '50px',
+                          width: '50px',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          marginLeft: '10px',
+                      }} alt="avatar"/>
+                  )}
+                </WrapperUploadFile>
+        </Form.Item>
+
+        
+
+        <Form.Item
+          wrapperCol={{
+            offset: 20,
+            span: 16,
+          }}
+        >
+          {/* <Button type="primary" htmlType="submit">
+            Apply
+          </Button> */}
         </Form.Item>
         </Form>
       </DrawerComp>
