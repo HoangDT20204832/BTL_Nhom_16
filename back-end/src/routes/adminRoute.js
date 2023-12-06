@@ -14,5 +14,7 @@ router.delete('/user/:id', adminController.deleteUser)
 router.get('/users', adminController.getAllUsers)
 router.get('/user/:id', adminController.findUserById)
 
+router.post('/category', adminController.postCategory)
+
 
 module.exports = router;

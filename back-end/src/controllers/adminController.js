@@ -1,12 +1,13 @@
 const Product = require('../models/productModel')
 const User = require('../models/userModel')
+const Category = require('../models/categoryModel')
 
 class AdminController{
 
 // [POST] Create Product
     async addProduct(req,res){
-        const {name, description, price} = req.body;
-        const product = await Product.create({name, description, price});
+        const {name, description, price, brand, category, status} = req.body;
+        const product = await Product.create({name, description, price, brand, category, status});
         res.status(200).json(product);
     }
 // [GET] Get all product
@@ -49,6 +50,15 @@ class AdminController{
     async findUserById(req,res){
         const user = await User.findById(req.params.id);
         res.status(200).json(user);
+    }
+
+    async postCategory(req,res){
+        const category = new Category({
+            category: req.body.category
+        })
+        category
+            .save()
+            .then(() => res.json("create category"))
     }
 
 }
