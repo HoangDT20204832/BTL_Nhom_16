@@ -6,28 +6,27 @@ import clsx from "clsx";
 import {
   StarFilled
 } from '@ant-design/icons';
-const CardProductComp = () => {
+const CardProductComp = (props) => {
+  const {countInStock,description,discount,image,name, priceOld,priceNew,rating,selled,type} = props;
+
   return (
 
         <Col span={4} className={styles.cardProductWrap} >
           <a className={styles.productItemWrap} href="/">
-            <img src="https://down-vn.img.susercontent.com/file/2e3f88b622de319e0a481941ef478411" className={styles.productItemImg} alt="" />
+            <img className={styles.productItemImg} src= {image}/>
             <h4 className={styles.productItemName}>
-              Bàn Phím Cơ Chơi Game FZ508 Pro Full Size 104 Phím
+              {name}
             </h4>
             <div className={styles.productItemPrice}>
-              <span className={styles.productItemPriceOld}>1.400.000đ</span>
-              <span className={styles.productItemPriceCurrent}>748.000đ</span>
+              <span className={styles.productItemPriceOld}>{priceOld.toLocaleString()}đ</span>
+              <span className={styles.productItemPriceCurrent}>{priceNew.toLocaleString()}đ</span>
             </div>
             <div className={styles.productItemAction}>
               <div className={styles.productItemRating}>
-                <i className={styles.productItemStar}><StarFilled /></i>
-                <i className={styles.productItemStar}><StarFilled /></i>
-                <i className={styles.productItemStar}><StarFilled /></i>
-                <i className={styles.productItemStar}><StarFilled /></i>
-                <i className={styles.productItemStar}><StarFilled /></i>
+                <span className={styles.productItemStar}>{rating} <StarFilled /></span>
+               
               </div>
-              <span className={styles.productItemSold}>88 Đã bán</span>
+              <span className={styles.productItemSold}>{selled} Đã bán</span>
             </div>
 
             <div className={styles.productItemOrigin}>
@@ -39,7 +38,7 @@ const CardProductComp = () => {
               <span>Yêu thích</span>
             </div>
             <div className={styles.productItemSaleOff}>
-              <div className={styles.productItemSaleOffPercent}>47%</div>
+              <div className={styles.productItemSaleOffPercent}>{discount}%</div>
               <div className={styles.productItemSaleOffLabel}>GIẢM</div>
             </div>
           </a>
