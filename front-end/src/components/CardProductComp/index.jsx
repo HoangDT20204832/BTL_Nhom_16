@@ -13,13 +13,13 @@ const CardProductComp = (props) => {
 
         <Col span={4} className={styles.cardProductWrap} >
           <a className={styles.productItemWrap} href="/">
-            <img src= {"https://down-vn.img.susercontent.com/file/f4e63d01771fa8d6b1f6d502cae38d82"} className={styles.productItemImg} alt="anhproduct" />
+            <img className={styles.productItemImg} src= {image}/>
             <h4 className={styles.productItemName}>
               {name}
             </h4>
             <div className={styles.productItemPrice}>
-              <span className={styles.productItemPriceOld}>{priceOld}đ</span>
-              <span className={styles.productItemPriceCurrent}>{priceNew}đ</span>
+              <span className={styles.productItemPriceOld}>{priceOld.toLocaleString()}đ</span>
+              <span className={styles.productItemPriceCurrent}>{priceNew.toLocaleString()}đ</span>
             </div>
             <div className={styles.productItemAction}>
               <div className={styles.productItemRating}>

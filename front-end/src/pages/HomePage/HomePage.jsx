@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TypeProduct from "../../components/TypeProduct/TypeProduct";
 import { WrapperHeadingProduct,WrapperListProduct,WrapperProduct } from "./styles";
 import SliderComponent from "../../components/SliderComponent/SliderComponent";
@@ -10,20 +10,50 @@ import CardProductComp from "../../components/CardProductComp";
 import { Pagination, Row } from "antd";
 import {useQuery} from "@tanstack/react-query"
 import * as productService from "../../services/productService"
+import {useSelector} from "react-redux"
+import { useDebounce } from "../../hooks/useDebounce";
+import ButtonComponent from "../../components/ButtonComp";
 
 const HomePage = () => {
   const arr = [{name:"TV", img:"https://sudospaces.com/viomivietnam-vn/2022/05/tivi-xiaomi-mi-tv-p1-55-inch-hang-xuat-eu-chinh-hang-gia-re-nhat-1-large.jpg"},
 {name:"Máy tính", img:"https://laptop88.vn/media/news/2910_hinhanhmaytinhxachtay4.jpg"},
 {name:"Điện thoại", img: "https://cdn.tgdd.vn/Products/Images/42/303833/iphone-15-pro-blue-thumbnew-600x600.jpg"}];
+
+const productSearch = useSelector((state) => state.product.search)
+// const refSearch = useRef()
+// const [stateProduct, setStateProduct] = useState([])
+const searchDebounce = useDebounce(productSearch, 1000)
+const [limit, setLimit] = useState(5)
+console.log("productSearch", productSearch)
 const onChange = ()=>{}
 
-const fetchProductAll = async() =>{
- const res= await productService.getAllProducts()
- console.log("hii",res)
- return res
+const fetchProductAll = async(context) =>{
+  console.log('context', context)
+  const productSearch= context.queryKey && context.queryKey[2];
+  const limit = context.queryKey && context.queryKey[1] //khi có context.queryKey sẽ lấy context.queryKey[1]: limit
+  const res= await productService.getAllProducts(productSearch, limit)
+    
+  return res
+
 }
-const {data: products} = useQuery(['products'], fetchProductAll, {retry: 3, retryDelay: 1000})
-// console.log('products', products)
+// useEffect(() =>{
+
+//   if(refSearch.current){
+//     fetchProductAll(searchDebounce)
+//   }
+//   refSearch.current = true
+// },[searchDebounce])
+
+const {data: products, isPreviousData} = useQuery(['products', limit, searchDebounce ], fetchProductAll, {retry: 3, retryDelay: 1000,keepPreviousData: true})
+// keepPreviousData: giúp giữ lại những data cũ mà ko cần load lại lại datta cũ đó
+console.log('products', products)
+console.log("isPreviousData", isPreviousData)
+// useEffect(() =>{
+//   if(products?.data?.length >0){
+//     setStateProduct(products?.data)
+//   }
+// }, [products]);
+
   return (
     <div id="container" style={{ backgroundColor:"#F5F5F5" }}>
       <div className="grid">
@@ -57,6 +87,10 @@ const {data: products} = useQuery(['products'], fetchProductAll, {retry: 3, retr
   })}
 
   </Row>
+  <ButtonComponent styleButton ={{background : "var(--primary-color)",width:"150px", margin:"15px auto 10px" }} 
+   textButton={isPreviousData ? "Đang Load" : "Xem Thêm"}
+    onClick={ () => setLimit((pre) => pre +5)}
+    disabled={products?.total === products?.data?.length  || products?.totalPages ===1}/>
 
   <Pagination defaultCurrent={1} total={500} onChange={onChange} style={{textAlign:"center", padding:"20px 0"}} />
       </div>

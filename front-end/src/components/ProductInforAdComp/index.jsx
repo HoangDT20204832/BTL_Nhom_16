@@ -149,10 +149,10 @@ console.log("resProduct", stateProductDetail)
 
   const handleGetDetailProduct = () =>{
     // console.log('GetDetailProduct', rowSelected)
-    if(rowSelected){
+    // if(rowSelected){
 
-      fetchGetDetailProduct(rowSelected)
-    }
+    //   fetchGetDetailProduct(rowSelected)
+    // }
     setIsOpenDrawer(true)
 
   }
@@ -351,19 +351,21 @@ const onUpdateProduct = () =>{
 
 //hàm để hiển thị chi tiết sản phẩm 
 const onDetailProduct = () =>{
-   // console.log('GetDetailProduct', rowSelected)
-   if(rowSelected){
-    fetchGetDetailProduct(rowSelected)
-  }
+  //  console.log('GetDetailProduct', rowSelected)
+  //  if(rowSelected){
+  //   fetchGetDetailProduct(rowSelected)
+  // }
   setIsOpenDrawer2(true)
 }
 const onDeleteProduct = () =>{
+
   mutationDelete.mutate({id: rowSelected },{
     onSettled: () =>{
       queryProduct.refetch()
     }
   })
-}
+ }
+
 
 
 // console.log(access_token)
@@ -382,7 +384,7 @@ const onDeleteProduct = () =>{
         }}/>
       </div>
 
-      <Modal title="Tạo sản phẩm" open={isModalOpen}  onCancel={handleCancel} footer={null}>
+      <Modal forceRender title="Tạo sản phẩm" open={isModalOpen}  onCancel={handleCancel} footer={null}>
         <Form
         name="basic"
         labelCol={{

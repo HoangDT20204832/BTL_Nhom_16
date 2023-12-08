@@ -8,7 +8,7 @@ import * as userService from "../../services/userService"
 import {useMutationHooks} from "../../hooks/useMutationHook"
 import * as messagee from "../../components/MessageComp"
 import {useQuery} from "@tanstack/react-query"
-import { PlusOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
+// import { PlusOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 import DrawerComp from "../DrawerComp";
 import {useSelector} from "react-redux"
 
@@ -19,16 +19,16 @@ const [rowSelected,setRowSelected] = useState("")
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const [stateUser, setStateUser] = useState({
-    name: "" , 
-    email : "",
-    isAdmin : false,
-    phone : "",
-    address : "",
-    avatar : "",
-    city : "",
-    // sex : "",
-  })
+  // const [stateUser, setStateUser] = useState({
+  //   name: "" , 
+  //   email : "",
+  //   isAdmin : false,
+  //   phone : "",
+  //   address : "",
+  //   avatar : "",
+  //   city : "",
+  //   // sex : "",
+  // })
 
   const [stateUserDetail, setStateUserDetail] = useState({
     name: "" , 
@@ -142,10 +142,10 @@ console.log("resProduct", stateUserDetail)
 
 
   const handleGetDetailUser = () =>{
-    // console.log('GetDetailProduct', rowSelected)
-    if(rowSelected){
-      fetchGetDetailUser(rowSelected)
-    }
+    console.log('GetDetailProduct', rowSelected)
+    // if(rowSelected){
+    //   fetchGetDetailUser()
+    // }
     setIsOpenDrawer(true)
   }
 
@@ -202,7 +202,7 @@ console.log("resProduct", stateUserDetail)
     },
   ];
   const dataTable = users?.data?.length && users?.data?.map((user) => {
-    return { ...user, key: user._id }
+    return { ...user, key: user._id, isAdmin: user.isAdmin ? "TRUE" : "FALSE"}
   })
 
   //nếu ấn nút submit tạo sản phẩm thành coogn thì sẽ tự động đóng cửa sổ , thống báo thành công
@@ -234,7 +234,7 @@ console.log("resProduct", stateUserDetail)
     }
   },[isSuccessDeleted, isErrorDeleted])
 
-  //hàm xử lý khi thoát ra hỏi cửa sổ thêm sản phẩm
+  // hàm xử lý khi thoát ra hỏi cửa sổ thêm sản phẩm
   // const handleCancel = () => {
   //   setIsModalOpen(false);
   //   setStateProduct({
@@ -268,14 +268,14 @@ console.log("resProduct", stateUserDetail)
       form.resetFields()
     };
   
-  const handleOnChangeInput = (e) =>{
-      // console.log("e.target.value", e.target.value);
-      // console.log("e.target.name", e.target.name);
-      setStateUser({
-        ...stateUser,
-        [e.target.name]: e.target.value
-      })
-  }
+  // const handleOnChangeInput = (e) =>{
+  //     // console.log("e.target.value", e.target.value);
+  //     // console.log("e.target.name", e.target.name);
+  //     setStateUser({
+  //       ...stateUser,
+  //       [e.target.name]: e.target.value
+  //     })
+  // }
 
   const handleOnChangeInputDetail = (e) =>{
     // console.log("e.target.value", e.target.value);
@@ -285,7 +285,7 @@ console.log("resProduct", stateUserDetail)
       [e.target.name]: e.target.value
     })
 }
-    //up file  ảnh sabr phẩm
+    //up file  ảnh user
 
     const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -295,16 +295,16 @@ console.log("resProduct", stateUserDetail)
       reader.onerror = (error) => reject(error);
     });
 
-  const handleChangeAvatar = async ({fileList}) => {
-    const file = fileList[0]
-    if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj );
-    }
-    setStateUser({
-      ...stateUser,
-      image: file.preview,
-    })
-}
+//   const handleChangeAvatar = async ({fileList}) => {
+//     const file = fileList[0]
+//     if (!file.url && !file.preview) {
+//         file.preview = await getBase64(file.originFileObj );
+//     }
+//     setStateUser({
+//       ...stateUser,
+//       image: file.preview,
+//     })
+// }
 
 const handleChangeAvatarDetail = async ({fileList}) => {
   const file = fileList[0]
@@ -313,7 +313,7 @@ const handleChangeAvatarDetail = async ({fileList}) => {
   }
   setStateUserDetail({
     ...stateUserDetail,
-    image: file.preview,
+    avatar: file.preview,
   })
 }
 // const onFinishSubmit =() =>{
@@ -342,10 +342,10 @@ const onUpdateUser = () =>{
 
 //hàm để hiển thị chi tiết sản phẩm 
 const onDetailUser = () =>{
-   // console.log('GetDetailProduct', rowSelected)
-   if(rowSelected){
-    fetchGetDetailUser(rowSelected)
-  }
+  //  console.log('GetDetailProduct', rowSelected)
+  //  if(rowSelected){
+  //   fetchGetDetailUser(rowSelected)
+  // }
   setIsOpenDrawer2(true)
 }
 const onDeleteUser = () =>{
@@ -372,128 +372,6 @@ const onDeleteUser = () =>{
           };
         }}/>
       </div>
-
-      {/* <Modal title="Tạo sản phẩm" open={isModalOpen}  onCancel={handleCancel} footer={null}>
-        <Form
-        name="basic"
-        labelCol={{
-          span: 7,
-        }}
-        wrapperCol={{
-          span: 17,
-        }}
-        onFinish={onFinishSubmit}
-        autoComplete="on"
-        form={form}
-      >
-        <Form.Item
-          label="Tên sản phẩm"
-          name="name"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your name!',
-            },
-          ]}
-        >
-          <InputComponent value={stateProduct.name} name="name" onChange={handleOnChangeInput} />
-        </Form.Item>
-
-        <Form.Item
-          label="Loại sản phẩm" name="type"
-          rules={[{required: true, message: 'Please input your type!',},]}
-        >
-          <InputComponent value={stateProduct.type} name="type" onChange={handleOnChangeInput} />
-        </Form.Item>
-
-        
-        <Form.Item
-          label="Giá cũ"
-          name="priceOld"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your priceOld!',
-            },
-          ]}
-        >
-          <InputComponent value={stateProduct.priceOld} name="priceOld" onChange={handleOnChangeInput} />
-        </Form.Item>
-
-        <Form.Item
-          label="Giá mới" name="priceNew" 
-          rules={[{required: true,message: 'Please input your priceNew!',}]}
-        >
-          <InputComponent value={stateProduct.priceNew} name="priceNew" onChange={handleOnChangeInput}/>
-        </Form.Item>
-
-        <Form.Item
-          label="Số lượng còn lại" name="countInStock" 
-          rules={[{required: true,message: 'Please input your countInStock!',}]}
-        >
-          <InputComponent value={stateProduct.countInStock} name="countInStock" onChange={handleOnChangeInput}/>
-        </Form.Item>
-
-        <Form.Item
-          label="Đánh giá" name="rating" 
-          rules={[{required: true,message: 'Please input your rating!',}]}
-        >
-          <InputComponent value={stateProduct.rating} name="rating" onChange={handleOnChangeInput}/>
-        </Form.Item>
-
-        <Form.Item
-          label="Giảm giá %" name="discount" 
-          rules={[{required: true,message: 'Please input your discount!',}]}
-        >
-          <InputComponent value={stateProduct.discount} name="discount" onChange={handleOnChangeInput}/>
-        </Form.Item>
-
-        <Form.Item
-          label="Số lượng đã bán" name="selled" 
-          rules={[{required: true,message: 'Please input your selled!',}]}
-        >
-          <InputComponent value={stateProduct.selled} name="selled" onChange={handleOnChangeInput} />
-        </Form.Item>
-
-        <Form.Item
-          label="Mô tả sản phẩm" name="description" 
-          rules={[{required: true,message: 'Please input your description!',}]}
-        >
-          <InputComponent value={stateProduct.description} name="description" onChange={handleOnChangeInput} />
-        </Form.Item>
-
-        <Form.Item
-          label="Ảnh" name="image" 
-          rules={[{required: true,message: 'Please input your image!',}]}
-        >
-          <WrapperUploadFile onChange={handleChangeAvatar} maxCount={1}>
-                  <Button >Chọn ảnh</Button>
-                  {stateProduct?.image && (
-                      <img src={stateProduct?.image} style={{
-                          height: '50px',
-                          width: '50px',
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                          marginLeft: '10px',
-                      }} alt="avatar"/>
-                  )}
-                </WrapperUploadFile>
-        </Form.Item>
-
-        
-
-        <Form.Item
-          wrapperCol={{
-            offset: 20,
-            span: 16,
-          }}
-        >
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-        </Form>
-      </Modal> */}
 {/* //Drawer Update */}
       <DrawerComp title="Chi tiết người dùng" isOpen={isOpenDrawer} width="50%" onClose={() => setIsOpenDrawer(false)}>
         <Form
@@ -572,13 +450,13 @@ const onDeleteUser = () =>{
 
 
         <Form.Item
-          label="Ảnh" name="image" 
+          label="Ảnh" name="avatar" 
           rules={[{required: true,message: 'Please input your image!',}]}
         >
           <WrapperUploadFile onChange={handleChangeAvatarDetail} maxCount={1}>
                   <Button >Chọn ảnh</Button>
-                  {stateUserDetail?.image && (
-                      <img src={stateUserDetail?.image} style={{
+                  {stateUserDetail?.avatar && (
+                      <img src={stateUserDetail?.avatar} style={{
                           height: '50px',
                           width: '50px',
                           borderRadius: '50%',
@@ -682,13 +560,13 @@ const onDeleteUser = () =>{
 
 
         <Form.Item
-          label="Ảnh" name="image" 
+          label="Ảnh" name="avatar" 
           rules={[{required: true,message: 'Please input your image!',}]}
         >
           <WrapperUploadFile onChange={handleChangeAvatarDetail} maxCount={1}>
                   <Button >Chọn ảnh</Button>
-                  {stateUserDetail?.image && (
-                      <img src={stateUserDetail?.image} style={{
+                  {stateUserDetail?.avatar && (
+                      <img src={stateUserDetail?.avatar} style={{
                           height: '50px',
                           width: '50px',
                           borderRadius: '50%',

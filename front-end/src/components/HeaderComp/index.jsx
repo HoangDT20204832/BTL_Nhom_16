@@ -26,6 +26,7 @@ import { useMemo } from "react";
 import * as userService from "../../services/userService"
 import { resetUser } from "../../redux/slides/userSlide";
 import { useEffect } from "react";
+import { searchProduct } from "../../redux/slides/productSlide.js";
 
 
 
@@ -76,6 +77,17 @@ function HeaderComponent() {
     };
   }, [arrow]);
 
+  //searchInput
+  const [search, setSearch] = useState("")
+
+  const onSearch = (e) =>{
+    console.log("input", e.target.value)
+    setSearch(e.target.value)
+    // dispatch(searchProduct(e.target.value))
+  }
+const onClickSearch = () =>{
+  dispatch(searchProduct(search))
+}
 
   return (
     <div style={{ backgroundColor: "var(--primary-color)" }}>
@@ -127,6 +139,7 @@ function HeaderComponent() {
               <div>
                   <Popover
                     placement="bottom"
+                    trigger="click"
                     content={content}
                     arrow={mergedArrow}
                   > 
@@ -148,6 +161,7 @@ function HeaderComponent() {
 
         
       </WrapperHeaderNavbar>
+
       <WrapperHeader gutter={16} className="grid">
         <Col span={4}>
           <WrapperTextHeader onClick={() => navigate("/")}>SHOP BAN HANG</WrapperTextHeader>
@@ -159,7 +173,8 @@ function HeaderComponent() {
             size="large"
             bordered={false}
             backgroundColorButton = "rgb(13,92,182)"
-            // onSearch={onSearch}
+            onChange={onSearch}
+            onClick= {onClickSearch}
           />
         </Col>
         <Col
