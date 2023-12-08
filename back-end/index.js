@@ -26,12 +26,6 @@ const store = new MongoDBStore({
 
 app.use(session({ secret: 'my secret', resave: false, saveUninitialized: false, store: store }))
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
-app.use(adminRoute)
-app.use(authRoute);
-app.use(siteRoute);
-
 app.use((req, res, next) => {
     if (!req.session.user) {
       return next()
@@ -44,6 +38,14 @@ app.use((req, res, next) => {
       })
       .catch()
   })
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
+app.use(adminRoute)
+app.use(authRoute);
+app.use(siteRoute);
+
+
 
 
 //connect to MongoDB

@@ -19,31 +19,31 @@ const userSchema = new Schema({
     createdAt:{type:Date, default:Date.now},
 })
 
-// userSchema.methods.addToCart = function (product, quantity) {
-//     const cartProductIndex = this.cart.items.findIndex(cp => {
-//         return cp.productId.toString() === product._id.toString()   // lấy chỉ mục sản phẩm 
-//     })
+userSchema.methods.addToCart = function (product, quantity) {
+    const cartProductIndex = this.cart.items.findIndex(cp => {
+        return cp.productId.toString() === product._id.toString()   // lấy chỉ mục sản phẩm 
+    })
 
-//     let newQuantity = Number(quantity)
-//     const updatedCartItems = [...this.cart.items]  // kiểm soát số lượng và cập nhật giỏ hàng
+    let newQuantity = Number(quantity)
+    const updatedCartItems = [...this.cart.items]  // kiểm soát số lượng và cập nhật giỏ hàng
 
-//     // cập nhật mảng 
-//     if (cartProductIndex >= 0) {
-//         newQuantity = this.cart.items[cartProductIndex].quantity + newQuantity
-//         updatedCartItems[cartProductIndex].quantity = newQuantity
+    // cập nhật mảng 
+    if (cartProductIndex >= 0) {
+        newQuantity = this.cart.items[cartProductIndex].quantity + newQuantity
+        updatedCartItems[cartProductIndex].quantity = newQuantity
 
-//     } else {
-//         updatedCartItems.push({
-//             quantity: newQuantity,
-//             productId: product._id,
-//         })
-//     }
-//     const updatedCart = {
-//         items: updatedCartItems
-//     }
-//     this.cart = updatedCart
-//     return this.save()
-// }
+    } else {
+        updatedCartItems.push({
+            quantity: newQuantity,
+            productId: product._id,
+        })
+    }
+    const updatedCart = {
+        items: updatedCartItems
+    }
+    this.cart = updatedCart
+    return this.save()
+}
 
 userSchema.methods.removeFromCart = function (productId) {
     const updatedCartItems = this.cart.items.filter(item => {

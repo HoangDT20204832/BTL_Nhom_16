@@ -1,6 +1,5 @@
 const Product = require('../models/productModel')
 const User = require('../models/userModel')
-const Category = require('../models/categoryModel')
 
 class AdminController{
 
@@ -52,14 +51,6 @@ class AdminController{
         res.status(200).json(user);
     }
 
-    async postCategory(req,res){
-        const category = new Category({
-            category: req.body.category
-        })
-        category
-            .save()
-            .then(() => res.json("create category"))
-    }
 
 }
 
