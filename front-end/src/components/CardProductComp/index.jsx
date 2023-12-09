@@ -6,13 +6,19 @@ import clsx from "clsx";
 import {
   StarFilled
 } from '@ant-design/icons';
-const CardProductComp = (props) => {
-  const {countInStock,description,discount,image,name, priceOld,priceNew,rating,selled,type} = props;
 
+import {useNavigate} from "react-router-dom"
+const CardProductComp = (props) => {
+  const {countInStock,description,discount,image,name, priceOld,priceNew,rating,selled,type,id} = props;
+
+  const navigate = useNavigate()
+  const handleDetailProduct = (id) =>{
+    navigate(`/product-detail/${id}`)
+  }
   return (
 
-        <Col span={4} className={styles.cardProductWrap} >
-          <a className={styles.productItemWrap} href="/">
+        <Col span={4} className={styles.cardProductWrap} onClick={() =>handleDetailProduct(id)} >
+          <a className={styles.productItemWrap} >
             <img className={styles.productItemImg} src= {image}/>
             <h4 className={styles.productItemName}>
               {name}

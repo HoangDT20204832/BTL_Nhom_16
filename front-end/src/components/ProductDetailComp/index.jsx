@@ -1,16 +1,45 @@
-import { Col, Image, Row, InputNumber } from "antd";
+import { Col, Image, Row, InputNumber,Rate } from "antd";
 import styles from "./styles.module.css";
 import { PlusOutlined, MinusOutlined, StarFilled } from "@ant-design/icons";
 import ButtonComponent from "../ButtonComp/index";
-import React from "react";
+import React, { useState } from "react";
+import * as productService from "../../services/productService"
+import {useQuery} from "@tanstack/react-query"
+import {useSelector} from "react-redux"
+const ProductDetailComp = ({idProduct}) => {
+    const [numberProductBye, setNumberProductBye] = useState(1)
 
-const ProductDetailComp = () => {
-    const onChange = () => {};
+    const user = useSelector((state) => state.user)
+    console.log("hi user: " + user)
+    const onChange = (value) => {
+        setNumberProductBye(value)
+    };
+
+    const handleChangeCount = (type) =>{
+        if(type === "decrease"){
+            setNumberProductBye(numberProductBye - 1)
+        }else if(type === "increase") {
+            setNumberProductBye(numberProductBye + 1)
+        }
+    }
+    const fetchGetDetailProduct = async(context) => {
+        console.log("context", context);
+        const id = context?.queryKey && context?.queryKey[1]
+        if(id){
+            const res = await productService.getDetailProduct(id) //rowSelected: id sản phẩm
+            console.log("res", res)
+            return res.data
+        }
+    }
+
+    const {data: productDetail} = useQuery(['product-detail', idProduct], fetchGetDetailProduct, {enabled: !!idProduct})
+ console.log("productDetail", productDetail)
+    
     return (
         <Row className={styles.wrapp}>
             <Col span={10} className={styles.wrapImgProduct}>
-                <Image
-                    src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lmmt7ajsywnz65"
+                <Image className={styles.imgBig}
+                    src={productDetail?.image}
                     alt="img product"
                     preview={false}
                 />
@@ -55,35 +84,31 @@ const ProductDetailComp = () => {
 
             <Col span={14} className={styles.productInfor}>
                 <h1 className={styles.nameProduct}>
-                    Bộ máy tính để bàn PC Gaming + Màn hình 22inch FULL HD cấu
-                    hình core i7, i5, i3 - Ram 8GB - SSD 120GB chiến game tốt
+                    {productDetail?.name}
                 </h1>
                 <div>
-                    <StarFilled className={styles.star} />
-                    <StarFilled className={styles.star} />
-                    <StarFilled className={styles.star} />
-                    <StarFilled className={styles.star} />
-                    <StarFilled />
-                    <span className={styles.textSell}> | Da ban 1000+</span>
+                    {/* <StarFilled className={styles.star} /> */}
+                    <Rate allowHalf defaultValue= {productDetail?.rating} value={productDetail?.rating} />
+                    <span className={styles.textSell}> | Đã bán {productDetail?.selled} sản phẩm</span>
                 </div>
                 <div className={styles.priceProduct}>
                     <div className={styles.priceProductOld}>
                         <h1 className={styles.priceTextProductOld}>
-                            10.000.000
+                            {productDetail?.priceOld.toLocaleString()}
                         </h1>
                         <span>đ</span>
                     </div>
                     <div className={styles.priceProductNew}>
                         <h1 className={styles.priceTextProductNew}>
-                            5.000.000
+                            {productDetail?.priceNew.toLocaleString()}
                         </h1>
                         <span>đ</span>
                     </div>
-                    <div className={styles.discoundProduct}>50% GIẢM</div>
+                    <div className={styles.discoundProduct}>{productDetail?.discount}% GIẢM</div>
                 </div>
                 <div className={styles.addressProduct}>
                     <span>Giao đến </span>
-                    <span className={styles.address}>Quan Thanh Xuan</span> -
+                    <span className={styles.address}>{user?.address}</span> -
                     <span className={styles.changeAddress}>Đổi địa chỉ</span>
                 </div>
                 {/* <LikeButtonComponent
@@ -110,7 +135,7 @@ const ProductDetailComp = () => {
                                 background: "transparent",
                                 cursor: "pointer",
                             }}
-                            onClick={() => {}}
+                            onClick={() => handleChangeCount("decrease")}
                         >
                             <MinusOutlined
                                 style={{ color: "#000", fontSize: "20px" }}
@@ -122,7 +147,7 @@ const ProductDetailComp = () => {
                             defaultValue={1}
                             max={10}
                             min={1}
-                            value={2}
+                            value={numberProductBye}
                             size="small"
                         />
                         <button
@@ -131,7 +156,7 @@ const ProductDetailComp = () => {
                                 background: "transparent",
                                 cursor: "pointer",
                             }}
-                            onClick={() => {}}
+                            onClick={() => handleChangeCount("increase")}
                         >
                             <PlusOutlined
                                 style={{ color: "#000", fontSize: "20px" }}
@@ -139,7 +164,7 @@ const ProductDetailComp = () => {
                         </button>
                     </div>
                     <div className={styles.quantityProductAvailable}>
-                        3992
+                        {productDetail?.countInStock}
                         <span> sản phẩm có sẵn</span>
                     </div>
                 </div>

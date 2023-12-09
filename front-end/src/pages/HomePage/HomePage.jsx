@@ -36,14 +36,6 @@ const fetchProductAll = async(context) =>{
   return res
 
 }
-// useEffect(() =>{
-
-//   if(refSearch.current){
-//     fetchProductAll(searchDebounce)
-//   }
-//   refSearch.current = true
-// },[searchDebounce])
-
 const {data: products, isPreviousData} = useQuery(['products', limit, searchDebounce ], fetchProductAll, {retry: 3, retryDelay: 1000,keepPreviousData: true})
 // keepPreviousData: giúp giữ lại những data cũ mà ko cần load lại lại datta cũ đó
 console.log('products', products)
@@ -83,14 +75,16 @@ console.log("isPreviousData", isPreviousData)
             rating={product.rating}
             selled={product.selled}
             type={product.type}
+            id = {product._id}
    />
   })}
 
   </Row>
-  <ButtonComponent styleButton ={{background : "var(--primary-color)",width:"150px", margin:"15px auto 10px" }} 
+  <ButtonComponent styleButton ={{background : "var(--primary-color)",width:"150px", margin:"15px auto 10px", color:"#fff" }} 
    textButton={isPreviousData ? "Đang Load" : "Xem Thêm"}
+   
     onClick={ () => setLimit((pre) => pre +5)}
-    disabled={products?.total === products?.data?.length  || products?.totalPages ===1}/>
+    disabled={products?.total === products?.data?.length  || products?.totalPages === 1}/>
 
   <Pagination defaultCurrent={1} total={500} onChange={onChange} style={{textAlign:"center", padding:"20px 0"}} />
       </div>
