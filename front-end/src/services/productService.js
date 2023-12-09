@@ -43,3 +43,15 @@ export const deleteProductInfor  = async(id) =>{
     );
     return res.data
 }
+
+export const getAllTypeProduct  = async() =>{
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all-type-product`);
+    return res.data
+}
+
+export const getProductType = async(type) =>{
+    if(type) {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all-product?filter=type&filter=${type}`);
+        return res.data
+    }
+}

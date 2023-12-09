@@ -25,6 +25,7 @@ const productSearch = useSelector((state) => state.product.search)
 const searchDebounce = useDebounce(productSearch, 1000)
 const [limit, setLimit] = useState(5)
 console.log("productSearch", productSearch)
+const [typeProduct, setTypeProduct] = useState([])
 const onChange = ()=>{}
 
 const fetchProductAll = async(context) =>{
@@ -34,7 +35,6 @@ const fetchProductAll = async(context) =>{
   const res= await productService.getAllProducts(productSearch, limit)
     
   return res
-
 }
 const {data: products, isPreviousData} = useQuery(['products', limit, searchDebounce ], fetchProductAll, {retry: 3, retryDelay: 1000,keepPreviousData: true})
 // keepPreviousData: giúp giữ lại những data cũ mà ko cần load lại lại datta cũ đó
@@ -45,6 +45,18 @@ console.log("isPreviousData", isPreviousData)
 //     setStateProduct(products?.data)
 //   }
 // }, [products]);
+const fetchAllTypeProduct = async() =>{
+  const res = await productService.getAllTypeProduct()
+  console.log("res typ", res)
+  
+   if(res.status ==="OK"){
+    setTypeProduct(res?.data)
+   }
+}
+
+useEffect(() =>{
+  fetchAllTypeProduct()
+}, [])
 
   return (
     <div id="container" style={{ backgroundColor:"#F5F5F5" }}>
@@ -54,8 +66,9 @@ console.log("isPreviousData", isPreviousData)
 <WrapperListProduct >
   <WrapperHeadingProduct >DANH MỤC</WrapperHeadingProduct>
   <WrapperProduct>
-    {arr.map((product, index) => (
-      <TypeProduct name={product.name} img={product.img} key={index} />
+    {typeProduct.map((product, index) => (
+      // <TypeProduct name={product.name} img={product.img} key={index} />
+      <TypeProduct name={product} key={index} />
     ))}
   </WrapperProduct>
 </WrapperListProduct>

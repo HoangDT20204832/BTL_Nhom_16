@@ -24,8 +24,8 @@ const CardProductComp = (props) => {
               {name}
             </h4>
             <div className={styles.productItemPrice}>
-              <span className={styles.productItemPriceOld}>{priceOld.toLocaleString()}đ</span>
-              <span className={styles.productItemPriceCurrent}>{priceNew.toLocaleString()}đ</span>
+              <span className={styles.productItemPriceOld}>{priceOld?.toLocaleString()}đ</span>
+              <span className={styles.productItemPriceCurrent}>{priceNew?.toLocaleString()}đ</span>
             </div>
             <div className={styles.productItemAction}>
               <div className={styles.productItemRating}>

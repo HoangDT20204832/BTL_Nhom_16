@@ -168,11 +168,28 @@ const  getDetailProduct = (productId) => {
     }
   });
 };
+
+const  getAllTypeProduct = () => {
+  return new Promise(async(resolve, reject) => {
+    try {
+      const allTypeProduct = await Product.distinct("type")
+     
+      resolve({ 
+        status: 'OK',
+        message: "Lấy thành công loại sản phẩm",
+        data: allTypeProduct
+      })
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
     createProduct,
     updateProduct,
     getDetailProduct,
     deleteProduct,
-    getAllProduct
+    getAllProduct,
+    getAllTypeProduct
 
 };
