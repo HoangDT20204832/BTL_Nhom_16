@@ -4,7 +4,7 @@ const createProduct = async (req, res) => {
   try {
     console.log("req.body", req.body);
     const { name, image, type, priceOld, priceNew,countInStock,rating, 
-           description,discount,selled} = req.body;
+           description,discount,selled, trademark, origin} = req.body;
     if (!name || !image || !type || !priceOld || !priceNew || !countInStock || !rating) {
       return res.status(200).json({
         status: "Error",

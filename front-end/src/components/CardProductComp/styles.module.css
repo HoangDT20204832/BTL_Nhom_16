@@ -97,7 +97,12 @@
 
 .productItemStar{
     color: var(--star-gold-color);
+    font-size: 12px !important;
+
 }
+.productItemStar .ant-rate-star:not(:last-child) {
+    margin-right: 0px !important;
+  }
 
 .productItemSold{
     font-size: 1.2rem;

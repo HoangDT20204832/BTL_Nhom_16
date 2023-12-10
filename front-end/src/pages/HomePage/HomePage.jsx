@@ -89,6 +89,8 @@ useEffect(() =>{
             selled={product.selled}
             type={product.type}
             id = {product._id}
+            trademark= {product.trademark}
+            origin = {product.origin}
    />
   })}
 

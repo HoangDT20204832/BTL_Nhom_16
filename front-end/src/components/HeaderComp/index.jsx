@@ -182,7 +182,7 @@ const onClickSearch = () =>{
           style={{ display: "flex", gap: "20px", alignItems: "center", justifyContent: "center"}}
         >
           
-          <div onClick={() => navigate(`order`)} style={{cursor:"pointer"}}>
+          <div onClick={() => navigate(`/order`)} style={{cursor:"pointer"}}>
             <Badge count={44} size="small"> {/* // count ={order?.orderItems?.length} */}
               <ShoppingCartOutlined
                 style={{ fontSize: "30px", color: "#fff" }}

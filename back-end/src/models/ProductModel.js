@@ -11,7 +11,9 @@ const productSchema = new mongoose.Schema(
         rating: { type: Number, required: true },        //đánh giá sản phẩm
         description: { type: String },                   //miêu tả sản phẩm
         discount: { type: Number },
-        selled: { type: Number }
+        selled: { type: Number },
+        trademark: {type: String},                    //thương hiệu
+        origin: { type: String}                       //xuất xứ
     },
     {
         timestamps: true,

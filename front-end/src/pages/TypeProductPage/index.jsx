@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import NavbarComp from "../../components/NavbarComp";
 import CardProductComp from "../../components/CardProductComp";
 import { Col, Pagination } from "antd";
@@ -13,19 +13,35 @@ const TypeProductPage = (type) => {
   console.log("location: " , location)
   const {state} = location
 
+  const [panigate, setPanigate] = useState({
+    page: 0,
+    limit: 5,
+    totalPages:1,
+  })
+
   const fetchProductType = async(context) =>{
     console.log("context: " , context)
     const type = context.queryKey[1]
-    const res = await productService.getProductType(type)
-    console.log("res typeprop: " , res)
+    const page = context.queryKey[2]
+    const limit = context.queryKey[3]
+    const res = await productService.getProductType(type, page, limit)
+    setPanigate({...panigate,totalPages: res?.totalPages})
+    console.log("x: " , res)
     if(res?.status === "OK"){
       return res.data
     }
   }
-  const {data: productsType} = useQuery(['product-type', state], fetchProductType)
+  const onChange = (current, pageSize) => {
+    console.log("PageSize", current, pageSize)
+    setPanigate({...panigate,page: current -1, limit:pageSize})
+    // setPanigate({...panigate,limit:pageSize})
+    // panigate.page = current -1;
+    // panigate.limit = pageSize
+  };
+  const {data: productsType} = useQuery(['product-type', state,panigate.page, panigate.limit ], fetchProductType)
 
-  // console.log("productType", productsType)
-  const onChange = () => {};
+  console.log("productType", productsType)
+
   return (
     <div style={{ backgroundColor: "var(--background-color)"}}>
       <WrapperProductType className="grid">
@@ -49,12 +65,18 @@ const TypeProductPage = (type) => {
                   selled={productType.selled}
                   type={productType.type}
                   id = {productType._id} 
+                  trademark= {productType.trademark}
+                  origin = {productType.origin}
                />)
             })}
           </WrapperProducts>
+
           <Pagination
-              defaultCurrent={1}
-              total={500}
+              defaultCurrent={panigate.page + 1}
+              // total={panigate.totalPages}
+              total={100}
+              // pageSize={5}
+              pageSizeOptions={[5, 10, 15]}
               onChange={onChange}
               style={{ textAlign: "center", padding: "20px 0" }}
             />
