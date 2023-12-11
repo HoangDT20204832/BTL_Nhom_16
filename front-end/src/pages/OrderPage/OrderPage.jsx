@@ -70,7 +70,7 @@ console.log("order", order)
                 <div style={{flex:1,display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                   <span>Đơn giá</span>
                   <span>Số lượng</span>
-                  <span>Thành tiền</span>
+                  <span>Số tiền</span>
                   <DeleteOutlined style={{cursor: 'pointer'}} onClick={() =>{}}/>
                 </div>
             </div>
@@ -78,20 +78,17 @@ console.log("order", order)
               {order?.orderItems?.map((order) => {
                 return ( 
                   <div className={styles.containerCartLeftItem}>
-                <div style={{width: '390px', display: 'flex', alignItems: 'center', gap: 4}}> 
+                <div style={{width: '350px', display: 'flex', alignItems: 'center', gap: 4}}> 
                   <Checkbox onChange={onChange} ></Checkbox>
                   {/* <Checkbox onChange={onChange} value={order?.product} checked={listChecked.includes(order?.product)}></Checkbox> */}
                   <img src={order?.image} style={{width: '77px', height: '79px', objectFit: 'cover'}}/>
-                  <div style={{
-                    width: 260,
-                    overflow: 'hidden',
-                    textOverflow:'ellipsis',
-                    whiteSpace:'nowrap'
-                  }}>{order?.name}</div>
+                  <div className={styles.containerCartName}>{order?.name}</div>
                 </div>
-                <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                  <span>
-                    <span style={{ fontSize: '13px', color: '#242424' }}>{order?.priceNew}</span>
+                <div className={styles.containerCartWrapPrice} >
+                  <span className={styles.containerCartUnitPrice}>
+                    <span className={styles.containerCartUnitPriceOld} >{order?.priceOld}đ</span>
+                    <span className={styles.containerCartUnitPriceNew} >{order?.priceNew}đ</span>
+                    <div className={styles.containerCartDiscount} >Giảm giá {order?.discount}%</div>
                   </span>
                   <div className={styles.containerCartLeftCount}>
                     <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount()}>
@@ -102,7 +99,7 @@ console.log("order", order)
                         <PlusOutlined style={{ color: '#000', fontSize: '10px' }} />
                     </button>
                   </div>
-                  <span style={{color: 'rgb(255, 66, 78)', fontSize: '13px', fontWeight: 500}}>{order?.priceNew * order?.amount}</span>
+                  <span className={styles.containerCartLeftPrices} >{order?.priceNew * order?.amount}đ</span>
                   {/* <DeleteOutlined style={{cursor: 'pointer'}} onClick={() => handleDeleteOrder(order?.product)}/> */}
                   <DeleteOutlined style={{cursor: 'pointer'}}/>
                 </div>
@@ -114,21 +111,21 @@ console.log("order", order)
           <div className={styles.containerCartRight}>
             <div style={{width: '100%'}}>
               <div className={styles.containerCartRightInfor}>
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                <div  className={styles.containerCartRightInforItem} >
                   <span>Tạm tính</span>
-                  <span style={{color: '#000', fontSize: '14px', fontWeight: 'bold'}}>0</span>
+                  <span className={styles.containerCartRightInforPrice} >0</span>
                 </div>
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                <div className={styles.containerCartRightInforItem}>
                   <span>Giảm giá</span>
-                  <span style={{color: '#000', fontSize: '14px', fontWeight: 'bold'}}>0</span>
+                  <span className={styles.containerCartRightInforPrice} >0</span>
                 </div>
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                <div className={styles.containerCartRightInforItem}>
                   <span>Thuế</span>
-                  <span style={{color: '#000', fontSize: '14px', fontWeight: 'bold'}}>0</span>
+                  <span className={styles.containerCartRightInforPrice} >0</span>
                 </div>
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                <div className={styles.containerCartRightInforItem}>
                   <span>Phí giao hàng</span>
-                  <span style={{color: '#000', fontSize: '14px', fontWeight: 'bold'}}>0</span>
+                  <span className={styles.containerCartRightInforPrice} >0</span>
                 </div>
               </div>
               <div className={styles.containerCartRightTotal}>
