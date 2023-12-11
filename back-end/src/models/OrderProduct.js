@@ -6,7 +6,8 @@ const orderSchema = new mongoose.Schema({
             name: { type: String, required: true },
             amount: { type: Number, required: true },      //số lượng sản phẩm đặt hàng trong đơn hàng đó
             image: { type: String, required: true },
-            price: { type: Number, required: true },
+            priceOld: { type: String, required: true},
+            priceNew: { type: Number, required: true },
             discount: { type: Number },
             product: {
                 type: mongoose.Schema.Types.ObjectId,

@@ -6,12 +6,17 @@ import { WrapperProductType, WrapperNavbar, WrapperProducts } from "./styles";
 import {useLocation} from "react-router-dom"
 import * as productService from "../../services/productService";
 import {useQuery} from "@tanstack/react-query"
+import {useSelector} from "react-redux"
+import { useDebounce } from "../../hooks/useDebounce";
 
 const TypeProductPage = (type) => {
 
   const location = useLocation()
   console.log("location: " , location)
   const {state} = location
+  const productSearch = useSelector((state) => state.product.search)
+const searchDebounce = useDebounce(productSearch, 500)
+
 
   const [panigate, setPanigate] = useState({
     page: 0,
@@ -50,7 +55,13 @@ const TypeProductPage = (type) => {
         </WrapperNavbar>
         <Col span={20} style={{backgroundColor:"#fff"}}>
           <WrapperProducts>
-            {productsType?.map((productType, index) =>{
+            {productsType?.filter((product) => {
+              if(searchDebounce ===""){
+                return product
+              }else if(product?.name?.toLowerCase()?.includes(searchDebounce?.toLowerCase())){
+                return product
+              }
+            })?.map((productType, index) =>{
                return (
                <CardProductComp
                   key={productType._id}
@@ -76,6 +87,7 @@ const TypeProductPage = (type) => {
               // total={panigate.totalPages}
               total={100}
               // pageSize={5}
+              defaultPageSize={5}
               pageSizeOptions={[5, 10, 15]}
               onChange={onChange}
               style={{ textAlign: "center", padding: "20px 0" }}

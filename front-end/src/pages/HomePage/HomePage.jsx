@@ -24,19 +24,28 @@ const productSearch = useSelector((state) => state.product.search)
 // const [stateProduct, setStateProduct] = useState([])
 const searchDebounce = useDebounce(productSearch, 1000)
 const [limit, setLimit] = useState(5)
+const [page, setPage] = useState(0)
 console.log("productSearch", productSearch)
 const [typeProduct, setTypeProduct] = useState([])
-const onChange = ()=>{}
+const onChange = (current, pageSize) => {
+  console.log("PageSize", current, pageSize)
+  setPage( current -1)
+  setLimit((limit) => (limit = pageSize))
+  // setPanigate({...panigate,limit:pageSize})
+  // panigate.page = current -1;
+  // panigate.limit = pageSize
+};
 
 const fetchProductAll = async(context) =>{
   console.log('context', context)
   const productSearch= context.queryKey && context.queryKey[2];
+  const page= context.queryKey && context.queryKey[3];
   const limit = context.queryKey && context.queryKey[1] //khi có context.queryKey sẽ lấy context.queryKey[1]: limit
-  const res= await productService.getAllProducts(productSearch, limit)
+  const res= await productService.getAllProducts(productSearch, limit, page)
     
   return res
 }
-const {data: products, isPreviousData} = useQuery(['products', limit, searchDebounce ], fetchProductAll, {retry: 3, retryDelay: 1000,keepPreviousData: true})
+const {data: products, isPreviousData} = useQuery(['products', limit, searchDebounce,page ], fetchProductAll, {retry: 3, retryDelay: 1000,keepPreviousData: true})
 // keepPreviousData: giúp giữ lại những data cũ mà ko cần load lại lại datta cũ đó
 console.log('products', products)
 console.log("isPreviousData", isPreviousData)
@@ -95,14 +104,25 @@ useEffect(() =>{
   })}
 
   </Row>
-  <ButtonComponent styleButton ={{background : "var(--primary-color)",width:"150px", margin:"15px auto 10px", color:"#fff" }} 
+
+  {/* Đây là nút xem thêm, click vào sẽ hiển thị thêm sản phẩm */}
+
+  {/* <ButtonComponent styleButton ={{background : "var(--primary-color)",width:"150px", margin:"15px auto 10px", color:"#fff" }} 
    textButton={isPreviousData ? "Đang Load" : "Xem Thêm"}
    
     onClick={ () => setLimit((pre) => pre +5)}
-    disabled={products?.total === products?.data?.length  || products?.totalPages === 1}/>
+    disabled={products?.total === products?.data?.length  || products?.totalPages === 1}
+    /> */}
 
-  <Pagination defaultCurrent={1} total={500} onChange={onChange} style={{textAlign:"center", padding:"20px 0"}} />
-      </div>
+      <Pagination 
+        defaultCurrent={page + 1}
+        total={100}
+        defaultPageSize={5}
+        pageSizeOptions={[5, 10, 15]} 
+        onChange={onChange} 
+        style={{textAlign:"center", padding:"20px 0"}} 
+        />
+  </div>
       
     </div>
   );

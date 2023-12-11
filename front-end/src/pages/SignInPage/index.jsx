@@ -3,7 +3,7 @@ import ButtonComponent from '../../components/ButtonComp/index'
 import FormInput from '../../components/FormInput/index'
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
 import styles from "./styles.module.css";
-import {useNavigate} from "react-router-dom"
+import {useNavigate,useLocation} from "react-router-dom"
 import * as userService from "../../services/userService"
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import * as message from "../../components/MessageComp"
@@ -16,6 +16,8 @@ const SignInPage = () => {
   const[email, setEmail] = useState('') 
   const[password, setPassword] = useState('') 
   const dispatch = useDispatch()
+  const location = useLocation()
+  console.log("locationLogin", location)
 
   const mutation = useMutationHooks(
      (data) => userService.loginUser(data)
@@ -28,8 +30,14 @@ const SignInPage = () => {
     if(statusData==="ERROR") {
       message.error()
     } else if(statusData==="OK") {
-      message.success()
-      navigate('/')
+         if(location?.state){        ///nếu khi login mà location có thêm thuoọc tính state thì sẽ chuyển đến trang có state(link), ko thì đến trang home
+            message.success()
+            navigate(location?.state)
+         }else{
+            message.success()
+            navigate('/')
+         }
+      
       //lưu access_token vào localStorage
       localStorage.setItem("access_token", JSON.stringify(data?.access_token))
 

@@ -105,7 +105,7 @@ const  getAllProduct = (limit, page, sort, filter) => {
         objectSort[key] = value;
 
         const allProductSort = await Product.find().limit(limit).skip(page*limit).sort(objectSort)
-        
+        // const totalCount = allProductSort.length
         resolve({ 
           status: 'OK',
           message: "Danh sách tất cả sản phẩm",
@@ -119,16 +119,16 @@ const  getAllProduct = (limit, page, sort, filter) => {
       if(filter){
         const key= filter[0]
         const value = filter[1] 
-
+        const  allProductOnlyFilter = await Product.find({ [key]:{ '$regex': value } })
         const allProductFilter = await Product.find({ [key]:{ '$regex': value } }).limit(limit).skip(page*limit)
-        
+        const totalCount2 = allProductOnlyFilter.length
         resolve({ 
           status: 'OK',
           message: "Danh sách tất cả sản phẩm",
           data: allProductFilter,
-          total: totalProduct,
+          total: totalCount2,
           pageCurrent: page+1,
-          totalPages : Math.ceil(totalProduct / limit)  //tổng số  trang
+          totalPages : Math.ceil(totalCount2 / limit)  //tổng số  trang
         })
       }
 

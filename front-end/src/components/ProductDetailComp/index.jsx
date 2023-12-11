@@ -5,15 +5,23 @@ import ButtonComponent from "../ButtonComp/index";
 import React, { useState } from "react";
 import * as productService from "../../services/productService"
 import {useQuery} from "@tanstack/react-query"
-import {useSelector} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
+import {useNavigate,useLocation} from "react-router-dom"
+import { addOrderProduct } from "../../redux/slides/orderSlide";
 const ProductDetailComp = ({idProduct}) => {
+    const navigate = useNavigate()
+    const location = useLocation()  //để lấy ra pathname trong location(đường dẫn của trang productdetail)
+                                    //để khi chưa đăng nhập mà ấn vào thêm giỏ hàng thì đăng nhập vào phát tự động dẫn tới link sản phẩm mua luôn
+    const dispatch = useDispatch()
     const [numberProductBye, setNumberProductBye] = useState(1)
 
     const user = useSelector((state) => state.user)
-    console.log("hi user: " + user)
+    console.log("hi user: " , user)
+
     const onChange = (value) => {
         setNumberProductBye(value)
     };
+    console.log("location", location)
 
     const handleChangeCount = (type) =>{
         if(type === "decrease"){
@@ -29,6 +37,24 @@ const ProductDetailComp = ({idProduct}) => {
             const res = await productService.getDetailProduct(id) //rowSelected: id sản phẩm
             console.log("res", res)
             return res.data
+        }
+    }
+
+    const handleAddOrderProduct= () =>{
+        if(!user?.id){
+            navigate('/sign-in', {state : location?.pathname}) //truyền thêm state khi login
+        }else{
+            dispatch(addOrderProduct({
+                orderItem :{
+                    name: productDetail?.name,
+                    amount: numberProductBye,
+                    image: productDetail?.image,
+                    priceOld: productDetail?.priceOld,
+                    priceNew: productDetail?.priceNew,
+                    discount: productDetail?.discount,
+                    product: productDetail?._id
+                }
+            }))
         }
     }
 
@@ -185,7 +211,7 @@ const ProductDetailComp = ({idProduct}) => {
                                 border: "1px solid #ee4d2d",
                                 borderRadius: "4px",
                             }}
-                            onClick={() => {}}
+                            onClick={ handleAddOrderProduct}
                             textButton={"Thêm vào giỏ hàng"}
                             styleTextButton={{
                                 color: "#ee4d2d",

@@ -37,7 +37,7 @@ function HeaderComponent() {
   const dispatch = useDispatch();
   const [namee, setNamee] = useState('')
   const [avatarr, setAvatarr] = useState('')
-//  const order = useSelector((state) => state.order)
+ const order = useSelector((state) => state.order)
   const handleNavgLogin = () => {
     navigate("/sign-in");
   };
@@ -183,7 +183,7 @@ const onClickSearch = () =>{
         >
           
           <div onClick={() => navigate(`/order`)} style={{cursor:"pointer"}}>
-            <Badge count={44} size="small"> {/* // count ={order?.orderItems?.length} */}
+            <Badge count={order?.orderItems?.length} size="small"> {/* // count ={order?.orderItems?.length} */}
               <ShoppingCartOutlined
                 style={{ fontSize: "30px", color: "#fff" }}
               />
