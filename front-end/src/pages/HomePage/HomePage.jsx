@@ -22,29 +22,30 @@ const HomePage = () => {
 const productSearch = useSelector((state) => state.product.search)
 // const refSearch = useRef()
 // const [stateProduct, setStateProduct] = useState([])
-const searchDebounce = useDebounce(productSearch, 1000)
+const searchDebounce = useDebounce(productSearch, 300)
 const [limit, setLimit] = useState(5)
+const [page, setPage] = useState(0)
 console.log("productSearch", productSearch)
-const onChange = ()=>{}
+const [typeProduct, setTypeProduct] = useState([])
+const onChange = (current, pageSize) => {
+  console.log("PageSize", current, pageSize)
+  setPage( current -1)
+  setLimit((limit) => (limit = pageSize))
+  // setPanigate({...panigate,limit:pageSize})
+  // panigate.page = current -1;
+  // panigate.limit = pageSize
+};
 
 const fetchProductAll = async(context) =>{
   console.log('context', context)
   const productSearch= context.queryKey && context.queryKey[2];
+  const page= context.queryKey && context.queryKey[3];
   const limit = context.queryKey && context.queryKey[1] //khi có context.queryKey sẽ lấy context.queryKey[1]: limit
-  const res= await productService.getAllProducts(productSearch, limit)
+  const res= await productService.getAllProducts(productSearch, limit, page)
     
   return res
-
 }
-// useEffect(() =>{
-
-//   if(refSearch.current){
-//     fetchProductAll(searchDebounce)
-//   }
-//   refSearch.current = true
-// },[searchDebounce])
-
-const {data: products, isPreviousData} = useQuery(['products', limit, searchDebounce ], fetchProductAll, {retry: 3, retryDelay: 1000,keepPreviousData: true})
+const {data: products, isPreviousData} = useQuery(['products', limit, searchDebounce,page ], fetchProductAll, {retry: 3, retryDelay: 1000,keepPreviousData: true})
 // keepPreviousData: giúp giữ lại những data cũ mà ko cần load lại lại datta cũ đó
 console.log('products', products)
 console.log("isPreviousData", isPreviousData)
@@ -53,6 +54,18 @@ console.log("isPreviousData", isPreviousData)
 //     setStateProduct(products?.data)
 //   }
 // }, [products]);
+const fetchAllTypeProduct = async() =>{
+  const res = await productService.getAllTypeProduct()
+  console.log("res typ", res)
+  
+   if(res.status ==="OK"){
+    setTypeProduct(res?.data)
+   }
+}
+
+useEffect(() =>{
+  fetchAllTypeProduct()
+}, [])
 
   return (
     <div id="container" style={{ backgroundColor:"#F5F5F5" }}>
@@ -62,8 +75,9 @@ console.log("isPreviousData", isPreviousData)
 <WrapperListProduct >
   <WrapperHeadingProduct >DANH MỤC</WrapperHeadingProduct>
   <WrapperProduct>
-    {arr.map((product, index) => (
-      <TypeProduct name={product.name} img={product.img} key={index} />
+    {typeProduct.map((product, index) => (
+      // <TypeProduct name={product.name} img={product.img} key={index} />
+      <TypeProduct name={product} key={index} />
     ))}
   </WrapperProduct>
 </WrapperListProduct>
@@ -83,17 +97,32 @@ console.log("isPreviousData", isPreviousData)
             rating={product.rating}
             selled={product.selled}
             type={product.type}
+            id = {product._id}
+            trademark= {product.trademark}
+            origin = {product.origin}
    />
   })}
 
   </Row>
-  <ButtonComponent styleButton ={{background : "var(--primary-color)",width:"150px", margin:"15px auto 10px" }} 
-   textButton={isPreviousData ? "Đang Load" : "Xem Thêm"}
-    onClick={ () => setLimit((pre) => pre +5)}
-    disabled={products?.total === products?.data?.length  || products?.totalPages ===1}/>
 
-  <Pagination defaultCurrent={1} total={500} onChange={onChange} style={{textAlign:"center", padding:"20px 0"}} />
-      </div>
+  {/* Đây là nút xem thêm, click vào sẽ hiển thị thêm sản phẩm */}
+
+  {/* <ButtonComponent styleButton ={{background : "var(--primary-color)",width:"150px", margin:"15px auto 10px", color:"#fff" }} 
+   textButton={isPreviousData ? "Đang Load" : "Xem Thêm"}
+   
+    onClick={ () => setLimit((pre) => pre +5)}
+    disabled={products?.total === products?.data?.length  || products?.totalPages === 1}
+    /> */}
+
+      <Pagination 
+        defaultCurrent={page + 1}
+        total={100}
+        defaultPageSize={5}
+        pageSizeOptions={[5, 10]} 
+        onChange={onChange} 
+        style={{textAlign:"center", padding:"20px 0"}} 
+        />
+  </div>
       
     </div>
   );

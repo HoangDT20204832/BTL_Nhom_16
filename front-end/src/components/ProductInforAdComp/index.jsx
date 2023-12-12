@@ -30,6 +30,8 @@ const [rowSelected,setRowSelected] = useState("")
     discount : "",
     selled : "",
     countInStock : "",
+    trademark: "",
+    origin: ""
   })
 
   const [stateProductDetail, setStateProductDetail] = useState({
@@ -43,6 +45,8 @@ const [rowSelected,setRowSelected] = useState("")
     discount : "",
     selled : "",
     countInStock : "",
+    trademark: "",
+    origin: ""
   })
 
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
@@ -53,10 +57,10 @@ const [rowSelected,setRowSelected] = useState("")
   const mutationCreate = useMutationHooks(
     ( data) =>{ 
       const {   name , image ,type ,priceOld ,priceNew ,countInStock,rating ,
-      description ,discount ,selled } = data;
+      description ,discount ,selled,trademark, origin } = data;
       console.log("test datta", data)
       const res = productService.createProduct({name , image ,type ,priceOld ,priceNew ,countInStock ,rating ,
-        description ,discount ,selled })
+        description ,discount ,selled,trademark, origin })
       return res
       }
  )
@@ -126,6 +130,8 @@ const fetchGetDetailProduct = async(rowSelected) => {
         discount : res?.data.discount,
         selled : res?.data.selled,
         countInStock : res?.data.countInStock,
+        trademark: res?.data.trademark,
+        origin: res?.data.origin 
       })
     }
 }
@@ -255,6 +261,8 @@ console.log("resProduct", stateProductDetail)
     discount : "",
     selled : "",
     countInStock : "",
+    trademark: "",
+    origin: ""
     })
     form.resetFields()
   };
@@ -273,6 +281,8 @@ console.log("resProduct", stateProductDetail)
       discount : "",
       selled : "",
       countInStock : "",
+      trademark: "",
+      origin: ""
       })
       form.resetFields()
     };
@@ -467,6 +477,20 @@ const onDeleteProduct = () =>{
         </Form.Item>
 
         <Form.Item
+          label="Thương hiệu" name="trademark" 
+          rules={[{required: true,message: 'Please input your trademark!',}]}
+        >
+          <InputComponent value={stateProduct.trademark} name="trademark" onChange={handleOnChangeInput} />
+        </Form.Item>
+
+        <Form.Item
+          label="Nơi xuất xứ" name="origin" 
+          rules={[{required: true,message: 'Please input your origin!',}]}
+        >
+          <InputComponent value={stateProduct.origin} name="origin" onChange={handleOnChangeInput} />
+        </Form.Item>
+
+        <Form.Item
           label="Mô tả sản phẩm" name="description" 
           rules={[{required: true,message: 'Please input your description!',}]}
         >
@@ -586,6 +610,20 @@ const onDeleteProduct = () =>{
           rules={[{required: true,message: 'Please input your selled!',}]}
         >
           <InputComponent value={stateProductDetail.selled} name="selled" onChange={handleOnChangeInputDetail} />
+        </Form.Item>
+
+        <Form.Item
+          label="Thương hiệu" name="trademark" 
+          rules={[{required: true,message: 'Please input your trademark!',}]}
+        >
+          <InputComponent value={stateProductDetail.trademark} name="trademark" onChange={handleOnChangeInputDetail} />
+        </Form.Item>
+
+        <Form.Item
+          label="Nơi xuất xứ" name="origin" 
+          rules={[{required: true,message: 'Please input your origin!',}]}
+        >
+          <InputComponent value={stateProductDetail.origin} name="origin" onChange={handleOnChangeInputDetail} />
         </Form.Item>
 
         <Form.Item
@@ -709,6 +747,20 @@ const onDeleteProduct = () =>{
           rules={[{required: true,message: 'Please input your selled!',}]}
         >
           <InputComponent value={stateProductDetail.selled} name="selled"  />
+        </Form.Item>
+
+        <Form.Item
+          label="Thương hiệu" name="trademark" 
+          rules={[{required: true,message: 'Please input your trademark!',}]}
+        >
+          <InputComponent value={stateProductDetail.trademark} name="trademark"  />
+        </Form.Item>
+
+        <Form.Item
+          label="Nơi xuất xứ" name="origin" 
+          rules={[{required: true,message: 'Please input your origin!',}]}
+        >
+          <InputComponent value={stateProductDetail.origin} name="origin" />
         </Form.Item>
 
         <Form.Item

@@ -4,7 +4,7 @@ const createProduct = async (req, res) => {
   try {
     console.log("req.body", req.body);
     const { name, image, type, priceOld, priceNew,countInStock,rating, 
-           description,discount,selled} = req.body;
+           description,discount,selled, trademark, origin} = req.body;
     if (!name || !image || !type || !priceOld || !priceNew || !countInStock || !rating) {
       return res.status(200).json({
         status: "Error",
@@ -63,7 +63,7 @@ try {
 const getAllProduct = async (req, res) => {
     try {
       const {limit, page, sort, filter} = req.query
-      const response = await productService.getAllProduct(Number(limit) || 10, Number(page) || 0,  sort,filter );
+      const response = await productService.getAllProduct(Number(limit) , Number(page) || 0,  sort,filter );
       return res.status(200).json(response);
     } catch (e) {
       return res.status(404).json({
@@ -91,6 +91,17 @@ try {
     }
 };
 
+const getAllTypeProduct = async (req, res) => {
+  try {
+      const response = await productService.getAllTypeProduct();
+      return res.status(200).json(response);
+      } catch (e) {
+      return res.status(404).json({
+          message: e,
+      });
+      }
+  };
+
 
 
 module.exports = {
@@ -98,5 +109,6 @@ module.exports = {
     updateProduct,
     getDetailProduct,
     deleteProduct,
-    getAllProduct
+    getAllProduct,
+    getAllTypeProduct
 };

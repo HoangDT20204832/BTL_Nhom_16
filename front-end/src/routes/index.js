@@ -25,12 +25,12 @@ export const routers = [
         isShowHeader: true,
     },
     {
-        path: '/:type',
+        path: '/product/:type',
         page: TypeProductPage,
         isShowHeader: true,
     },
     {
-        path: "/product-detail",
+        path: "/product-detail/:id",
         page: ProductPageDetail,
         isShowHeader: true,
     },
