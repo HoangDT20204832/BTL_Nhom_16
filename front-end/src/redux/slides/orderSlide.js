@@ -25,7 +25,7 @@ export const orderSlide = createSlice({
   initialState,
   reducers: {
     addOrderProduct: (state, action) =>{
-        console.log("addOrderProduct", state, action)
+        // console.log("addOrderProduct", state, action)
         const {orderItem} = action.payload
         const itemOrder = state?.orderItems?.find((item) => item?.product === orderItem.product)
                          //kiểm tra xem có sản phẩm có idProduct có sẵn trong orderItems bằng với idProduct mình đã truyền lên khi ấn thêm vào giỏ hàng
@@ -56,13 +56,22 @@ export const orderSlide = createSlice({
     removeOrderProduct: (state, action) =>{
         console.log("remove", state, action)
         const {idProduct} = action.payload
-        const itemOrder = state?.orderItems?.find((item) => item?.product !== idProduct) //lấy ra những sản phẩm trong đơn hàng ko có idProduct trùng với id của sản phẩm đã xóa
+        const itemOrder = state?.orderItems?.filter((item) => item?.product !== idProduct) //lấy ra những sản phẩm trong đơn hàng ko có idProduct trùng với id của sản phẩm đã xóa
         state.orderItems= itemOrder  //sửa so với video itemOrder thành state
+    },
+
+    removeAllOrderProduct: (state, action) =>{
+        console.log("remove", state, action)
+        const {listChecked} = action.payload
+        const itemOrders = state?.orderItems?.filter((item) => {
+            return (!listChecked.includes(item.product))
+        }) //lấy ra những sản phẩm trong đơn hàng ko có idProduct trùng với id của các sản phẩm đã xóa
+        state.orderItems= itemOrders  //sửa so với video itemOrder thành state
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addOrderProduct} = orderSlide.actions
+export const { addOrderProduct,increaseAmount, decreaseAmount, removeOrderProduct,removeAllOrderProduct} = orderSlide.actions
 
 export default orderSlide.reducer 

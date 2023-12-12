@@ -96,14 +96,14 @@ const  getAllProduct = (limit, page, sort, filter) => {
       //limit() để xác định số lượng sản phẩm tối đa trong 1 trang;
       //skip(m) nghĩa là bỏ qua m sản phẩm đầu tiên => skip(page*limit) nghĩa là bỏ qua các sản phẩm của trang trc
       const totalProduct = await Product.countDocuments()
-      console.log(filter)
+      // console.log(filter)
       
       if(sort){
         const objectSort = {}
         const key = sort[1];
         const value = sort[0]
         objectSort[key] = value;
-
+                                   // .lean():giảm độ trễ bằng cách trả về kết quả dưới dạng JavaScript thay vì đối tượng Mongoose
         const allProductSort = await Product.find().limit(limit).skip(page*limit).sort(objectSort)
         // const totalCount = allProductSort.length
         resolve({ 
@@ -119,16 +119,16 @@ const  getAllProduct = (limit, page, sort, filter) => {
       if(filter){
         const key= filter[0]
         const value = filter[1] 
-        const  allProductOnlyFilter = await Product.find({ [key]:{ '$regex': value } })
+        // const  allProductOnlyFilter = await Product.find({ [key]:{ '$regex': value } })
         const allProductFilter = await Product.find({ [key]:{ '$regex': value } }).limit(limit).skip(page*limit)
-        const totalCount2 = allProductOnlyFilter.length
+        // const totalCount2 = allProductOnlyFilter.length
         resolve({ 
           status: 'OK',
           message: "Danh sách tất cả sản phẩm",
           data: allProductFilter,
-          total: totalCount2,
+          total: totalProduct,
           pageCurrent: page+1,
-          totalPages : Math.ceil(totalCount2 / limit)  //tổng số  trang
+          totalPages : Math.ceil(totalProduct / limit)  //tổng số  trang
         })
       }
 

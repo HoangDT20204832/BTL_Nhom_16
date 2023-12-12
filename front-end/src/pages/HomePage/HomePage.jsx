@@ -22,7 +22,7 @@ const HomePage = () => {
 const productSearch = useSelector((state) => state.product.search)
 // const refSearch = useRef()
 // const [stateProduct, setStateProduct] = useState([])
-const searchDebounce = useDebounce(productSearch, 1000)
+const searchDebounce = useDebounce(productSearch, 300)
 const [limit, setLimit] = useState(5)
 const [page, setPage] = useState(0)
 console.log("productSearch", productSearch)
@@ -118,7 +118,7 @@ useEffect(() =>{
         defaultCurrent={page + 1}
         total={100}
         defaultPageSize={5}
-        pageSizeOptions={[5, 10, 15]} 
+        pageSizeOptions={[5, 10]} 
         onChange={onChange} 
         style={{textAlign:"center", padding:"20px 0"}} 
         />

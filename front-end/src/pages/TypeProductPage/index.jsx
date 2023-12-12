@@ -88,10 +88,10 @@ const searchDebounce = useDebounce(productSearch, 500)
               total={100}
               // pageSize={5}
               defaultPageSize={5}
-              pageSizeOptions={[5, 10, 15]}
+              pageSizeOptions={[5, 10]}
               onChange={onChange}
               style={{ textAlign: "center", padding: "20px 0" }}
-            />
+            /> 
         </Col>
       </WrapperProductType>
     </div>

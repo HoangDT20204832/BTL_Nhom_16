@@ -21,8 +21,8 @@ const ProductDetailComp = ({idProduct}) => {
     const onChange = (value) => {
         setNumberProductBye(value)
     };
-    console.log("location", location)
-
+    // console.log("location", location)
+// 
     const handleChangeCount = (type) =>{
         if(type === "decrease"){
             setNumberProductBye(numberProductBye - 1)
@@ -31,11 +31,11 @@ const ProductDetailComp = ({idProduct}) => {
         }
     }
     const fetchGetDetailProduct = async(context) => {
-        console.log("context", context);
+        // console.log("context", context);
         const id = context?.queryKey && context?.queryKey[1]
         if(id){
             const res = await productService.getDetailProduct(id) //rowSelected: id sản phẩm
-            console.log("res", res)
+            // console.log("res", res)
             return res.data
         }
     }
