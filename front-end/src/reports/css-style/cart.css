@@ -27,10 +27,14 @@
     font-family: 'lato', sans-serif;
 }
 
-.empty-img{
-    width: 50%;
-    display: block;
-    margin: auto;
+.des{
+    height: 300px;
+    overflow: scroll;
+    white-space: pre-wrap;
+}
+
+.tags-section{
+    padding: 30px 5vw;
 }
 
 .sm-product{

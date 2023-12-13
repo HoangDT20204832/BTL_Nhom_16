@@ -31,13 +31,6 @@ body{
     background: #fff;
     border-radius: 10px;
     padding: 20px;
-    font-family: 'lato', sans-serif;
-    transition: .5s;
-    font-size: 1rem;
-    line-height: 1.2rem;
-    z-index: 9;
-    text-align: center;
-    text-transform: capitalize;
     color: #ff3737;
     align-items: center;
     display: flex;
@@ -49,17 +42,6 @@ body{
 
 .error.show{
     opacity: 1;
-}
-
-.product-image{
-    background: #fff;
-    width: 100%;
-}
-
-.image-upload-container{
-    width: 60%;
-    position: relative;
-    height: 600px;
 }
 
 .upload-overlay{
