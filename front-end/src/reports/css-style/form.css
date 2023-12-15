@@ -92,7 +92,6 @@ input:focus::placeholder, textarea:focus::placeholder{
 }
 
 #tc{
-    -webkit-appearance: none;
     width: 15px;
     height: 15px;
     padding: 0;
