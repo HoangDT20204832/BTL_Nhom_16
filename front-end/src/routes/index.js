@@ -1,5 +1,5 @@
 import HomePage from "../pages/HomePage/HomePage"
-import OrderPage from "../pages/OrderPage/OrderPage"
+import OrderPage from "../pages/OrderPage"
 import ProductsPage from "../pages/ProductsPage/ProductsPage"
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage"
 import AccountPage from "../pages/AccountPage"
@@ -8,6 +8,7 @@ import SignInPage from "../pages/SignInPage"
 import SignUpPage from "../pages/SignUpPage"
 import ProductPageDetail from "../pages/ProductPageDetail"
 import AdminPage from "../pages/AminPage"
+import PaymentPage from "../pages/PaymentPage"
 export const routers = [
     {
         path: '/',
@@ -37,6 +38,11 @@ export const routers = [
     {
         path: "/account",
         page: AccountPage,
+        isShowHeader: true,
+    },
+    {
+        path: '/payment',
+        page: PaymentPage,
         isShowHeader: true,
     },
     {

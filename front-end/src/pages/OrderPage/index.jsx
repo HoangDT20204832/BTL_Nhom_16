@@ -1,13 +1,25 @@
 import { Checkbox,InputNumber } from 'antd'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { DeleteOutlined, MinusOutlined, PlusOutlined} from '@ant-design/icons'
 import ButtonComponent from '../../components/ButtonComp/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { decreaseAmount, increaseAmount, removeAllOrderProduct, removeOrderProduct } from '../../redux/slides/orderSlide';
+import { decreaseAmount, increaseAmount, removeAllOrderProduct, removeOrderProduct, selectOrder } from '../../redux/slides/orderSlide';
 import styles from "./styles.module.css";
+import { Button,  Modal,Form} from 'antd';
+import InputComponent from '../../components/InputComponent/InputComponent';
+import { useMutationHooks } from '../../hooks/useMutationHook';
+import * as userService from "../../services/userService"
+import * as messagee from "../../components/MessageComp"
+import { updateUser } from '../../redux/slides/userSlide';
+import {useNavigate} from "react-router-dom"
+
 const OrderPage = () => {
+  const navigate = useNavigate()
   const order = useSelector((state) => state.order)
   const [listChecked, setListChecked] = useState([])
+  const user = useSelector((state) => state.user)
+
+  const[isOpenUpdateInfor, setIsOpenUpdateInfor] = useState(false)
   const dispatch = useDispatch()
   const onChange = (e) => {
     if(listChecked.includes(e.target.value)){ //nếu check đã listCheck đã có rồi mà lại check thì sẽ xóa checked đó đi 
@@ -19,7 +31,15 @@ const OrderPage = () => {
     // console.log(`checked = ${e.target.value}`)
   };
   console.log("listChecked", listChecked)
-
+  const [stateUserDetail, setStateUserDetail] = useState({
+    name: "" , 
+    phone : "",
+    address : "",
+    city : "",
+    // sex : "",
+  })
+  const [form] = Form.useForm() 
+  
   const handleChangeCount = (type, idProduct) => {
     if(type === 'increase') {
       dispatch(increaseAmount({idProduct}))
@@ -50,8 +70,15 @@ const OrderPage = () => {
       dispatch(removeAllOrderProduct({listChecked}))
     }
   }
+
+  //xử lý phần tính tiền các sản phẩm chọn mua
+  useEffect(() =>{
+      dispatch(selectOrder({listChecked}))
+  },[listChecked])
+
+  console.log("orderChecked", order)
   const priceMemo = useMemo(() =>{
-      const result = order?.orderItems?.reduce(
+      const result = order?.orderItemsSelected?.reduce(
         (total, item) => total + (item.priceNew * item.amount)
       ,0)
       return result
@@ -60,22 +87,100 @@ const OrderPage = () => {
   const transportPriceMemo = useMemo(() =>{
    if(priceMemo >= 300000){
     return 16000
+   } else {
+    if(priceMemo <=0){
+      return 0
+    }else if(priceMemo < 300000){
+      return 30000
+    }
    }
-   else if(0< priceMemo < 300000){
-        return 30000
-   } else if(priceMemo <= 0){
-        return 0
-   }
+  
 }, [priceMemo])
 
 const totalPriceMemo = useMemo(() =>{
       return priceMemo + transportPriceMemo
 },[priceMemo,transportPriceMemo])
-// console.log("type of price", typeof(totalPriceMemo))
+console.log("type of price", typeof(totalPriceMemo))
 console.log("order", order)
+
+// udpdate thông tin user khi ko đủ thoogn tin để giao hàng
+const mutationUpdate = useMutationHooks(
+  ( data) =>{ 
+    const {id ,  ...rest } = data;
+    console.log("test datta", data)
+    const res = userService.updateUserInfor(id, {...rest} )
+    return res
+    },
+)
+const {data: dataUpdated, isSuccess: isSuccessUpdated, isError:isErrorUpdated} = mutationUpdate
+
+  const handleOnChangeInputDetail = (e) =>{
+    setStateUserDetail({
+      ...stateUserDetail,
+      [e.target.name]: e.target.value
+    })
+}
+useEffect(() =>{
+    if(isOpenUpdateInfor){
+      setStateUserDetail({
+        ...stateUserDetail,
+        city: user?.city,
+        name: user?.name,
+        address: user?.address,
+        phone: user?.phone
+      })
+    }
+},[isOpenUpdateInfor])
+
+// khi click vào nút chỉnh sửa => stateUserDetail thay đổi =>
+// form.setFieldsValue: form set giá trị thay đổi thông tin trong form 
+// những giá trị của name="" của Form.Item trùng với các state trong stateUserDetail  = vs giá trị của stateUserDetail
+useEffect(()=> {
+  form.setFieldsValue(stateUserDetail)
+},[form, stateUserDetail])
+
+const handleAddCard = () =>{
+  if(!order?.orderItemsSelected?.length){
+    messagee.error("Vui lòng chọn sản phẩm")
+  }else if(!user?.name || !user?.phone || !user?.address || !user?.city){
+        setIsOpenUpdateInfor(true)
+    } else{
+      navigate('/payment')
+    }
+}
+const handleCancelUpdate = () =>{
+    setStateUserDetail({
+    name: "" , 
+    email : "",
+    isAdmin : false,
+    phone : "",
+    address : "",
+    avatar : "",
+    city : "",
+    // sex : "",
+    })
+    form.resetFields()
+  setIsOpenUpdateInfor(false)
+}
+
+const handleUpdateInforUser = () =>{
+  const {name, phone, address, city} = stateUserDetail
+  if(name&&phone&&address&&city){ 
+    mutationUpdate.mutate({id: user?.id , ...stateUserDetail},{
+      onSuccess: ()=>{
+        dispatch(updateUser({...user, name, phone, address, city}))
+        setIsOpenUpdateInfor(false)
+      }
+    })
+}
+}
+console.log("user3", user)
+
+const handleOnchaneAddress = () =>{
+  setIsOpenUpdateInfor(true)
+}
   return (
     <>
-    {/* <div>OrderPage</div> */}
     <div className={styles.cartCompWrap} >
       <div className={styles.headerCart}>
               <div className={styles.headerCartItem}>SHOP BÁN HÀNG</div>
@@ -131,15 +236,20 @@ console.log("order", order)
           </div>
           <div className={styles.containerCartRight}>
             <div style={{width: '100%'}}>
+            <div className={styles.containerCartRightInfor}>
+              <div>
+                <span>Đia chỉ: </span>
+                <span style={{color:"var(--active-color)", margin:"0 5px"}}>{`${user?.address} - ${user?.city}`}</span>
+                <span  onClick={handleOnchaneAddress} style={{color:"blue", cursor:"pointer"}}>Thay đổi </span>
+              </div>
+            </div>
+                 
               <div className={styles.containerCartRightInfor}>
                 <div  className={styles.containerCartRightInforItem} >
                   <span>Tạm tính</span>
                   <span className={styles.containerCartRightInforPrice} >{priceMemo.toLocaleString()}đ</span>
                 </div>
-                {/* <div className={styles.containerCartRightInforItem}>
-                  <span>Giảm giá</span>
-                  <span className={styles.containerCartRightInforPrice} >0</span>
-                </div> */}
+
                 <div className={styles.containerCartRightInforItem}>
                   <span>Phí vận chuyển</span>
                   <span className={styles.containerCartRightInforPrice} >{transportPriceMemo.toLocaleString()}đ</span>
@@ -154,7 +264,7 @@ console.log("order", order)
               </div>
             </div>
             <ButtonComponent
-              // onClick={() => handleAddCard(productDetails, numProduct)}
+              onClick={() => handleAddCard()}
               size={40}
               styleButton={{
                   background: 'rgb(255, 57, 69)',
@@ -170,8 +280,73 @@ console.log("order", order)
         </div>
       </div>
     </div>
+
+    <Modal forceRender title="Cập nhật thông tin giao hàng" open={isOpenUpdateInfor}  onCancel={handleCancelUpdate} 
+            onOk={handleUpdateInforUser}>
+
+<Form
+        name="basic"
+        labelCol={{
+          span: 7,
+        }}
+        wrapperCol={{
+          span: 17,
+        }}
+        // onFinish={onUpdateUser}
+        autoComplete="on"
+        form={form}
+      >
+        <Form.Item
+          label="Tên người dùng"
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your name!',
+            },
+          ]}
+        >
+          <InputComponent value={stateUserDetail.name} name="name" onChange={handleOnChangeInputDetail} />
+        </Form.Item>
+
+        <Form.Item
+          label="SĐT" name="phone" 
+          rules={[{required: true,message: 'Please input your phone!',}]}
+        >
+          <InputComponent value={stateUserDetail.phone} name="phone" onChange={handleOnChangeInputDetail}/>
+        </Form.Item>
+
+        <Form.Item
+          label="Địa chỉ" name="address" 
+          rules={[{required: true,message: 'Please input your address!',}]}
+        >
+          <InputComponent value={stateUserDetail.address} name="address" onChange={handleOnChangeInputDetail}/>
+        </Form.Item>
+
+        <Form.Item
+          label="Nơi sống" name="city" 
+          rules={[{required: true,message: 'Please input your city!',}]}
+        >
+          <InputComponent value={stateUserDetail.city} name="city" onChange={handleOnChangeInputDetail}/>
+        </Form.Item>
+     
+
+        {/* <Form.Item
+          wrapperCol={{
+            offset: 20,
+            span: 16,
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            Apply
+          </Button>
+        </Form.Item> */}
+        </Form>
+    </Modal>
+
     </>
   )
 }
+
 
 export default OrderPage;

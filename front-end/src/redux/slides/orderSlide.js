@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    orderItems: [
-    ],
+    orderItems: [],
+    orderItemsSelected :[],
     shippingAddress: {                                          // giao hàng
         // fullName: { type: String, required: true },             //tên người nhận
         // address: { type: String, required: true },              //địa chỉ giao hàng
@@ -40,24 +40,32 @@ export const orderSlide = createSlice({
     increaseAmount : (state, action) =>{
         // console.log("remove", state, action)
         const {idProduct} = action.payload
-        const itemOrder = state?.orderItems?.find((item) => item?.product === idProduct) //lấy ra những sản phẩm trong đơn hàng ko có idProduct trùng với id của sản phẩm đã xóa
-        // state.orderItems= itemOrder  //sửa so với video itemOrder thành state
-        itemOrder.amount ++
+        const itemOrder = state?.orderItems?.find((item) => item?.product === idProduct)
+        const itemOrderSelected = state?.orderItemsSelected?.find((item) => item?.product === idProduct)
+        itemOrder.amount++;
+        if(itemOrderSelected) {
+          itemOrderSelected.amount++;
+        }
     },
     
     decreaseAmount : (state, action) =>{
         // console.log("remove", state, action)
-        const {idProduct} = action.payload
-        const itemOrder = state?.orderItems?.find((item) => item?.product === idProduct) //lấy ra những sản phẩm trong đơn hàng ko có idProduct trùng với id của sản phẩm đã xóa
-        // state.orderItems= itemOrder  //sửa so với video itemOrder thành state
-        itemOrder.amount --
+      const {idProduct} = action.payload
+      const itemOrder = state?.orderItems?.find((item) => item?.product === idProduct)
+      const itemOrderSelected = state?.orderItemsSelected?.find((item) => item?.product === idProduct)
+      itemOrder.amount--;
+      if(itemOrderSelected) {
+        itemOrderSelected.amount--;
+      }
     },
 
     removeOrderProduct: (state, action) =>{
         console.log("remove", state, action)
         const {idProduct} = action.payload
         const itemOrder = state?.orderItems?.filter((item) => item?.product !== idProduct) //lấy ra những sản phẩm trong đơn hàng ko có idProduct trùng với id của sản phẩm đã xóa
-        state.orderItems= itemOrder  //sửa so với video itemOrder thành state
+        const itemOrderSelected = state?.orderItemsSelected?.filter((item) => item?.product !== idProduct) //lấy ra những sản phẩm trong đơn hàng đã "selected" ko có idProduct trùng với id của sản phẩm đã xóa khi selected
+        state.orderItems= itemOrder 
+        state.orderItemsSelected= itemOrderSelected
     },
 
     removeAllOrderProduct: (state, action) =>{
@@ -66,12 +74,30 @@ export const orderSlide = createSlice({
         const itemOrders = state?.orderItems?.filter((item) => {
             return (!listChecked.includes(item.product))
         }) //lấy ra những sản phẩm trong đơn hàng ko có idProduct trùng với id của các sản phẩm đã xóa
-        state.orderItems= itemOrders  //sửa so với video itemOrder thành state
+        
+        const itemOrdersSelected = state?.orderItemsSelected?.filter((item) => {
+            return (!listChecked.includes(item.product))
+        })
+        state.orderItems= itemOrders  
+        state.orderItemsSelected= itemOrdersSelected  
+    },
+
+    selectOrder: (state, action) =>{
+        console.log("select", state, action)
+        const orderSelected = []
+        const {listChecked} = action.payload
+        state.orderItems.forEach((order) =>{
+            if(listChecked.includes(order.product)){
+                orderSelected.push(order)
+        }
+        state.orderItemsSelected = orderSelected
+    })
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addOrderProduct,increaseAmount, decreaseAmount, removeOrderProduct,removeAllOrderProduct} = orderSlide.actions
+export const { addOrderProduct,increaseAmount, decreaseAmount, 
+    removeOrderProduct,removeAllOrderProduct ,selectOrder} = orderSlide.actions
 
 export default orderSlide.reducer 
