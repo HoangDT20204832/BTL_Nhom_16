@@ -9,6 +9,8 @@ import SignUpPage from "../pages/SignUpPage"
 import ProductPageDetail from "../pages/ProductPageDetail"
 import AdminPage from "../pages/AminPage"
 import PaymentPage from "../pages/PaymentPage"
+import OrderSuccess from "../pages/OrderSuccess"
+import MyOrderPage from "../pages/MyOrderPage"
 export const routers = [
     {
         path: '/',
@@ -43,6 +45,16 @@ export const routers = [
     {
         path: '/payment',
         page: PaymentPage,
+        isShowHeader: true,
+    },
+    {
+        path: '/orderSuccess',
+        page: OrderSuccess,
+        isShowHeader: true,
+    },
+    {
+        path: '/my-order',
+        page: MyOrderPage,
         isShowHeader: true,
     },
     {

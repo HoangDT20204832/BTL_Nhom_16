@@ -18,8 +18,11 @@ const CardProductComp = (props) => {
   }
   return (
 
-        <Col span={4} className={styles.cardProductWrap} onClick={() =>handleDetailProduct(id)} >
-          <a className={styles.productItemWrap} >
+        <Col span={4} className={styles.cardProductWrap} 
+             onClick={() => countInStock!== 0 && handleDetailProduct(id)}
+              >         
+          <a className={styles.productItemWrap} 
+            style={{backgroundColor: countInStock ===0 ? "#ccc" : "#fff" }} >
             <img className={styles.productItemImg} src= {image}/>
             <h4 className={styles.productItemName}>
               {name}

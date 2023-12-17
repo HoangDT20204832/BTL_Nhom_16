@@ -32,6 +32,7 @@ import { searchProduct } from "../../redux/slides/productSlide.js";
 
 function HeaderComponent() {
   const navigate = useNavigate();
+  const [isOpenPopover, setIsOpenPopover] = useState(false)
   const user = useSelector((state) => state.user);
   console.log("user",user);
   const dispatch = useDispatch();
@@ -57,13 +58,35 @@ function HeaderComponent() {
 
   const content = (
     <div >
-      <p style={{cursor: "pointer"}} onClick={() => {navigate("/account")} } >Tài khoản của tôi</p>
+      <p style={{cursor: "pointer"}} onClick={() => handleClickNav("account") } >Tài khoản của tôi</p>
+      <p style={{cursor: "pointer"}} onClick={() => handleClickNav("my-order") } >Đơn mua</p>
       {user?.isAdmin &&(
-        <p style={{cursor: "pointer"}} onClick={() => {navigate("/system/admin")} } >Quản lý hệ thống</p>
+        <p style={{cursor: "pointer"}} onClick={() => handleClickNav("system/admin") } >Quản lý hệ thống</p>
       )}
-      <p style={{cursor: "pointer"}} onClick={handleLogoutUser}>Đăng xuất</p>
+      <p style={{cursor: "pointer"}} onClick={() => handleClickNav()}>Đăng xuất</p>
     </div>
   );
+ const handleClickNav = (type) =>{
+    switch(type)  {
+      case "account":
+        navigate("/account")
+        break;
+      case "my-order":
+        navigate("/my-order",{ state : {
+          id: user?.id,
+          // token : user?.access_token
+        }
+      })
+        break;
+      case "system/admin":
+        navigate("/system/admin")
+        break;
+      default:
+        handleLogoutUser()
+    }
+    setIsOpenPopover(false)
+ }
+
   const [arrow, setArrow] = useState('Show');
   const mergedArrow = useMemo(() => {
     if (arrow === 'Hide') {
@@ -137,11 +160,13 @@ const onClickSearch = () =>{
             
             {user?.name ? ( //kiểm tra xem nếu có user.name(người dùng đã đăng nhập ) thì hiển thị th1; ko thì th2
               <div>
-                  <Popover
+                  <Popover 
                     placement="bottom"
                     trigger="click"
                     content={content}
                     arrow={mergedArrow}
+                    open={isOpenPopover}
+                    onClick= {() => setIsOpenPopover((pre) => !pre)}
                   > 
                 <div style={{ cursor: "pointer" , fontSize:"14px"} }>{namee || "User"}</div>
                   </Popover>

@@ -4,11 +4,7 @@ import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import ButtonComponent from "../../components/ButtonComp/index";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  decreaseAmount,
-  increaseAmount,
   removeAllOrderProduct,
-  removeOrderProduct,
-  selectOrder,
 } from "../../redux/slides/orderSlide";
 import styles from "./styles.module.css";
 import { Button, Modal, Form } from "antd";
@@ -18,10 +14,13 @@ import * as userService from "../../services/userService";
 import * as orderService from "../../services/orderService";
 import * as messagee from "../../components/MessageComp";
 import { updateUser } from "../../redux/slides/userSlide";
-
+import {useNavigate} from "react-router-dom"
 const PaymentPage = () => {
+  const navigate = useNavigate()
   const order = useSelector((state) => state.order);
   const user = useSelector((state) => state.user);
+  const [delivery, setDelivery] = useState('fast')
+  const [payment, setPayment] = useState('later_money')
 
   const [isOpenUpdateInfor, setIsOpenUpdateInfor] = useState(false);
   const dispatch = useDispatch();
@@ -85,9 +84,25 @@ const PaymentPage = () => {
   )
   const {data: dataOrder} = mutationAddOrder
   const statusOrder = dataOrder?.status
+
   useEffect(() =>{
       if(statusOrder === "OK"){
+        //nếu đăt hàng thành công thì sẽ xóa các đơn hàng đã checked trong giỏ hàng, rồi chyển tới mục thanh toán
+        const arrayOrdered = []
+        order?.orderItemsSelected?.forEach(element =>{
+          arrayOrdered.push(element.product)
+        })
+        dispatch(removeAllOrderProduct({listChecked: arrayOrdered}))
+
         messagee.success("Bạn đã đặt hàng thành công")
+        navigate('/orderSuccess', {
+          state: {
+            delivery,
+            payment,
+            orders: order?.orderItemsSelected,
+            totalPriceMemo: totalPriceMemo
+          }
+        })
       }
   },[statusOrder])
 
@@ -153,8 +168,7 @@ const PaymentPage = () => {
     setIsOpenUpdateInfor(true);
   };
 
-  const [delivery, setDelivery] = useState('fast')
-  const [payment, setPayment] = useState('later_money')
+
 
   const handleDilivery = (e) => {
     setDelivery(e.target.value)

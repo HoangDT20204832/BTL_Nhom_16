@@ -85,12 +85,12 @@ const OrderPage = () => {
   }, [order])
 
   const transportPriceMemo = useMemo(() =>{
-   if(priceMemo >= 300000){
-    return 16000
+   if(300000 <= priceMemo & priceMemo <= 1000000){
+    return 15000
    } else {
-    if(priceMemo <=0){
+    if(priceMemo <=0 || priceMemo>=1000000){
       return 0
-    }else if(priceMemo < 300000){
+    }else if(0 < priceMemo < 300000){
       return 30000
     }
    }
@@ -205,31 +205,31 @@ const handleOnchaneAddress = () =>{
               {order?.orderItems?.map((order) => {
                 return ( 
                   <div className={styles.containerCartLeftItem}>
-                <div style={{width: '350px', display: 'flex', alignItems: 'center', gap: 4}}> 
-                  {/* <Checkbox onChange={onChange} value={order?.product} ></Checkbox> */}
-                  <Checkbox onChange={onChange} value={order?.product} checked={listChecked.includes(order?.product)}></Checkbox>
-                  <img src={order?.image} style={{width: '77px', height: '79px', objectFit: 'cover'}}/>
-                  <div className={styles.containerCartName}>{order?.name}</div>
-                </div>
-                <div className={styles.containerCartWrapPrice} >
-                  <span className={styles.containerCartUnitPrice}>
-                    <span className={styles.containerCartUnitPriceOld} >{order?.priceOld?.toLocaleString()}đ</span>
-                    <span className={styles.containerCartUnitPriceNew} >{order?.priceNew?.toLocaleString()}đ</span>
-                    <div className={styles.containerCartDiscount} >Giảm giá {order?.discount}%</div>
-                  </span>
-                  <div className={styles.containerCartLeftCount}>
-                    <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount("decrease", order?.product)}>
-                        <MinusOutlined style={{ color: '#000', fontSize: '10px' }} />
-                    </button>
-                    <InputNumber defaultValue={order?.amount} value={order?.amount} size="small" />
-                    <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount("increase", order?.product)}>
-                        <PlusOutlined style={{ color: '#000', fontSize: '10px' }} />
-                    </button>
+                    <div style={{width: '350px', display: 'flex', alignItems: 'center', gap: 4}}> 
+                      {/* <Checkbox onChange={onChange} value={order?.product} ></Checkbox> */}
+                      <Checkbox onChange={onChange} value={order?.product} checked={listChecked.includes(order?.product)}></Checkbox>
+                      <img src={order?.image} style={{width: '77px', height: '79px', objectFit: 'cover'}}/>
+                      <div className={styles.containerCartName}>{order?.name}</div>
+                    </div>
+                    <div className={styles.containerCartWrapPrice} >
+                      <span className={styles.containerCartUnitPrice}>
+                        <span className={styles.containerCartUnitPriceOld} >{order?.priceOld?.toLocaleString()}đ</span>
+                        <span className={styles.containerCartUnitPriceNew} >{order?.priceNew?.toLocaleString()}đ</span>
+                        <div className={styles.containerCartDiscount} >Giảm giá {order?.discount}%</div>
+                      </span>
+                      <div className={styles.containerCartLeftCount}>
+                        <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount("decrease", order?.product)}>
+                            <MinusOutlined style={{ color: '#000', fontSize: '10px' }} />
+                        </button>
+                        <InputNumber defaultValue={order?.amount} value={order?.amount} size="small" />
+                        <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount("increase", order?.product)}>
+                            <PlusOutlined style={{ color: '#000', fontSize: '10px' }} />
+                        </button>
+                      </div>
+                      <span className={styles.containerCartLeftPrices} >{(order?.priceNew * order?.amount)?.toLocaleString()}đ</span>
+                      <button style={{cursor: 'pointer'}} onClick={() => handleDeleteOrder(order?.product)}>Xóa</button>
+                    </div>
                   </div>
-                  <span className={styles.containerCartLeftPrices} >{(order?.priceNew * order?.amount)?.toLocaleString()}đ</span>
-                  <button style={{cursor: 'pointer'}} onClick={() => handleDeleteOrder(order?.product)}>Xóa</button>
-                </div>
-              </div>
                  ) 
                })} 
             </div>
