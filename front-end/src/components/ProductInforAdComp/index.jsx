@@ -19,22 +19,8 @@ const [rowSelected,setRowSelected] = useState("")
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const [stateProduct, setStateProduct] = useState({
-    name: "" , 
-    image : "",
-    type : "",
-    priceOld : "",
-    priceNew : "",
-    rating : "",
-    description : "",
-    discount : "",
-    selled : "",
-    countInStock : "",
-    trademark: "",
-    origin: ""
-  })
 
-  const [stateProductDetail, setStateProductDetail] = useState({
+  const inittial= () =>({
     name: "" , 
     image : "",
     type : "",
@@ -48,6 +34,9 @@ const [rowSelected,setRowSelected] = useState("")
     trademark: "",
     origin: ""
   })
+  const [stateProduct, setStateProduct] = useState(inittial())
+
+  const [stateProductDetail, setStateProductDetail] = useState(inittial())
 
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
   const [isOpenDrawer2, setIsOpenDrawer2] = useState(false)
@@ -146,8 +135,12 @@ useEffect(() =>{
 // form.setFieldsValue: form set giá trị thay đổi thông tin trong form 
 // những giá trị của name="" của Form.Item trùng với các state trong stateProductDetail  = vs giá trị của stateProductDetail
 useEffect(()=> {
-  form.setFieldsValue(stateProductDetail)
-},[form, stateProductDetail])
+  if(!isModalOpen){
+    form.setFieldsValue(stateProductDetail)
+  }else{
+    form.setFieldsValue(inittial())
+  }
+},[form, stateProductDetail,isModalOpen])
 
 
 console.log("resProduct", stateProductDetail)
