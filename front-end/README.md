@@ -9,7 +9,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### `git clone git clone https://github.com/HoangDT20204832/BTL_Nhom_16.git`
 Clone Repository: Mở terminal và chạy lệnh sau để sao chép dự án về máy của bạn.
 
-### `cd ten-repository`
+### `cd name-repository`
 Di Chuyển vào Thư Mục Dự Án: Sử dụng lệnh cd để điều hướng vào thư mục dự án.
 
 ### `npm install`
