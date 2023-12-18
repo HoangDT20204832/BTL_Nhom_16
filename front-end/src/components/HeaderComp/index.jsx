@@ -8,6 +8,7 @@ import {
   WrapperHeaderNavbar,
   WrapperHeaderNavbarList,
   WrapperHeaderNavbarItem,
+  WrapperBadge
 } from "./styles.js";
 import {
   UserOutlined,
@@ -27,12 +28,15 @@ import * as userService from "../../services/userService"
 import { resetUser } from "../../redux/slides/userSlide";
 import { useEffect } from "react";
 import { searchProduct } from "../../redux/slides/productSlide.js";
+import BadgeComp from "../BadgeComp/index.jsx";
+
 
 
 
 function HeaderComponent() {
   const navigate = useNavigate();
   const [isOpenPopover, setIsOpenPopover] = useState(false)
+  const [isHovered, setHovered] = useState(false);
   const user = useSelector((state) => state.user);
   console.log("user",user);
   const dispatch = useDispatch();
@@ -207,13 +211,17 @@ const onClickSearch = () =>{
           style={{ display: "flex", gap: "20px", alignItems: "center", justifyContent: "center"}}
         >
           
-          <div onClick={() => navigate(`/order`)} style={{cursor:"pointer"}}>
-            <Badge count={order?.orderItems?.length} size="small"> {/* // count ={order?.orderItems?.length} */}
+          <div  style={{cursor:"pointer"}}>
+            <WrapperBadge count={order?.orderItems?.length} size="small"
+               onMouseEnter={() => setHovered(true)}
+               onMouseLeave={() => setHovered(false)}> {/* // count ={order?.orderItems?.length} */}
               <ShoppingCartOutlined
                 style={{ fontSize: "30px", color: "#fff" }}
               />
-            </Badge>
-            {/* <WrapperTextHeaderSmall>Giỏ hàng</WrapperTextHeaderSmall> */}
+                {isHovered && <BadgeComp />}
+            
+            </WrapperBadge>
+          
           </div>
         </Col>
       </WrapperHeader>
