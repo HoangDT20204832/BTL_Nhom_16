@@ -23,6 +23,7 @@ const orderSchema = new mongoose.Schema({
         phone: { type: Number, required: true },                //sdt của người nhận
     },
     paymentMethod: { type: String, required: true },           //phương thức thanh toán
+    deliveryMethod: { type: String, required: true },           //phương thức thanh toán
     itemsPrice: { type: Number, required: true },              //tổng giá các sản phẩm
     shippingPrice: { type: Number, required: true },           // phí giao hàng
     totalPrice: { type: Number, required: true },             //tổng giá tiền cuối cùng của đơn hàng

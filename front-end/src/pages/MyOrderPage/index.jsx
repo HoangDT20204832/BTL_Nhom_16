@@ -19,23 +19,27 @@ const MyOrderPage = () => {
   const user = useSelector((state) => state.user)
 
   const queryOrder = useQuery({ queryKey: ['orders'], queryFn: fetchMyOrder }, {
-    enabled: state?.id 
+    enabled: state?.id   // enabled trong useQuery giúp kiểm soát xem query nên tự động thực hiện hay không, dựa trên một điều kiện cụ thể
   })
   const { isLoading, data } = queryOrder
 
   const handleDetailsOrder = (id) => {
-    navigate(`/details-order/${id}`, {
-      state: {
-        token: state?.token
-      }
-    })
+    navigate(`/details-order/${id}`
+    // , {
+    //   state: {
+    //     token: state?.token
+    //   }
+    // }
+    )
   }
 
   const mutation = useMutationHooks(
     (data) => {
-      const { id, token , orderItems, userId } = data
+      const { id , orderItems, userId } = data
+      // const { id, token , orderItems, userId } = data
+      const res = OrderService.cancelOrder(id,orderItems, userId)
       // const res = OrderService.cancelOrder(id, token,orderItems, userId)
-      // return res
+      return res
     }
   )
 
@@ -46,12 +50,12 @@ const MyOrderPage = () => {
       },
     })
   }
-  const { isLoading: isLoadingCancel, isSuccess: isSuccessCancel, isError: isErrorCancle, data: dataCancel } = mutation
+  const { isSuccess: isSuccessCancel, isError: isErrorCancle, data: dataCancel } = mutation
 
   useEffect(() => {
     if (isSuccessCancel && dataCancel?.status === 'OK') {
-      message.success()
-    } else if(isSuccessCancel && dataCancel?.status === 'ERR') {
+      message.success("Hủy đơn hàng thành công")
+    } else if(isSuccessCancel && dataCancel?.status === 'ERROR') {
       message.error(dataCancel?.message)
     }else if (isErrorCancle) {
       message.error()
@@ -77,7 +81,7 @@ const MyOrderPage = () => {
                 whiteSpace:'nowrap',
                 marginLeft: '10px'
               }}>{order?.name}</div>
-              <span style={{ fontSize: '13px', color: '#242424',marginLeft: 'auto' }}>{(order?.price)?.toLocaleString()}</span>
+              <span style={{ fontSize: '13px', color: '#242424',marginLeft: 'auto' }}>{(order?.priceNew)?.toLocaleString()}đ</span>
             </WrapperHeaderItem>
           })
   }
@@ -108,7 +112,7 @@ const MyOrderPage = () => {
                       <span style={{color: 'rgb(255, 66, 78)'}}>Tổng tiền: </span>
                       <span 
                         style={{ fontSize: '13px', color: 'rgb(56, 56, 61)',fontWeight: 700 }}
-                      >{(order?.totalPrice)?.toLocaleString()}</span>
+                      >{(order?.totalPrice)?.toLocaleString()}đ</span>
                     </div>
                     <div style={{display: 'flex', gap: '10px'}}>
                     <ButtonComponent
@@ -119,7 +123,7 @@ const MyOrderPage = () => {
                             border: '1px solid #9255FD',
                             borderRadius: '4px'
                         }}
-                        textbutton={'Hủy đơn hàng'}
+                        textButton={'Hủy đơn hàng'}
                         styleTextButton={{ color: '#9255FD', fontSize: '14px' }}
                       >
                       </ButtonComponent>
@@ -131,7 +135,7 @@ const MyOrderPage = () => {
                             border: '1px solid #9255FD',
                             borderRadius: '4px'
                         }}
-                        textbutton={'Xem chi tiết'}
+                        textButton={'Xem chi tiết'}
                         styleTextButton={{ color: '#9255FD', fontSize: '14px' }}
                       >
                       </ButtonComponent>

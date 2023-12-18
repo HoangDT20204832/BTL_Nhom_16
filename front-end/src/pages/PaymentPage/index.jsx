@@ -1,11 +1,9 @@
-import { Checkbox, InputNumber,Radio} from "antd";
+import { Checkbox, InputNumber, Radio } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import ButtonComponent from "../../components/ButtonComp/index";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  removeAllOrderProduct,
-} from "../../redux/slides/orderSlide";
+import { removeAllOrderProduct } from "../../redux/slides/orderSlide";
 import styles from "./styles.module.css";
 import { Button, Modal, Form } from "antd";
 import InputComponent from "../../components/InputComponent/InputComponent";
@@ -14,13 +12,19 @@ import * as userService from "../../services/userService";
 import * as orderService from "../../services/orderService";
 import * as messagee from "../../components/MessageComp";
 import { updateUser } from "../../redux/slides/userSlide";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { PayPalButton } from "react-paypal-button-v2";
+import * as PaymentService from '../../services/PaymentService'
+
+
 const PaymentPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const order = useSelector((state) => state.order);
   const user = useSelector((state) => state.user);
-  const [delivery, setDelivery] = useState('fast')
-  const [payment, setPayment] = useState('later_money')
+  const [delivery, setDelivery] = useState("fast");
+  const [payment, setPayment] = useState("later_money");
+  const [sdkReady , setSdkReady] = useState(false)
+
 
   const [isOpenUpdateInfor, setIsOpenUpdateInfor] = useState(false);
   const dispatch = useDispatch();
@@ -43,12 +47,12 @@ const PaymentPage = () => {
   }, [order]);
 
   const transportPriceMemo = useMemo(() => {
-    if (priceMemo >= 300000) {
-      return 16000;
+    if ((300000 <= priceMemo) & (priceMemo <= 1000000)) {
+      return 15000;
     } else {
-      if (priceMemo <= 0) {
+      if (priceMemo <= 0 || priceMemo >= 1000000) {
         return 0;
-      } else if (priceMemo < 300000) {
+      } else if (0 < priceMemo < 300000) {
         return 30000;
       }
     }
@@ -74,37 +78,35 @@ const PaymentPage = () => {
     isError: isErrorUpdated,
   } = mutationUpdate;
 
-  const mutationAddOrder = useMutationHooks(
-    ( data) =>{ 
-      const {  ...rest } = data;
-      console.log("test datta", data)
-      const res = orderService.createOrder( {...rest} )
-      return res
-      }
-  )
-  const {data: dataOrder} = mutationAddOrder
-  const statusOrder = dataOrder?.status
+  const mutationAddOrder = useMutationHooks((data) => {
+    const { ...rest } = data;
+    console.log("test datta", data);
+    const res = orderService.createOrder({ ...rest });
+    return res;
+  });
+  const { data: dataOrder } = mutationAddOrder;
+  const statusOrder = dataOrder?.status;
 
-  useEffect(() =>{
-      if(statusOrder === "OK"){
-        //nếu đăt hàng thành công thì sẽ xóa các đơn hàng đã checked trong giỏ hàng, rồi chyển tới mục thanh toán
-        const arrayOrdered = []
-        order?.orderItemsSelected?.forEach(element =>{
-          arrayOrdered.push(element.product)
-        })
-        dispatch(removeAllOrderProduct({listChecked: arrayOrdered}))
+  useEffect(() => {
+    if (statusOrder === "OK") {
+      //nếu đăt hàng thành công thì sẽ xóa các đơn hàng đã checked trong giỏ hàng, rồi chyển tới mục thanh toán
+      const arrayOrdered = [];
+      order?.orderItemsSelected?.forEach((element) => {
+        arrayOrdered.push(element.product);
+      });
+      dispatch(removeAllOrderProduct({ listChecked: arrayOrdered }));
 
-        messagee.success("Bạn đã đặt hàng thành công")
-        navigate('/orderSuccess', {
-          state: {
-            delivery,
-            payment,
-            orders: order?.orderItemsSelected,
-            totalPriceMemo: totalPriceMemo
-          }
-        })
-      }
-  },[statusOrder])
+      messagee.success("Bạn đã đặt hàng thành công");
+      navigate("/orderSuccess", {
+        state: {
+          delivery,
+          payment,
+          orders: order?.orderItemsSelected,
+          totalPriceMemo: totalPriceMemo,
+        },
+      });
+    }
+  }, [statusOrder]);
 
   const handleOnChangeInputDetail = (e) => {
     setStateUserDetail({
@@ -131,7 +133,6 @@ const PaymentPage = () => {
     form.setFieldsValue(stateUserDetail);
   }, [form, stateUserDetail]);
 
-
   const handleCancelUpdate = () => {
     setStateUserDetail({
       name: "",
@@ -146,6 +147,28 @@ const PaymentPage = () => {
     form.resetFields();
     setIsOpenUpdateInfor(false);
   };
+
+  const onSuccessPaypal = (details, data) => {
+    mutationAddOrder.mutate(
+      { 
+        // token: user?.access_token, 
+        orderItems: order?.orderItemsSelected, 
+        fullName: user?.name,
+        address:user?.address, 
+        phone:user?.phone,
+        city: user?.city,
+        paymentMethod: payment,
+        deliveryMethod: delivery,
+        itemsPrice: priceMemo,
+        shippingPrice: transportPriceMemo,
+        totalPrice: totalPriceMemo,
+        user: user?.id,
+        isPaid :true,
+        paidAt: details.update_time, 
+        // email: user?.email
+      }
+    )
+  }
 
   const handleUpdateInforUser = () => {
     const { name, phone, address, city } = stateUserDetail;
@@ -163,32 +186,64 @@ const PaymentPage = () => {
   };
   console.log("user3", user);
 
-  //xử lý pần chon thanht phương thcws giao hàng và thanh toán 
+  //xử lý pần chon thanht phương thcws giao hàng và thanh toán
   const handleOnchaneAddress = () => {
     setIsOpenUpdateInfor(true);
   };
 
-
-
   const handleDilivery = (e) => {
-    setDelivery(e.target.value)
-  }
+    setDelivery(e.target.value);
+  };
 
   const handlePayment = (e) => {
-    setPayment(e.target.value)
-  }
+    setPayment(e.target.value);
+  };
 
   const handleAddOrder = () => {
-    if(user?.id && user?.name && user?.address && user?.city && user?.phone && 
-      order?.orderItemsSelected && priceMemo){
-        mutationAddOrder.mutate( 
-          {orderItems: order?.orderItemsSelected , fullName: user?.name,
-          address: user?.address, city: user?.city, phone: user?.phone,
-          paymentMethod: payment, itemsPrice: priceMemo, shippingPrice: transportPriceMemo,
-          totalPrice: totalPriceMemo, user: user?.id}
-      )
-      }
-};
+    if (
+      user?.id &&
+      user?.name &&
+      user?.address &&
+      user?.city &&
+      user?.phone &&
+      order?.orderItemsSelected &&
+      priceMemo
+    ) {
+      mutationAddOrder.mutate({
+        orderItems: order?.orderItemsSelected,
+        fullName: user?.name,
+        address: user?.address,
+        city: user?.city,
+        phone: user?.phone,
+        paymentMethod: payment,
+        deliveryMethod: delivery,
+        itemsPrice: priceMemo,
+        shippingPrice: transportPriceMemo,
+        totalPrice: totalPriceMemo,
+        user: user?.id,
+      });
+    }
+  };
+
+  const addPaypalScript = async () => {
+    const { data } = await PaymentService.getConfig()
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
+    script.async = true;
+    script.onload = () => {
+      setSdkReady(true)
+    }
+    document.body.appendChild(script)
+  }
+
+  useEffect(() => {
+    if(!window.paypal) {
+      addPaypalScript()
+    }else {
+      setSdkReady(true)
+    }
+  }, [])
   return (
     <>
       {/* <div>PaymentPage</div> */}
@@ -200,20 +255,46 @@ const PaymentPage = () => {
         <div className={styles.cartComp}>
           <div className={styles.containerCart}>
             <div className={styles.containerCartLeft}>
-            <div className={styles.containerCartLeftWrapperInfo}>
+              <div className={styles.containerCartLeftWrapperInfo}>
                 <div>
-                  <div className={styles.containerCartLeftLable}>Chọn phương thức giao hàng</div>
-                  <Radio.Group className={styles.containerCartLeftRadio} onChange={handleDilivery} value={delivery}> 
-                    <Radio  value="fast"><span style={{color: '#ea8500', fontWeight: 'bold'}}>FAST</span> Giao hàng tiết kiệm</Radio>
-                    <Radio  value="gojek"><span style={{color: '#ea8500', fontWeight: 'bold'}}>GO_JEK</span> Giao hàng tiết kiệm</Radio>
+                  <div className={styles.containerCartLeftLable}>
+                    Chọn phương thức giao hàng
+                  </div>
+                  <Radio.Group
+                    className={styles.containerCartLeftRadio}
+                    onChange={handleDilivery}
+                    value={delivery}
+                  >
+                    <Radio value="fast">
+                      <span style={{ color: "#ea8500", fontWeight: "bold" }}>
+                        FAST
+                      </span>{" "}
+                      Giao hàng tiết kiệm
+                    </Radio>
+                    <Radio value="gojek">
+                      <span style={{ color: "#ea8500", fontWeight: "bold" }}>
+                        GO_JEK
+                      </span>{" "}
+                      Giao hàng tiết kiệm
+                    </Radio>
                   </Radio.Group>
                 </div>
               </div>
               <div className={styles.containerCartLeftWrapperInfo}>
                 <div>
-                  <div className={styles.containerCartLeftLable}>Chọn phương thức thanh toán</div>
-                  <Radio.Group className={styles.containerCartLeftRadio} onChange={handlePayment} value={payment}> 
-                    <Radio value="later_money"> Thanh toán tiền mặt khi nhận hàng</Radio>
+                  <div className={styles.containerCartLeftLable}>
+                    Chọn phương thức thanh toán
+                  </div>
+                  <Radio.Group
+                    className={styles.containerCartLeftRadio}
+                    onChange={handlePayment}
+                    value={payment}
+                  >
+                    <Radio value="later_money">
+                      {" "}
+                      Thanh toán tiền mặt khi nhận hàng
+                    </Radio>
+                    <Radio value="paypal"> Thanh toán bằng paypal</Radio>
                   </Radio.Group>
                 </div>
               </div>
@@ -266,23 +347,36 @@ const PaymentPage = () => {
                   </span>
                 </div>
               </div>
-              <ButtonComponent
-                onClick={() => handleAddOrder()}
-                size={40}
-                styleButton={{
-                  background: "rgb(255, 57, 69)",
-                  height: "48px",
-                  width: "220px",
-                  border: "none",
-                  borderRadius: "4px",
-                }}
-                textButton={"Đặt hàng"}
-                styleTextButton={{
-                  color: "#fff",
-                  fontSize: "15px",
-                  fontWeight: "700",
-                }}
-              ></ButtonComponent>
+              {payment === "paypal"  && sdkReady ? (
+                 <div style={{width: '320px'}}>
+                 <PayPalButton
+                   amount={Math.round(totalPriceMemo / 30000)}
+                   // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                   onSuccess={onSuccessPaypal}
+                   onError={() => {
+                     alert('Error')
+                   }}
+                 />
+               </div>
+              ) : (
+                <ButtonComponent
+                  onClick={() => handleAddOrder()}
+                  size={40}
+                  styleButton={{
+                    background: "rgb(255, 57, 69)",
+                    height: "48px",
+                    width: "220px",
+                    border: "none",
+                    borderRadius: "4px",
+                  }}
+                  textButton={"Đặt hàng"}
+                  styleTextButton={{
+                    color: "#fff",
+                    fontSize: "15px",
+                    fontWeight: "700",
+                  }}
+                ></ButtonComponent>
+              )}
             </div>
           </div>
         </div>

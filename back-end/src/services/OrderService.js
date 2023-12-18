@@ -1,10 +1,11 @@
 const Order = require("../models/OrderProduct");
-const Product = require("../models//ProductModel");
+const Product = require("../models/ProductModel");
 const createOrder = (newOrder) => {
   return new Promise(async (resolve, reject) => {
     const {
       orderItems,
       paymentMethod,
+      deliveryMethod,
       itemsPrice,
       shippingPrice,
       totalPrice,
@@ -13,6 +14,8 @@ const createOrder = (newOrder) => {
       city,
       phone,
       user,
+      isPaid,
+      paidAt
     } = newOrder;
 
     try {
@@ -39,7 +42,7 @@ const createOrder = (newOrder) => {
         } else {
           return {
             status: "OK",
-            message: "ERR",
+            message: "ERROR",
             id: order.product,
           };
         }
@@ -67,13 +70,15 @@ const createOrder = (newOrder) => {
             phone,
           },
           paymentMethod,
+          deliveryMethod,
           itemsPrice,
           shippingPrice,
           totalPrice,
           user,
-          // isPaid,
-          // paidAt,
+          isPaid,
+          paidAt,
         });
+        console.log("my-order", createdOrder)
         resolve({
               status: "OK",
               message: "success",
@@ -125,8 +130,8 @@ const getOrderDetails = (id) => {
           })
           if (order === null) {
               resolve({
-                  status: 'ERR',
-                  message: 'The order is not defined'
+                  status: 'ERROR',
+                  message: 'Đơn hàng không tồn tại'
               })
           }
 
@@ -162,7 +167,7 @@ const cancelOrderDetails = (id, data) => {
                   order = await Order.findByIdAndDelete(id)
                   if (order === null) {
                       resolve({
-                          status: 'ERR',
+                          status: 'ERROR',
                           message: 'The order is not defined'
                       })
                   }
@@ -179,7 +184,7 @@ const cancelOrderDetails = (id, data) => {
           
           if(newData) {
               resolve({
-                  status: 'ERR',
+                  status: 'ERROR',
                   message: `San pham voi id: ${newData} khong ton tai`
               })
           }

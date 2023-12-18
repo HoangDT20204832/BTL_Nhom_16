@@ -72,7 +72,7 @@ function HeaderComponent() {
         navigate("/account")
         break;
       case "my-order":
-        navigate("/my-order",{ state : {
+        navigate("/my-order", {state: {
           id: user?.id,
           // token : user?.access_token
         }

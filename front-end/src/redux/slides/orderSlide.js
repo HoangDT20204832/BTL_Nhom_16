@@ -9,7 +9,8 @@ const initialState = {
         // city: { type: String, required: true },                 //thành phố
         // phone: { type: Number, required: true },                //sdt của người nhận
     },
-    paymentMethod: "",           //phương thức thanh toán
+    paymentMethod: "",         //phương thức thanh toán
+    deliveryMethod:"" ,        //phương thức giao hàng
     itemsPrice: 0,              //tổng giá các sản phẩm
     shippingPrice: 0,           // phí giao hàng
     totalPrice: 0,             //tổng giá tiền cuối cùng của đơn hàng

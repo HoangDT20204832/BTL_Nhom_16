@@ -40,11 +40,15 @@ const OrderPage = () => {
   })
   const [form] = Form.useForm() 
   
-  const handleChangeCount = (type, idProduct) => {
+  const handleChangeCount = (type, idProduct,limited) => {
     if(type === 'increase') {
-      dispatch(increaseAmount({idProduct}))
+      if(!limited){   //nếu limited=false hay số lượng chưa = max(countInStock) thì vẫn tăng,=true thì ko tăng nữa
+        dispatch(increaseAmount({idProduct}))
+      }
     }else if(type === 'decrease'){
-      dispatch(decreaseAmount({idProduct}))
+      if(!limited){ ////nếu limited=false hay số lượng chưa = 0 thì vẫn giảm, giảm về 0 thì ko giảm nữa
+        dispatch(decreaseAmount({idProduct}))
+      }
     }
   }
 
@@ -101,7 +105,6 @@ const totalPriceMemo = useMemo(() =>{
       return priceMemo + transportPriceMemo
 },[priceMemo,transportPriceMemo])
 console.log("type of price", typeof(totalPriceMemo))
-console.log("order", order)
 
 // udpdate thông tin user khi ko đủ thoogn tin để giao hàng
 const mutationUpdate = useMutationHooks(
@@ -174,7 +177,6 @@ const handleUpdateInforUser = () =>{
     })
 }
 }
-console.log("user3", user)
 
 const handleOnchaneAddress = () =>{
   setIsOpenUpdateInfor(true)
@@ -218,12 +220,14 @@ const handleOnchaneAddress = () =>{
                         <div className={styles.containerCartDiscount} >Giảm giá {order?.discount}%</div>
                       </span>
                       <div className={styles.containerCartLeftCount}>
-                        <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount("decrease", order?.product)}>
-                            <MinusOutlined style={{ color: '#000', fontSize: '10px' }} />
+                        <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} 
+                          onClick={() => handleChangeCount("decrease", order?.product,order?.amount===0)}>
+                            <MinusOutlined style={{ color: '#000', fontSize: '10px' }}  />
                         </button>
-                        <InputNumber defaultValue={order?.amount} value={order?.amount} size="small" />
-                        <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} onClick={() => handleChangeCount("increase", order?.product)}>
-                            <PlusOutlined style={{ color: '#000', fontSize: '10px' }} />
+                        <InputNumber defaultValue={order?.amount} value={order?.amount} size="small" min={1} max={order?.countInStock} />
+                        <button style={{ border: 'none', background: 'transparent', cursor: 'pointer' }} 
+                          onClick={() => handleChangeCount("increase", order?.product,order?.amount === order?.countInStock)}>
+                            <PlusOutlined style={{ color: '#000', fontSize: '10px' }}/>
                         </button>
                       </div>
                       <span className={styles.containerCartLeftPrices} >{(order?.priceNew * order?.amount)?.toLocaleString()}đ</span>

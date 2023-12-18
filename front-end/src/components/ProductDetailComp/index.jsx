@@ -23,11 +23,15 @@ const ProductDetailComp = ({idProduct}) => {
     };
     // console.log("location", location)
 // 
-    const handleChangeCount = (type) =>{
+    const handleChangeCount = (type,limited) =>{
         if(type === "decrease"){
-            setNumberProductBye(numberProductBye - 1)
+            if(!limited){
+                setNumberProductBye(numberProductBye - 1)
+            }
         }else if(type === "increase") {
-            setNumberProductBye(numberProductBye + 1)
+            if(!limited){
+                setNumberProductBye(numberProductBye + 1)
+            }
         }
     }
     const fetchGetDetailProduct = async(context) => {
@@ -52,7 +56,8 @@ const ProductDetailComp = ({idProduct}) => {
                     priceOld: productDetail?.priceOld,
                     priceNew: productDetail?.priceNew,
                     discount: productDetail?.discount,
-                    product: productDetail?._id
+                    product: productDetail?._id,
+                    countInStock: productDetail?.countInStock
                 }
             }))
         }
@@ -161,7 +166,7 @@ const ProductDetailComp = ({idProduct}) => {
                                 background: "transparent",
                                 cursor: "pointer",
                             }}
-                            onClick={() => handleChangeCount("decrease")}
+                            onClick={() => handleChangeCount("decrease", numberProductBye ===1)}
                         >
                             <MinusOutlined
                                 style={{ color: "#000", fontSize: "20px" }}
@@ -171,7 +176,6 @@ const ProductDetailComp = ({idProduct}) => {
                             className={styles.inputNumber}
                             onChange={onChange}
                             defaultValue={1}
-                            max={10}
                             min={1}
                             value={numberProductBye}
                             size="small"
@@ -182,7 +186,7 @@ const ProductDetailComp = ({idProduct}) => {
                                 background: "transparent",
                                 cursor: "pointer",
                             }}
-                            onClick={() => handleChangeCount("increase")}
+                            onClick={() => handleChangeCount("increase",numberProductBye===productDetail?.countInStock)}
                         >
                             <PlusOutlined
                                 style={{ color: "#000", fontSize: "20px" }}

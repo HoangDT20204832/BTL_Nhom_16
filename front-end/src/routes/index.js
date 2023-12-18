@@ -11,6 +11,7 @@ import AdminPage from "../pages/AminPage"
 import PaymentPage from "../pages/PaymentPage"
 import OrderSuccess from "../pages/OrderSuccess"
 import MyOrderPage from "../pages/MyOrderPage"
+import DetailsOrderPage from "../pages/DetailsOrderPage"
 export const routers = [
     {
         path: '/',
@@ -56,6 +57,11 @@ export const routers = [
         path: '/my-order',
         page: MyOrderPage,
         isShowHeader: true,
+    },
+    {
+        path: '/details-order/:id',
+        page: DetailsOrderPage,
+        isShowHeader: true
     },
     {
         path: "/sign-in",

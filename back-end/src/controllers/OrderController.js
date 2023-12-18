@@ -3,12 +3,12 @@ const JwtService = require("../services/JwtService");
 const createOrder = async (req, res) => {   
   try {
     console.log("req.body", req.body);
-    const {orderItems, paymentMethod, itemsPrice, shippingPrice, totalPrice, fullName,address, 
+    const {orderItems, paymentMethod,deliveryMethod, itemsPrice, shippingPrice, totalPrice, fullName,address, 
         city,phone,user} = req.body;
-    if ( !paymentMethod || !itemsPrice || !shippingPrice || !totalPrice || !fullName || !address || 
+    if ( !paymentMethod ||!deliveryMethod|| !itemsPrice  || !totalPrice || !fullName || !address || 
         !city || !phone || !user) {
       return res.status(200).json({
-        status: "Error",
+        status: "ERROR",
         message: "Bạn cần điền đầy đủ thông tin",
       });
     } 
@@ -66,8 +66,8 @@ const cancelOrderDetails = async (req, res) => {
       const orderId= req.body.orderId
       if (!orderId) {
           return res.status(200).json({
-              status: 'ERR',
-              message: 'The orderId is required'
+              status: 'ERROR',
+              message: ' orderId là bắt buộc'
           })
       }
       const response = await orderService.cancelOrderDetails(orderId, data)
