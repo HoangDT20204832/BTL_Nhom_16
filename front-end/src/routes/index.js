@@ -13,6 +13,7 @@ import OrderSuccess from "../pages/OrderSuccess"
 import MyOrderPage from "../pages/MyOrderPage"
 import DetailsOrderPage from "../pages/DetailsOrderPage"
 import AddressUserPage from "../pages/AddressUserPage"
+import BankUserPage from "../pages/BankUserPage"
 export const routers = [
     {
         path: '/',
@@ -68,6 +69,12 @@ export const routers = [
     {
         path: "/account/address",
         page: AddressUserPage,
+        isShowHeader: true,
+        isShowNavbar: true
+    },
+    {
+        path: "/account/bank",
+        page: BankUserPage,
         isShowHeader: true,
         isShowNavbar: true
     },

@@ -70,10 +70,9 @@ function App() {
         <Router>
           <Routes>
             {routers.map((route) => {
-              //những trang nào có isShowHeader = true thì sẽ có HeaderComponent
-              // const Layout = route.isShowHeader ? DefaultComponent : Fragment;
-              //những trang nào có isShowNavbar = true thì sẽ có NavbarComponent
-              const Layout = route.isShowNavbar ? DefaultNavComponent : DefaultComponent;
+              //những trang nào có isShowNavbar = true thì sẽ có DefaultNavComponent(có NavbarComponent, có Header, footer) 
+              //không thì sẽ là DefaultComponent(chỉ có Header, footer) nếu route.isShowHeader=true hoặc sẽ ko có gì cả(Fragment) route.isShowHeader=false
+              const Layout = route.isShowNavbar ?  DefaultNavComponent : (route.isShowHeader ? DefaultComponent : Fragment);
               const isCheckAuth = !route.isPrivate || user.isAdmin
               return (
                 <Route

@@ -32,7 +32,10 @@ const NavbarAcountComp = () => {
             />
             <div className={styles.navbarName}>
               <div className={styles.navbarNameText}>{name}</div>
-              <div className={styles.navbarNameEdit} onClick={()=> navigate('/account')}>
+              <div className={styles.navbarNameEdit} 
+              onClick={()=> {navigate('/account')
+                            setSelectedNavItem("Hồ sơ")
+                            }}>
                 <EditOutlined />
                 Sửa Hồ Sơ
               </div>
@@ -55,7 +58,11 @@ const NavbarAcountComp = () => {
               }>
                 Hồ sơ
               </div>
-              <div className={styles.navbarItem}>Ngân hàng</div>
+              <div className={clsx(styles.navbarItem, {[styles.active]: selectedNavItem === "Ngân hàng"})}
+                 onClick={() => {
+                  navigate('/account/bank')
+                  setSelectedNavItem("Ngân hàng")
+                }}>Ngân hàng</div>
               <div className={clsx(styles.navbarItem, {[styles.active]: selectedNavItem === "Địa chỉ"})}   
                     onClick={() => {
                         navigate('/account/address')

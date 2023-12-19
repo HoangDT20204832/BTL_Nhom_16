@@ -129,7 +129,7 @@ const  deleteUser= (userId) => {
   });
 };
 
-const  getAllUser= () => {
+const  getAllUser = () => {
   return new Promise(async(resolve, reject) => {
     try {
       const allUser = await User.find()
@@ -166,11 +166,59 @@ const  getDetailsUser= (userId) => {
     }
   });
 };
+
+function updateUserPassWord(userId, oldPassword, newPassword) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await User.findOne({_id: userId});
+
+      if (user === null) {
+        resolve({
+          status: "OK",
+          message: "Người dùng khoogn tồn tại"
+        });
+      }
+      // const comparePassword = await brcypt.compare(password, checkUser.password)
+  
+      // if(comparePassword == false){
+      //   resolve({ 
+      //     status: 'ERROR',
+      //     message: "Mật khẩu không chính xác"
+      //   })
+      // }
+
+      const isPasswordValid = await brcypt.compare(oldPassword, user.password);
+
+      if (!isPasswordValid) {
+        resolve({ 
+          status: 'ERROR',
+          message: "Mật khẩu không chính xác"
+        })
+      }
+
+      const saltRounds = 2;
+      // const salt = await bcrypt.genSalt(saltRounds);
+      const hashedPassword = await brcypt.hash(newPassword, saltRounds);
+
+      await User.findByIdAndUpdate(userId, { password: hashedPassword });
+
+      resolve({
+        status: 'OK',
+        message: "Thay đổi mật khẩu thành công",
+        // data: user
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
 module.exports = {
   createUser,
   loginUser,
   updateUser,
   deleteUser,
   getAllUser,
-  getDetailsUser
+  getDetailsUser,
+  updateUserPassWord
 };
