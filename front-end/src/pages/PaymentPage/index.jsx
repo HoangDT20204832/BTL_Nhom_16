@@ -136,13 +136,9 @@ const PaymentPage = () => {
   const handleCancelUpdate = () => {
     setStateUserDetail({
       name: "",
-      email: "",
-      isAdmin: false,
       phone: "",
       address: "",
-      avatar: "",
       city: "",
-      // sex : "",
     });
     form.resetFields();
     setIsOpenUpdateInfor(false);

@@ -1,24 +1,17 @@
 import { Col, Input, Radio, Row, Select, Button, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-import ImgCrop from "antd-img-crop";
+// import ImgCrop from "antd-img-crop";
 import { useDispatch, useSelector } from "react-redux";
 import * as messagee from "../MessageComp/index"
 import {WrapperUploadFile } from './styles'
 import { UploadOutlined} from '@ant-design/icons'
-
-
-import {
-  EditOutlined,
-  UserOutlined,
-  BellOutlined,
-  ShopOutlined,
-} from "@ant-design/icons";
 import clsx from "clsx";
 import ButtonComponent from "../ButtonComp/index";
 import * as userService from "../../services/userService"
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import { updateUser } from "../../redux/slides/userSlide";
+import NavbarAcountComp from "../NavbarAcountComp/index";
 
 const AccountComp = () => {
 
@@ -64,10 +57,12 @@ const AccountComp = () => {
     ( data) =>{ 
       const {id, ...rest} = data;
       console.log("test datta", data)
-      userService.updateUserInfor(id, rest)}
+      const res = userService.updateUserInfor(id, rest)
+      return res
+    }
  )
-  const {data, isSuccess, isError} = mutation
-console.log("mutationn", mutation)
+  const {data: dataUser} = mutation
+// console.log("mutationUser", mutation)
 
   const handleChangeSex = ({ target: { value } }) => {
     console.log("radio1 checked", value);
@@ -82,15 +77,16 @@ console.log("mutationn", mutation)
   },[user])
 
   useEffect(() =>{
-    if(isSuccess){
-      messagee.success()
+    if( dataUser?.status ==="OK"){
+      messagee.success("Cập nhập người dùng thành công")
       setTimeout(()=>{
       handleGetDetailUser(user?.id, user?.access_token)
-      },2000)      
-    }else if(isError){
-      messagee.error()
+      },500)      
     }
-  }, [isSuccess, isError])
+    // else{
+    //   messagee.error("Cập nhập người dùng thất bại")
+    // }
+  }, [dataUser])
 
   const handleGetDetailUser = async(id, access_token) =>{
     const res = await userService.getDetailUser(id, access_token)
@@ -109,9 +105,9 @@ console.log("mutationn", mutation)
   const handleChangePhone = (e) =>{
       setPhone(e.target.value)
   }
-  const handleChangeAddress = () =>{
-    //  setAddress(e.target.value)
-  }
+  // const handleChangeAddress = () =>{
+  //   //  setAddress(e.target.value)
+  // }
   //up file  ảnh đại diện
 
   const getBase64 = (file) =>
@@ -121,6 +117,7 @@ console.log("mutationn", mutation)
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+
   const handleChangeAvatar = async ({fileList}) => {
     const file = fileList[0]
     if (!file.url && !file.preview) {
@@ -138,50 +135,7 @@ console.log("mutationn", mutation)
   return (
     <div className={styles.wrapAccount}>
       <Row className="grid">
-        <Col span={4} className={styles.navbar}>
-          <div className={styles.navbarHeader}>
-            <img
-              className={styles.navbarImg}
-              src={avatar}
-              alt="Ảnh đại diện"
-            />
-            <div className={styles.navbarName}>
-              <div className={styles.navbarNameText}>{name}</div>
-              <div className={styles.navbarNameEdit}>
-                <EditOutlined />
-                Sửa Hồ Sơ
-              </div>
-            </div>
-          </div>
-          <div className={styles.navbarBody}>
-            <div className={styles.navbarWrapIten}>
-              <div className={styles.navbarBodyItem}>
-                <div className={styles.navbarIcon}>
-                  <UserOutlined />
-                </div>
-                <span>Tài khoản của tôi</span>
-              </div>
-              <div className={clsx(styles.navbarItem, styles.active)}>
-                Hồ sơ
-              </div>
-              <div className={styles.navbarItem}>Ngân hàng</div>
-              <div className={styles.navbarItem}>Địa chỉ</div>
-              <div className={styles.navbarItem}>Đổi mật khẩu</div>
-            </div>
-            <div className={styles.navbarBodyItem}>
-              <div className={styles.navbarIcon}>
-                <ShopOutlined />
-              </div>
-              <span>Đơn mua</span>
-            </div>
-            <div className={styles.navbarBodyItem}>
-              <div className={styles.navbarIcon}>
-                <BellOutlined />
-              </div>
-              <span>Thông báo</span>
-            </div>
-          </div>
-        </Col>
+        <NavbarAcountComp />
         <Col span={20} className={styles.container}>
           <div className={styles.containerHeader}>Hồ Sơ Của Tôi</div>
           <Row className={styles.containerContent}>

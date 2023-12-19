@@ -34,6 +34,7 @@ export const WrapperTextHeader = style.span`
     color: #fff;
     font-weight:bold;
     text-align:left;
+    cursor:pointer;
 `
 
 export const WrapperHeaderAcount = style.div`

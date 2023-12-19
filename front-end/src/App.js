@@ -3,6 +3,7 @@ import React, { Fragment, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { routers } from "./routes";
 import DefaultComponent from "./components/DefaultComp/index";
+import DefaultNavComponent from "./components/DefaultNavComp/index"
 import GlobalStyles from "./components/GlobalStylesComp";
 import {
   useQuery,
@@ -15,18 +16,6 @@ import { updateUser } from "./redux/slides/userSlide";
 
 
 function App() {
-  
-  // useEffect(() =>{
-  //   fetchApi()
-  // }, [])
-
-//   console.log("process.env.REACT_API_URL", process.env.REACT_APP_API_URL)
-//   const fetchApi = async () =>{
-//     const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all-product`)
-//     return res.data
-//   }
-// const query = useQuery({ queryKey: ['todos'], queryFn: fetchApi })
-// console.log("query", query)
 
   const dispatch = useDispatch()
   const user = useSelector((state)=> state.user)
@@ -82,7 +71,9 @@ function App() {
           <Routes>
             {routers.map((route) => {
               //những trang nào có isShowHeader = true thì sẽ có HeaderComponent
-              const Layout = route.isShowHeader ? DefaultComponent : Fragment;
+              // const Layout = route.isShowHeader ? DefaultComponent : Fragment;
+              //những trang nào có isShowNavbar = true thì sẽ có NavbarComponent
+              const Layout = route.isShowNavbar ? DefaultNavComponent : DefaultComponent;
               const isCheckAuth = !route.isPrivate || user.isAdmin
               return (
                 <Route

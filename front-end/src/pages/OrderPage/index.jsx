@@ -154,11 +154,8 @@ const handleAddCard = () =>{
 const handleCancelUpdate = () =>{
     setStateUserDetail({
     name: "" , 
-    email : "",
-    isAdmin : false,
     phone : "",
     address : "",
-    avatar : "",
     city : "",
     // sex : "",
     })
