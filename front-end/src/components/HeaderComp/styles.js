@@ -1,4 +1,4 @@
-import {Row} from 'antd'
+import {Row, Badge} from 'antd'
 import style from 'styled-components'
 
 export const WrapperHeaderNavbar = style.div`
@@ -34,6 +34,7 @@ export const WrapperTextHeader = style.span`
     color: #fff;
     font-weight:bold;
     text-align:left;
+    cursor:pointer;
 `
 
 export const WrapperHeaderAcount = style.div`
@@ -47,4 +48,7 @@ export const WrapperHeaderAcount = style.div`
 export const WrapperTextHeaderSmall = style.span`
     font-size:12px;
     color: #fff;
+`
+export const WrapperBadge = style(Badge)`
+    
 `

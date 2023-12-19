@@ -177,8 +177,38 @@ const logoutUser = async (req, res) => {
     });
   }
 };
+
+const updateUserPassword = async(req, res) => {
+  try {
+   const userId = req.params.id;
+   console.log("userId: " , userId);
+   const data = req.body;
+   console.log("dataPass", data)
+   const {oldPassword, newPassword} = data
+   if (!userId) {
+    return res.status(200).json({
+      status: "ERR",
+      message: "userId là bắt buộc",
+    });
+   }
+    const response = await userService.updateUserPassWord(userId, oldPassword, newPassword);
+    return res.status(200).json(response);
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+      status: "hi"
+    });
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
-   updateUser,deleteUser,getAllUser,getDetailsUser,refreshToken,logoutUser
+   updateUser,
+   deleteUser,
+   getAllUser,
+   getDetailsUser,
+   refreshToken,
+   logoutUser,
+   updateUserPassword
 };

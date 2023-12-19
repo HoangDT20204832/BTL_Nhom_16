@@ -12,6 +12,8 @@ import PaymentPage from "../pages/PaymentPage"
 import OrderSuccess from "../pages/OrderSuccess"
 import MyOrderPage from "../pages/MyOrderPage"
 import DetailsOrderPage from "../pages/DetailsOrderPage"
+import AddressUserPage from "../pages/AddressUserPage"
+import BankUserPage from "../pages/BankUserPage"
 export const routers = [
     {
         path: '/',
@@ -39,11 +41,6 @@ export const routers = [
         isShowHeader: true,
     },
     {
-        path: "/account",
-        page: AccountPage,
-        isShowHeader: true,
-    },
-    {
         path: '/payment',
         page: PaymentPage,
         isShowHeader: true,
@@ -62,6 +59,24 @@ export const routers = [
         path: '/details-order/:id',
         page: DetailsOrderPage,
         isShowHeader: true
+    },
+    {
+        path: "/account",
+        page: AccountPage,
+        isShowHeader: true,
+        isShowNavbar: true
+    },
+    {
+        path: "/account/address",
+        page: AddressUserPage,
+        isShowHeader: true,
+        isShowNavbar: true
+    },
+    {
+        path: "/account/bank",
+        page: BankUserPage,
+        isShowHeader: true,
+        isShowNavbar: true
     },
     {
         path: "/sign-in",
