@@ -12,5 +12,9 @@ router.delete('/delete-user/:id',  userController.deleteUser )
 // router.get('/get-all-user',authMiddleware,  userController.getAllUser )
 router.get('/get-all-user',  userController.getAllUser )
 router.get('/get-details-user/:id',  authUserMiddleware,userController.getDetailsUser )
+<<<<<<< HEAD
+=======
+router.put('/update-user-password/:id', userController.updateUserPassword)
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 router.post('/refresh-token',userController.refreshToken) //api cung cấp lại access_token mới khi access_token cũ hết hạn mà người dùng ko cần đăng nhập lại
 module.exports = router

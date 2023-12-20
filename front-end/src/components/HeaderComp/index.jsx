@@ -8,7 +8,14 @@ import {
   WrapperHeaderNavbar,
   WrapperHeaderNavbarList,
   WrapperHeaderNavbarItem,
+<<<<<<< HEAD
   WrapperBadge
+=======
+<<<<<<< HEAD
+=======
+  WrapperBadge
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
+>>>>>>> af7818199995148691cc7717e48f1f14f6b72a01
 } from "./styles.js";
 import {
   UserOutlined,
@@ -28,15 +35,30 @@ import * as userService from "../../services/userService"
 import { resetUser } from "../../redux/slides/userSlide";
 import { useEffect } from "react";
 import { searchProduct } from "../../redux/slides/productSlide.js";
+<<<<<<< HEAD
 import BadgeComp from "../BadgeComp/index.jsx";
 
+=======
+<<<<<<< HEAD
+=======
+import BadgeComp from "../BadgeComp/index.jsx";
+
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
+>>>>>>> af7818199995148691cc7717e48f1f14f6b72a01
 
 
 
 function HeaderComponent() {
   const navigate = useNavigate();
   const [isOpenPopover, setIsOpenPopover] = useState(false)
+<<<<<<< HEAD
   const [isHovered, setHovered] = useState(false);
+=======
+<<<<<<< HEAD
+=======
+  const [isHovered, setHovered] = useState(false);
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
+>>>>>>> af7818199995148691cc7717e48f1f14f6b72a01
   const user = useSelector((state) => state.user);
   console.log("user",user);
   const dispatch = useDispatch();
@@ -211,6 +233,18 @@ const onClickSearch = () =>{
           style={{ display: "flex", gap: "20px", alignItems: "center", justifyContent: "center"}}
         >
           
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+          <div onClick={() => navigate(`/order`)} style={{cursor:"pointer"}}>
+            <Badge count={order?.orderItems?.length} size="small"> {/* // count ={order?.orderItems?.length} */}
+              <ShoppingCartOutlined
+                style={{ fontSize: "30px", color: "#fff" }}
+              />
+            </Badge>
+            {/* <WrapperTextHeaderSmall>Giỏ hàng</WrapperTextHeaderSmall> */}
+=======
+>>>>>>> af7818199995148691cc7717e48f1f14f6b72a01
           <div  style={{cursor:"pointer"}}>
             <WrapperBadge count={order?.orderItems?.length} size="small"
                onMouseEnter={() => setHovered(true)}
@@ -222,6 +256,10 @@ const onClickSearch = () =>{
             
             </WrapperBadge>
           
+<<<<<<< HEAD
+=======
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
+>>>>>>> af7818199995148691cc7717e48f1f14f6b72a01
           </div>
         </Col>
       </WrapperHeader>

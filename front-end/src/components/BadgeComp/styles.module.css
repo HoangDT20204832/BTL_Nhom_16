@@ -12,7 +12,11 @@
     animation: fadeIn ease-in 0.2s;
     cursor: default;
     /* display: none; */
+<<<<<<< HEAD
     z-index: 1;
+=======
+    z-index: 100;
+>>>>>>> af7818199995148691cc7717e48f1f14f6b72a01
     border: 1px solid #f66f63;
 }
 
