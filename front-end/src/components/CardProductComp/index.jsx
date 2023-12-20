@@ -21,9 +21,15 @@ const CardProductComp = (props) => {
         <Col span={4} className={styles.cardProductWrap} 
              onClick={() => countInStock!== 0 && handleDetailProduct(id)}
               >         
+<<<<<<< HEAD
           <a className={styles.productItemWrap} 
             style={{backgroundColor: countInStock ===0 ? "#ccc" : "#fff" }} >
             <img className={styles.productItemImg} src= {image}/>
+=======
+          <div className={styles.productItemWrap} 
+            style={{backgroundColor: countInStock ===0 ? "#ccc" : "#fff" }} >
+            <img className={styles.productItemImg} src= {image} />
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
             <h4 className={styles.productItemName}>
               {name}
             </h4>
@@ -53,7 +59,11 @@ const CardProductComp = (props) => {
               <div className={styles.productItemSaleOffPercent}>{discount}%</div>
               <div className={styles.productItemSaleOffLabel}>GIẢM</div>
             </div>
+<<<<<<< HEAD
           </a>
+=======
+          </div>
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
         </Col>     
  
 

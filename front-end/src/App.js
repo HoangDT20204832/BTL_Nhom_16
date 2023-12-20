@@ -3,6 +3,10 @@ import React, { Fragment, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { routers } from "./routes";
 import DefaultComponent from "./components/DefaultComp/index";
+<<<<<<< HEAD
+=======
+import DefaultNavComponent from "./components/DefaultNavComp/index"
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 import GlobalStyles from "./components/GlobalStylesComp";
 import {
   useQuery,
@@ -15,6 +19,7 @@ import { updateUser } from "./redux/slides/userSlide";
 
 
 function App() {
+<<<<<<< HEAD
   
   // useEffect(() =>{
   //   fetchApi()
@@ -27,6 +32,8 @@ function App() {
 //   }
 // const query = useQuery({ queryKey: ['todos'], queryFn: fetchApi })
 // console.log("query", query)
+=======
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 
   const dispatch = useDispatch()
   const user = useSelector((state)=> state.user)
@@ -81,8 +88,14 @@ function App() {
         <Router>
           <Routes>
             {routers.map((route) => {
+<<<<<<< HEAD
               //những trang nào có isShowHeader = true thì sẽ có HeaderComponent
               const Layout = route.isShowHeader ? DefaultComponent : Fragment;
+=======
+              //những trang nào có isShowNavbar = true thì sẽ có DefaultNavComponent(có NavbarComponent, có Header, footer) 
+              //không thì sẽ là DefaultComponent(chỉ có Header, footer) nếu route.isShowHeader=true hoặc sẽ ko có gì cả(Fragment) route.isShowHeader=false
+              const Layout = route.isShowNavbar ?  DefaultNavComponent : (route.isShowHeader ? DefaultComponent : Fragment);
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
               const isCheckAuth = !route.isPrivate || user.isAdmin
               return (
                 <Route

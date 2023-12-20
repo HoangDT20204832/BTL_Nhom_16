@@ -12,6 +12,11 @@ import PaymentPage from "../pages/PaymentPage"
 import OrderSuccess from "../pages/OrderSuccess"
 import MyOrderPage from "../pages/MyOrderPage"
 import DetailsOrderPage from "../pages/DetailsOrderPage"
+<<<<<<< HEAD
+=======
+import AddressUserPage from "../pages/AddressUserPage"
+import BankUserPage from "../pages/BankUserPage"
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 export const routers = [
     {
         path: '/',
@@ -39,11 +44,14 @@ export const routers = [
         isShowHeader: true,
     },
     {
+<<<<<<< HEAD
         path: "/account",
         page: AccountPage,
         isShowHeader: true,
     },
     {
+=======
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
         path: '/payment',
         page: PaymentPage,
         isShowHeader: true,
@@ -64,6 +72,27 @@ export const routers = [
         isShowHeader: true
     },
     {
+<<<<<<< HEAD
+=======
+        path: "/account",
+        page: AccountPage,
+        isShowHeader: true,
+        isShowNavbar: true
+    },
+    {
+        path: "/account/address",
+        page: AddressUserPage,
+        isShowHeader: true,
+        isShowNavbar: true
+    },
+    {
+        path: "/account/bank",
+        page: BankUserPage,
+        isShowHeader: true,
+        isShowNavbar: true
+    },
+    {
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
         path: "/sign-in",
         page: SignInPage,
         isShowHeader: false,

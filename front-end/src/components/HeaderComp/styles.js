@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import {Row} from 'antd'
+=======
+import {Row, Badge} from 'antd'
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 import style from 'styled-components'
 
 export const WrapperHeaderNavbar = style.div`
@@ -34,6 +38,10 @@ export const WrapperTextHeader = style.span`
     color: #fff;
     font-weight:bold;
     text-align:left;
+<<<<<<< HEAD
+=======
+    cursor:pointer;
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 `
 
 export const WrapperHeaderAcount = style.div`
@@ -47,4 +55,10 @@ export const WrapperHeaderAcount = style.div`
 export const WrapperTextHeaderSmall = style.span`
     font-size:12px;
     color: #fff;
+<<<<<<< HEAD
+=======
+`
+export const WrapperBadge = style(Badge)`
+    
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 `

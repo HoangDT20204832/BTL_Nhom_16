@@ -15,9 +15,15 @@ import { useDebounce } from "../../hooks/useDebounce";
 import ButtonComponent from "../../components/ButtonComp";
 
 const HomePage = () => {
+<<<<<<< HEAD
   const arr = [{name:"TV", img:"https://sudospaces.com/viomivietnam-vn/2022/05/tivi-xiaomi-mi-tv-p1-55-inch-hang-xuat-eu-chinh-hang-gia-re-nhat-1-large.jpg"},
 {name:"Máy tính", img:"https://laptop88.vn/media/news/2910_hinhanhmaytinhxachtay4.jpg"},
 {name:"Điện thoại", img: "https://cdn.tgdd.vn/Products/Images/42/303833/iphone-15-pro-blue-thumbnew-600x600.jpg"}];
+=======
+//   const arr = [{name:"TV", img:"https://sudospaces.com/viomivietnam-vn/2022/05/tivi-xiaomi-mi-tv-p1-55-inch-hang-xuat-eu-chinh-hang-gia-re-nhat-1-large.jpg"},
+// {name:"Máy tính", img:"https://laptop88.vn/media/news/2910_hinhanhmaytinhxachtay4.jpg"},
+// {name:"Điện thoại", img: "https://cdn.tgdd.vn/Products/Images/42/303833/iphone-15-pro-blue-thumbnew-600x600.jpg"}];
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 
 const productSearch = useSelector((state) => state.product.search)
 // const refSearch = useRef()

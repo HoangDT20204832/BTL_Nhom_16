@@ -2,6 +2,7 @@
     background-color: var(--background-color);
     padding: 20px 0px;
 }
+<<<<<<< HEAD
 .navbar {
     background-color: var(--background-color);
 }
@@ -67,6 +68,9 @@
 .active {
     color: var(--active-color);
 }
+=======
+
+>>>>>>> 3427d796e2ac7f912893cd8cb058a365504997a4
 
 .container {
     background-color: #fff;
