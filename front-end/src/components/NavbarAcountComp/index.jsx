@@ -68,8 +68,15 @@ const NavbarAcountComp = () => {
                         navigate('/account/address')
                         setSelectedNavItem("Địa chỉ")
                     }}>
-                      Địa chỉ</div>
-              <div className={styles.navbarItem}>Đổi mật khẩu</div>
+                      Địa chỉ
+              </div>
+              <div className={clsx(styles.navbarItem, {[styles.active]: selectedNavItem === "Đổi mật khẩu"})}
+                    onClick={() => {
+                      navigate('/account/password')
+                      setSelectedNavItem("Đổi mật khẩu")
+                  }}>
+                   Đổi mật khẩu
+              </div>
             </div>
             <div className={styles.navbarBodyItem}>
               <div className={styles.navbarIcon}>

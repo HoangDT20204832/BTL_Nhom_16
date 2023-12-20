@@ -7,7 +7,7 @@ import {
   import clsx from "clsx";
 
   
-  const AccountComp = () => {
+  const BankAccountComp = () => {
     return (
    
         <Col span={20} className={styles.container}>
@@ -46,5 +46,5 @@ import {
     );
   };
   
-  export default AccountComp;
+  export default BankAccountComp;
   
