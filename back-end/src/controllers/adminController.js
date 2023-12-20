@@ -5,8 +5,8 @@ class AdminController{
 
 // [POST] Create Product
     async addProduct(req,res){
-        const {name, description, price, brand, category, status} = req.body;
-        const product = await Product.create({name, description, price, brand, category, status});
+        const {name, description, price, thuong_hieu, product_type, tinh_trang} = req.body;
+        const product = await Product.create({name, description, price, thuong_hieu, product_type, tinh_trang});
         res.status(200).json(product);
     }
 // [GET] Get all product
