@@ -1,48 +1,59 @@
 import React from "react";
 // import "./styles.css";
-import { Col } from "antd";
+import { Col, Rate } from "antd";
 import styles from "./styles.module.css"
 import clsx from "clsx";
 import {
   StarFilled
 } from '@ant-design/icons';
-const CardProductComp = () => {
+
+import {useNavigate} from "react-router-dom"
+const CardProductComp = (props) => {
+  const {countInStock,description,discount,image,name, priceOld,priceNew,rating,selled,
+    trademark, origin, type,id} = props;
+
+  const navigate = useNavigate()
+  const handleDetailProduct = (id) =>{
+    navigate(`/product-detail/${id}`)
+  }
   return (
 
-        <Col span={4} className={styles.cardProductWrap} >
-          <a className={styles.productItemWrap} href="/">
-            <img src="https://down-vn.img.susercontent.com/file/2e3f88b622de319e0a481941ef478411" className={styles.productItemImg} alt="" />
+        <Col span={4} className={styles.cardProductWrap} 
+             onClick={() => countInStock!== 0 && handleDetailProduct(id)}
+              >         
+          <div className={styles.productItemWrap} 
+            style={{backgroundColor: countInStock ===0 ? "#ccc" : "#fff" }} >
+            <img className={styles.productItemImg} src= {image} />
             <h4 className={styles.productItemName}>
-              Bàn Phím Cơ Chơi Game FZ508 Pro Full Size 104 Phím
+              {name}
             </h4>
             <div className={styles.productItemPrice}>
-              <span className={styles.productItemPriceOld}>1.400.000đ</span>
-              <span className={styles.productItemPriceCurrent}>748.000đ</span>
+              <span className={styles.productItemPriceOld}>{priceOld?.toLocaleString()}đ</span>
+              <span className={styles.productItemPriceCurrent}>{priceNew?.toLocaleString()}đ</span>
             </div>
             <div className={styles.productItemAction}>
               <div className={styles.productItemRating}>
-                <i className={styles.productItemStar}><StarFilled /></i>
-                <i className={styles.productItemStar}><StarFilled /></i>
-                <i className={styles.productItemStar}><StarFilled /></i>
-                <i className={styles.productItemStar}><StarFilled /></i>
-                <i className={styles.productItemStar}><StarFilled /></i>
+                {/* <span className={styles.productItemStar}>{rating} <StarFilled /></span> */}
+                <Rate className={styles.productItemStar} allowHalf disabled  defaultValue= {rating} value={rating} 
+                  />
+               
               </div>
-              <span className={styles.productItemSold}>88 Đã bán</span>
+              <span className={styles.productItemSold}>{selled} Đã bán</span>
             </div>
 
             <div className={styles.productItemOrigin}>
-              <span className={styles.productItemBrand}>Whoo</span>
-              <div className={styles.productItemOriginName}>Nhật Bản</div>
+              <span className={styles.productItemBrand}>{trademark ||"Xmass" }</span>
+              <div className={styles.productItemOriginName}>{origin || "Việt Nam"}</div>
             </div>
             <div className={styles.productItemFavourite}>
               <i className={clsx(styles.fasolid, styles.facheck)}></i>
               <span>Yêu thích</span>
             </div>
             <div className={styles.productItemSaleOff}>
-              <div className={styles.productItemSaleOffPercent}>47%</div>
+              <div className={styles.productItemSaleOffPercent}>{discount}%</div>
               <div className={styles.productItemSaleOffLabel}>GIẢM</div>
             </div>
-          </a>
+          </div>
         </Col>     
  
 
