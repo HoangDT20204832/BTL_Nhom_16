@@ -14,7 +14,7 @@ const DetailsOrderPage = () => {
   // const location = useLocation()
   // const { state } = location
   const { id } = params
-
+    // Lay chi tiet dat hang
   const fetchDetailsOrder = async () => {
     const res = await OrderService.getDetailsOrder(id)
     // const res = await OrderService.getDetailsOrder(id, state?.token)
@@ -25,7 +25,7 @@ const DetailsOrderPage = () => {
     enabled: id
   })
   const { data } = queryOrder
-
+    // Gia don hang
   const priceMemo = useMemo(() => {
     const result = data?.orderItems?.reduce((total, cur) => {
       return total + ((cur.priceNew * cur.amount))

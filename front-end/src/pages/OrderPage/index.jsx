@@ -19,7 +19,7 @@ const OrderPage = () => {
   const [listChecked, setListChecked] = useState([])
   const user = useSelector((state) => state.user)
 
-  const[isOpenUpdateInfor, setIsOpenUpdateInfor] = useState(false)
+  const[isOpenUpdateInfor, setIsOpenUpdateInfor] = useState(false)  // update
   const dispatch = useDispatch()
   const onChange = (e) => {
     if(listChecked.includes(e.target.value)){ //nếu check đã listCheck đã có rồi mà lại check thì sẽ xóa checked đó đi 
@@ -39,7 +39,7 @@ const OrderPage = () => {
     // sex : "",
   })
   const [form] = Form.useForm() 
-  
+    // Xử lý thay đổi số lượng vật phẩm
   const handleChangeCount = (type, idProduct,limited) => {
     if(type === 'increase') {
       if(!limited){   //nếu limited=false hay số lượng chưa = max(countInStock) thì vẫn tăng,=true thì ko tăng nữa
@@ -51,7 +51,7 @@ const OrderPage = () => {
       }
     }
   }
-
+    // Xử lý xóa vật phẩm
   const handleDeleteOrder = (idProduct) => {
     dispatch(removeOrderProduct({idProduct}))
   }
@@ -68,7 +68,7 @@ const OrderPage = () => {
       setListChecked([])
     }
   }
-
+  // Xử lý xóa tất cả vật phẩm
   const handleDeleteAllOrder = () => {
     if(listChecked?.length > 1){
       dispatch(removeAllOrderProduct({listChecked}))
@@ -87,7 +87,7 @@ const OrderPage = () => {
       ,0)
       return result
   }, [order])
-
+    // Tax
   const transportPriceMemo = useMemo(() =>{
    if(300000 <= priceMemo & priceMemo <= 1000000){
     return 15000
@@ -100,7 +100,7 @@ const OrderPage = () => {
    }
   
 }, [priceMemo])
-
+    // Tính tổng giá trị đơn hàng
 const totalPriceMemo = useMemo(() =>{
       return priceMemo + transportPriceMemo
 },[priceMemo,transportPriceMemo])
@@ -150,7 +150,8 @@ const handleAddCard = () =>{
     } else{
       navigate('/payment')
     }
-}
+}   
+    // Huy bỏ update
 const handleCancelUpdate = () =>{
     setStateUserDetail({
     name: "" , 
@@ -162,7 +163,7 @@ const handleCancelUpdate = () =>{
     form.resetFields()
   setIsOpenUpdateInfor(false)
 }
-
+    // Xử lý update thông tin cá nhân
 const handleUpdateInforUser = () =>{
   const {name, phone, address, city} = stateUserDetail
   if(name&&phone&&address&&city){ 
@@ -174,7 +175,7 @@ const handleUpdateInforUser = () =>{
     })
 }
 }
-
+    // Xử lý thay đổi địa chỉ
 const handleOnchaneAddress = () =>{
   setIsOpenUpdateInfor(true)
 }

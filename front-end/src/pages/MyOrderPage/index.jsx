@@ -24,7 +24,7 @@ const MyOrderPage = () => {
   const { isLoading, data } = queryOrder
 
   const handleDetailsOrder = (id) => {
-    navigate(`/details-order/${id}`
+    navigate(`/details-order/${id}`    // Chuyen den Order Page
     // , {
     //   state: {
     //     token: state?.token
@@ -32,7 +32,7 @@ const MyOrderPage = () => {
     // }
     )
   }
-
+  // Xu ly mutation hooks
   const mutation = useMutationHooks(
     (data) => {
       const { id , orderItems, userId } = data
@@ -42,7 +42,7 @@ const MyOrderPage = () => {
       return res
     }
   )
-
+    // Xu ly xoa Order
   const handleCanceOrder = (order) => {
     mutation.mutate({id : order._id, orderItems: order?.orderItems, userId: user.id }, {
       onSuccess: () => {
