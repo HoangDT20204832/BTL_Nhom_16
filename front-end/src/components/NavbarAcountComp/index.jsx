@@ -47,7 +47,11 @@ const NavbarAcountComp = () => {
                 <div className={styles.navbarIcon}>
                   <UserOutlined />
                 </div>
-                <span>Tài khoản của tôi</span>
+                <span onClick={() => {
+                navigate('/account')
+                setSelectedNavItem("Hồ sơ")
+              }
+              }>Tài khoản của tôi</span>
               </div>
               <div className={clsx(styles.navbarItem, {
           [styles.active]: selectedNavItem === "Hồ sơ"})} 
@@ -68,8 +72,15 @@ const NavbarAcountComp = () => {
                         navigate('/account/address')
                         setSelectedNavItem("Địa chỉ")
                     }}>
-                      Địa chỉ</div>
-              <div className={styles.navbarItem}>Đổi mật khẩu</div>
+                      Địa chỉ
+              </div>
+              <div className={clsx(styles.navbarItem, {[styles.active]: selectedNavItem === "Đổi mật khẩu"})}
+                    onClick={() => {
+                      navigate('/account/password')
+                      setSelectedNavItem("Đổi mật khẩu")
+                  }}>
+                   Đổi mật khẩu
+              </div>
             </div>
             <div className={styles.navbarBodyItem}>
               <div className={styles.navbarIcon}>

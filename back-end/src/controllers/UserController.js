@@ -1,5 +1,7 @@
 const userService = require("../services/UserService");
 const JwtService = require("../services/JwtService");
+
+// Đăng ký người dùng mới
 const createUser = async (req, res) => {
   try {
     console.log(req.body);
@@ -33,6 +35,8 @@ const createUser = async (req, res) => {
   }
 };
 
+
+//Người dùng đăng nhập
 const loginUser = async (req, res) => {
   try {
     console.log(req.body);
@@ -70,7 +74,7 @@ const loginUser = async (req, res) => {
 };
 
 
-
+// Cập nhật thông tin người dùng
 const updateUser = async (req, res) => {
   try {
    const userId = req.params.id;
@@ -183,15 +187,24 @@ const updateUserPassword = async(req, res) => {
    const userId = req.params.id;
    console.log("userId: " , userId);
    const data = req.body;
-   console.log("dataPass", data)
-   const {oldPassword, newPassword} = data
+   const { oldPassword, newPassword, confirmPassword} = data;
    if (!userId) {
     return res.status(200).json({
       status: "ERR",
       message: "userId là bắt buộc",
     });
+   }else if ( !oldPassword || !newPassword || !confirmPassword ) {
+     return res.status(200).json({
+       status: "ERROR",
+       message: "Bạn cần điền đầy đủ thông tin",
+     });
+   }  else if (newPassword !== confirmPassword) {
+     return res.status(200).json({
+       status: "ERROR",
+       message: "password và confirmPassword phải giống nhau",
+     });
    }
-    const response = await userService.updateUserPassWord(userId, oldPassword, newPassword);
+    const response = await userService.updateUserPassWord(userId, data);
     return res.status(200).json(response);
   } catch (e) {
     return res.status(404).json({

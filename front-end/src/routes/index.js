@@ -14,6 +14,7 @@ import MyOrderPage from "../pages/MyOrderPage"
 import DetailsOrderPage from "../pages/DetailsOrderPage"
 import AddressUserPage from "../pages/AddressUserPage"
 import BankUserPage from "../pages/BankUserPage"
+import PasswordUserPage from "../pages/PasswordUserPage copy"
 export const routers = [
     {
         path: '/',
@@ -75,6 +76,12 @@ export const routers = [
     {
         path: "/account/bank",
         page: BankUserPage,
+        isShowHeader: true,
+        isShowNavbar: true
+    },
+    {
+        path: "/account/password",
+        page: PasswordUserPage,
         isShowHeader: true,
         isShowNavbar: true
     },
