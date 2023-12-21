@@ -3,6 +3,7 @@ import { Menu } from "antd";
 import { AppstoreOutlined, MailOutlined } from '@ant-design/icons';
 import UserInForAd from "../../components/UserInforAdComp";
 import ProductInForAd from "../../components/ProductInforAdComp";
+import OrderInForAd from "../../components/OrderInForAd";
 const AdminPage = () => {
     function getItem(label, key, icon, children, type) {
         return {
@@ -16,6 +17,7 @@ const AdminPage = () => {
     const items = [
         getItem('Người dùng', 'user', <MailOutlined />),
         getItem('Sản phẩm', 'product', <AppstoreOutlined />),
+        getItem('Đơn hàng', 'order', <AppstoreOutlined />),
     
       ];
   // const rootSubmenuKeys = ["user", "product"];
@@ -35,6 +37,8 @@ const renderPage = (key) =>{
             return (<UserInForAd />)
         case 'product':
             return (<ProductInForAd />)
+        case 'order':
+          return (<OrderInForAd />)
         default: 
             return <></>
     }
