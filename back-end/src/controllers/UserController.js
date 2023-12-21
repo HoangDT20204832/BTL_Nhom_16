@@ -1,5 +1,7 @@
 const userService = require("../services/UserService");
 const JwtService = require("../services/JwtService");
+
+// Đăng ký người dùng mới
 const createUser = async (req, res) => {
   try {
     console.log(req.body);
@@ -33,6 +35,8 @@ const createUser = async (req, res) => {
   }
 };
 
+
+//Người dùng đăng nhập
 const loginUser = async (req, res) => {
   try {
     console.log(req.body);
@@ -70,7 +74,7 @@ const loginUser = async (req, res) => {
 };
 
 
-
+// Cập nhật thông tin người dùng
 const updateUser = async (req, res) => {
   try {
    const userId = req.params.id;
