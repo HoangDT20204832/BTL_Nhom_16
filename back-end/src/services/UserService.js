@@ -167,8 +167,9 @@ const  getDetailsUser= (userId) => {
   });
 };
 
-function updateUserPassWord(userId, oldPassword, newPassword) {
+function updateUserPassWord(userId, data) {
   return new Promise(async (resolve, reject) => {
+    const {oldPassword, newPassword, confirmPassword} = data;
     try {
       const user = await User.findOne({_id: userId});
 

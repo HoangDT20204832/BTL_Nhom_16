@@ -64,3 +64,10 @@ export const deleteUserInfor  = async(id) =>{
     );
     return res.data
 }
+
+export const updateUserPassword  = async(id, data) =>{
+    const res = await axiosJWT.put(`${process.env.REACT_APP_API_URL}/user/update-user-password/${id}`, data,
+    );
+    return res.data
+}
+
