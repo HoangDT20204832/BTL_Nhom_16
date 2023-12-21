@@ -117,7 +117,7 @@ const onClickSearch = () =>{
 }
 
   return (
-    <div style={{ backgroundColor: "var(--primary-color)" }}>
+    <div style={{ backgroundColor: "var(--primary-color)"}}>
       <WrapperHeaderNavbar className="grid">
         <WrapperHeaderNavbarList>
           <WrapperHeaderNavbarItem>

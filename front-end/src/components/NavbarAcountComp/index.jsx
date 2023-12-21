@@ -47,7 +47,11 @@ const NavbarAcountComp = () => {
                 <div className={styles.navbarIcon}>
                   <UserOutlined />
                 </div>
-                <span>Tài khoản của tôi</span>
+                <span onClick={() => {
+                navigate('/account')
+                setSelectedNavItem("Hồ sơ")
+              }
+              }>Tài khoản của tôi</span>
               </div>
               <div className={clsx(styles.navbarItem, {
           [styles.active]: selectedNavItem === "Hồ sơ"})} 
