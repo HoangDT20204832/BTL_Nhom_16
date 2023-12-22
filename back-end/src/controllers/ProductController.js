@@ -78,7 +78,7 @@ try {
 
     if (!productId) {
     return res.status(200).json({
-        status: "ERR",
+        status: "ERROR",
         message: "productId là bắt buộc",
     });
     }
