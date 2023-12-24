@@ -35,10 +35,10 @@ const ReviewService = require('../services/ReviewService');
 const createReview = async (req, res) => {
   try {
     const data = req.body
-    const { userId, productId, rating, comment } = data;
+    const { userId, productId, rating, comment, images } = data;
     console.log("dataReview", data);
     const reviewProduct = await ReviewService.createReview(data);
-    return res.status(200).json({ reviewProduct });
+    return res.status(200).json( reviewProduct);
   } catch (e) {
     console.error('Error creating review:', e);
     return res.status(404).json({

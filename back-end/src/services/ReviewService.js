@@ -2,7 +2,7 @@ const Review = require('../models/ReviewProduct');
 const Product = require('../models/ProductModel')
 const createReview = (data) => {
   return new Promise(async(resolve, reject) => {
-    const { userId, productId, rating, comment } = data;
+    const { userId, productId, rating, comment,images } = data;
 
     try {
       const checkProduct = await Product.findOne({ _id: productId})
@@ -11,7 +11,8 @@ const createReview = (data) => {
             userId, 
             productId, 
             rating, 
-            comment, 
+            comment,
+            images
           });
           if(newReview){
             resolve({

@@ -3,6 +3,7 @@ import counterReducer from './slides/counterSlide'
 import userReducer from './slides/userSlide'
 import productReducer from './slides/productSlide'
 import orderReducer from './slides/orderSlide'
+import reviewReducer from "./slides/reviewSlide"
 import {
   persistStore,
   persistReducer,
@@ -20,13 +21,14 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: ['user', 'product']  //những state mình ko muốn redux-persist lưu vào localStorage
+  blacklist: ['user', 'product', 'reviews']  //những state mình ko muốn redux-persist lưu vào localStorage
 }
 const rootReducer = combineReducers({
   counter: counterReducer,
   user: userReducer,
   product: productReducer,
   order: orderReducer,
+  reviews: reviewReducer,
 },)
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 

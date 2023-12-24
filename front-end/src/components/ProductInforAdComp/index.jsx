@@ -125,6 +125,9 @@ const fetchGetDetailProduct = async(rowSelected) => {
     }
 }
 
+console.log("heli", stateProductDetail)
+
+
 useEffect(() =>{
   if(rowSelected){
     fetchGetDetailProduct(rowSelected)
@@ -328,6 +331,7 @@ const handleChangeAvatarDetail = async ({fileList}) => {
     image: file.preview,
   })
 }
+
 const onFinishSubmit =() =>{
   console.log('onFinishSubmit',stateProduct )
   mutationCreate.mutate(stateProduct, {
