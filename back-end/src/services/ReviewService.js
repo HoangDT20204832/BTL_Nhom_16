@@ -28,15 +28,30 @@ const createReview = (data) => {
   });
 };
 
-const  getReviewsByProduct = (productId) => {
+const  getReviewsByProduct = (productId,ratingPoint,hasImg) => {
     return new Promise(async(resolve, reject) => {
       try {
         // const product = await Product.findOne({_id: productId})
-       const reviews = await Review.find({productId: productId }).populate('userId');
-        if(reviews === null){
+        let query = { productId: productId };
+
+      if (ratingPoint) {
+        query.rating = ratingPoint;
+      }
+      if (hasImg !== undefined) {
+        if (hasImg) {
+          // Nếu hasImage tồn tại và có giá trị (khác null, undefined, false, 0, "", "false")
+          query.images = { $elemMatch: { imageUrl: { $exists: true, $ne: null } } };
+        } 
+        // else {
+        //   // Nếu hasImage là null, undefined, false, 0, "", "false"
+        //   query.images = { $elemMatch: { imageUrl: { $exists: false } } };
+        // }
+      }
+       const reviews = await Review.find(query).populate('userId');
+        if(!reviews || reviews.length === 0){
           resolve({ 
             status: 'OK',
-            message: "Đánh giá không tồn tại"
+            message: "Không có đánh giá nào cho sản phẩm này"
           })
         }
        

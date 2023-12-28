@@ -1,7 +1,7 @@
 import React,{ useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query';
 import * as OrderService from '../../services/orderService'
-import * as ReviewService from '../../services/reviewService'
+// import * as ReviewService from '../../services/reviewService'
 import { useSelector } from 'react-redux';
 import { WrapperItemOrder, WrapperListOrder, WrapperHeaderItem, WrapperFooterItem, WrapperContainer, WrapperStatus,
   ModalOverlay } from './style';
@@ -16,13 +16,16 @@ const MyOrderPage = () => {
   const location = useLocation()
   const { state } = location
   const navigate = useNavigate()
+
   const fetchMyOrder = async () => {
     const res = await OrderService.getOrderByUserId(state?.id)
     return res.data
   }
   const user = useSelector((state) => state.user)
+  const idsOrderReviewed = useSelector((state) => state.order.idsOrderReviewed)
+  console.log("idsOrderReviewed",idsOrderReviewed)
   const [isOpenReview, setIsOpenReview] = useState(false)
-  const [productReview, setProductReview] = useState('')
+  const [orderReview, setOrderReview] = useState('')
 
   const queryOrder = useQuery({ queryKey: ['orders'], queryFn: fetchMyOrder }, {
     enabled: state?.id   // enabled trong useQuery giúp kiểm soát xem query nên tự động thực hiện hay không, dựa trên một điều kiện cụ thể
@@ -120,12 +123,15 @@ console.log("dataOrder", data)
 //code xử lý đánh giá sanmr phẩm
   const handleReviewOrder = (order) =>{
       setIsOpenReview(true)
-      setProductReview(order?.orderItems[0])
+      setOrderReview(order)
   }
 
   const closeReviewModal = ()=>{
     setIsOpenReview(false)
   }
+
+  // const [reviewedOrders, setReviewedOrders] = useState([]);
+//  console.log('reviewedOrders', reviewedOrders)
   return (
     // <Loading isLoading={isLoading || isLoadingCancel}>
       <WrapperContainer>
@@ -155,7 +161,7 @@ console.log("dataOrder", data)
                       >{(order?.totalPrice)?.toLocaleString()}đ</span>
                     </div>
                     <div style={{display: 'flex', gap: '10px'}}>
-                    {(order?.isDelivered &&  order?.isPaid)  &&  
+                    {(order?.isDelivered &&  order?.isPaid && !idsOrderReviewed.includes(order?._id))  &&  
                      <ButtonComponent
                         onClick={() => handleReviewOrder(order)}
                         size={40}
@@ -184,18 +190,35 @@ console.log("dataOrder", data)
                         styleTextButton={{ color: '#9255FD', fontSize: '14px' }}
                       >
                       </ButtonComponent>}
-                      <ButtonComponent
+                      {(order?.isDelivered ===false  || order?.isPaid === false)
+                      ?(<ButtonComponent
                         onClick={() => handlReceiveOrder(order)}
                         size={40}
                         styleButton={{
                             height: '36px',
                             border: '1px solid #9255FD',
-                            borderRadius: '4px'
+                            borderRadius: '4px',
+                            background: "var(--active-color)"
                         }}
                         textButton={'Đã nhận hàng'}
-                        styleTextButton={{ color: '#9255FD', fontSize: '14px' }}
+                        styleTextButton={{ color: '#fff', fontSize: '14px' }}
                       >
-                      </ButtonComponent>
+                      </ButtonComponent>)
+                      :<ButtonComponent
+                      onClick={() => navigate(`/product-detail/${order?.orderItems[0]?.product}`)}
+                      size={40}
+                      styleButton={{
+                          height: '36px',
+                          border: '1px solid #9255FD',
+                          borderRadius: '4px',
+                          background: "var(--active-color)"
+                      }}
+                      textButton={'Mua lại'}
+                      styleTextButton={{ color: '#fff', fontSize: '14px' }}
+                    >
+                    </ButtonComponent>
+                      }
+                      
                       <ButtonComponent
                         onClick={() => handleDetailsOrder(order?._id)}
                         size={40}
@@ -218,7 +241,7 @@ console.log("dataOrder", data)
         </div>
         { isOpenReview && <div>
           <ModalOverlay ></ModalOverlay>
-          <ReviewComponent productReview={productReview} onClose={closeReviewModal} /></div>}
+          <ReviewComponent orderReview={orderReview} onClose={closeReviewModal}  /></div>}
 
       </WrapperContainer>
     // </Loading>

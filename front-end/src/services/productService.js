@@ -11,6 +11,26 @@ export const getAllProducts  = async(search,limit, page) =>{
     return res.data
 }
 
+// export const getProductsByType  = async(type,page, limit) =>{
+//     let res = {}
+//     if(type){
+//         res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-products-type?type=${type}&limit=${limit}&page=${page}`);
+//     }
+//     // else{
+//     //     res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-products-type?type=${type}&name=${name}&priceNew=${priceNew}&rating=${rating}&origin=${origin}&sort=${sort}&limit=${limit}&page=${page}`);
+//     // }
+//     return res.data
+// }
+export const getProductsByType  = async(queryString) =>{
+
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-products-type?${queryString}`);
+    
+    // else{
+    //     res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-products-type?type=${type}&name=${name}&priceNew=${priceNew}&rating=${rating}&origin=${origin}&sort=${sort}&limit=${limit}&page=${page}`);
+    // }
+    return res.data
+}
+
 export const createProduct  = async(data) =>{
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/product/create-product`,data);
     return res.data

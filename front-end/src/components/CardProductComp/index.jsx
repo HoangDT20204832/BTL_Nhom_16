@@ -6,16 +6,29 @@ import clsx from "clsx";
 import {
   StarFilled
 } from '@ant-design/icons';
-
+import { useQuery } from "@tanstack/react-query";
+import * as reviewService from "../../services/reviewService";
 import {useNavigate} from "react-router-dom"
 const CardProductComp = (props) => {
   const {countInStock,description,discount,image,name, priceOld,priceNew,rating,selled,
-    trademark, origin, type,id} = props;
+    trademark, origin, type ,id} = props;
 
   const navigate = useNavigate()
   const handleDetailProduct = (id) =>{
     navigate(`/product-detail/${id}`)
   }
+
+//   const fetchReviewProduct =async(context) =>{
+//     const id = context?.queryKey && context?.queryKey[1];
+//     const res = await reviewService.getReviewsByProduct(id)
+//     return res.data
+//   }
+//   const queryReiew = useQuery(['reviews', id], fetchReviewProduct)
+
+//   const {data: dataReviews} = queryReiew
+// // Tính trung bình rating
+// const totalRating = dataReviews?.reduce((sum, review) => sum + review.rating, 0);
+// const averageRating = Number((dataReviews?.length > 0 ? totalRating / dataReviews?.length : 0).toFixed(1));
   return (
 
         <Col span={4} className={styles.cardProductWrap} 
@@ -34,7 +47,7 @@ const CardProductComp = (props) => {
             <div className={styles.productItemAction}>
               <div className={styles.productItemRating}>
                 {/* <span className={styles.productItemStar}>{rating} <StarFilled /></span> */}
-                <Rate className={styles.productItemStar} allowHalf disabled  defaultValue= {rating} value={rating} 
+                <Rate className={styles.productItemStar} allowHalf disabled  defaultValue={5} value={rating} 
                   />
                
               </div>

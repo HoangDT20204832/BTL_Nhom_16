@@ -16,7 +16,7 @@ export const createReview  = async(data) =>{
     return res.data
 }
 
-export const getReviewsByProduct  = async(productId) =>{
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/review/get-reviews-product/${productId}`);
+export const getReviewsByProduct  = async(productId,ratingPoint,hasImg) =>{
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/review/get-reviews-product/${productId}?ratingPoint=${ratingPoint}&hasImg=${hasImg}`);
     return res.data
 }

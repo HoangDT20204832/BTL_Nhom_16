@@ -64,10 +64,11 @@ const NavbarComp = () => {
   };
   return (
     <div style={{backgroundColor:"#fff"}}>
-      <WrapperLabelText>Lable</WrapperLabelText>
-      <WrapperContent>
+      <WrapperLabelText>Bộ  lọc tìm kiếm</WrapperLabelText>
+      {/* <WrapperContent>
         {renderContent("text", ["TV", "May", "Dien Thoai"])}
-      </WrapperContent>
+      </WrapperContent> */}
+      <div>Nơi bán</div>
       <WrapperContent>
         {renderContent("checkbox", [
           { value: "a", label: "A" },

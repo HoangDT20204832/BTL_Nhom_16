@@ -7,8 +7,11 @@ import styles from "./styles.module.css"
 import { Col, Rate, Space,Button, Modal,Upload } from "antd";
 import * as messagee from '../MessageComp/index'
 import { WrapperUploadFile } from './styles';
+import { updateIdsOrderReviewed } from "../../redux/slides/orderSlide";
 
-const ReviewComponent = ({ productReview, onClose }) => {
+
+const ReviewComponent = ({ orderReview, onClose }) => {
+  const productReview = orderReview?.orderItems[0]
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user)
   console.log("userReview", user)
@@ -38,11 +41,20 @@ const ReviewComponent = ({ productReview, onClose }) => {
  )
      const {data: dataReview} = mutationCreate
      console.log("dataReview1", dataReview)
+
      useEffect(() =>{
       if(dataReview?.status==="OK"){
         messagee.success("Đánh giá thành công")
+        
+        // onhandleReview((prevReviewedOrders) => [
+        //   ...prevReviewedOrders,
+        //   orderReview?._id,
+        // ])
+        dispatch(updateIdsOrderReviewed(orderReview?._id))
+          
       }
      }, [dataReview?.status])
+
   const handleReviewSubmit = async () => {
     mutationCreate.mutate({ 
        userId: user?.id,productId: productReview?.product,rating,comment,

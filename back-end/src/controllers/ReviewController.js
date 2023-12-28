@@ -50,14 +50,14 @@ const createReview = async (req, res) => {
 const getReviewsByProduct = async (req, res) => {
   try {
     const productId = req.params.productId;
-    
+    const {ratingPoint, hasImg} = req.query
     if (!productId) {
         return res.status(200).json({
             status: "ERROR",
             message: "productId là bắt buộc",
         });
         }
-    const response = await ReviewService.getReviewsByProduct(productId);
+    const response = await ReviewService.getReviewsByProduct(productId,ratingPoint,hasImg);
     return res.status(200).json(response);
     } catch (e) {
     return res.status(404).json({

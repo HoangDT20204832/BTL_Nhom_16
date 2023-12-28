@@ -2,7 +2,7 @@ import { Col, Image, Row, InputNumber, Rate } from "antd";
 import styles from "./styles.module.css";
 import { PlusOutlined, MinusOutlined, StarFilled } from "@ant-design/icons";
 import ButtonComponent from "../ButtonComp/index";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as productService from "../../services/productService";
 import * as reviewService from "../../services/reviewService";
 import { useQuery } from "@tanstack/react-query";
@@ -10,15 +10,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { addOrderProduct } from "../../redux/slides/orderSlide";
 import { format } from 'date-fns';
+import clsx from "clsx";
+
 const ProductDetailComp = ({ idProduct }) => {
   const navigate = useNavigate();
   const location = useLocation(); //để lấy ra pathname trong location(đường dẫn của trang productdetail)
   //để khi chưa đăng nhập mà ấn vào thêm giỏ hàng thì đăng nhập vào phát tự động dẫn tới link sản phẩm mua luôn
   const dispatch = useDispatch();
   const [numberProductBye, setNumberProductBye] = useState(1);
-
+  const [ratingPoint, setRatingPoint] = useState("");
+  const [dataReviews,setDataReviews] = useState(null)
+  const [hasImg, setHasImg] = useState('')
   const user = useSelector((state) => state.user);
   console.log("hi user: ", user);
+  const [selectedNavItem, setSelectedNavItem] = useState("Tất cả"); // Thêm state mới
 
   const onChange = (value) => {
     setNumberProductBye(value);
@@ -66,24 +71,35 @@ const ProductDetailComp = ({ idProduct }) => {
     }
   };
 
-  const { data: productDetail } = useQuery(
-    ["product-detail", idProduct],
-    fetchGetDetailProduct,
+  const { data: productDetail } = useQuery(["product-detail", idProduct],fetchGetDetailProduct,
     { enabled: !!idProduct }
   );
   console.log("productDetail", productDetail);
 
   const fetchReviewProduct =async() =>{
-    const res = await reviewService.getReviewsByProduct(idProduct)
+    const res = await reviewService.getReviewsByProduct(idProduct, ratingPoint,hasImg)
+    setDataReviews(res.data)
+    // return res.data
+  }
+  console.log("hello", dataReviews)
+
+  useEffect(() =>{
+    fetchReviewProduct()
+  },[ratingPoint, hasImg])
+
+  const fetchReviewAllProduct =async(contex) =>{
+    const idProduct = contex?.queryKey[1]
+    const res = await reviewService.getReviewsByProduct(idProduct, ratingPoint,hasImg)
+    setDataReviews(res.data)
     return res.data
   }
-  const queryReiew = useQuery(['reviews'], fetchReviewProduct)
-  const {data: dataReviews} = queryReiew
-  console.log("dataReviews", dataReviews)
+  const queryReiew = useQuery(['reviews',idProduct], fetchReviewAllProduct)
+  const {data: dataReviewsAll} = queryReiew
+  console.log("dataReviewAll", dataReviewsAll)
   
     // Tính trung bình rating
-    const totalRating = dataReviews?.reduce((sum, review) => sum + review.rating, 0);
-    const averageRating = Number((dataReviews?.length > 0 ? totalRating / dataReviews?.length : 0).toFixed(1));
+    const totalRating = dataReviewsAll?.reduce((sum, review) => sum + review.rating, 0);
+    const averageRating = Number((dataReviewsAll?.length > 0 ? totalRating / dataReviewsAll?.length : 0).toFixed(1));
   return (
     <>
       <Row className={styles.wrapp}>
@@ -140,7 +156,7 @@ const ProductDetailComp = ({ idProduct }) => {
             <Rate
               allowHalf
               disabled
-              defaultValue={productDetail?.rating}
+              defaultValue={5}
               value={averageRating}
             />
             <span className={styles.textSell}>
@@ -170,12 +186,6 @@ const ProductDetailComp = ({ idProduct }) => {
             <span className={styles.address}>{user?.address}</span> -
             <span className={styles.changeAddress}>Đổi địa chỉ</span>
           </div>
-          {/* <LikeButtonComponent
-                     dataHref={ process.env.REACT_APP_IS_LOCAL 
-                                ? "https://developers.facebook.com/docs/plugins/" 
-                                : window.location.href
-                            } 
-                    /> */}
           <div
             style={{
               margin: "10px 0 20px",
@@ -275,6 +285,7 @@ const ProductDetailComp = ({ idProduct }) => {
           </div>
         </Col>
       </Row>
+
       <div className={styles.wrapperProductRating}>
         <div className={styles.wrapperProductRatingHeader}>
           ĐÁNH GIÁ SẢN PHẨM
@@ -291,118 +302,63 @@ const ProductDetailComp = ({ idProduct }) => {
               <Rate style={{ fontSize: "16px", color:"var(--active-color)" }} allowHalf disabled  defaultValue= {5} value={averageRating} />
             </div>
             <div className={styles.productRatingOverviewList}>
-              <ButtonComponent
-                size={40}
-                styleButton={{
-                  background: "#fff",
-                  height: "35px",
-                  width: "105px",
-                  border: "1px solid var(--background-color)",
-                  borderRadius: "4px",
-                }}
-                textButton={"Tất cả"}
-                styleTextButton={{
-                  color: "var(--text-color)",
-                  fontSize: "15px",
-                  fontWeight: "400",
-                }}
-              />
-              <ButtonComponent
-                size={40}
-                styleButton={{
-                  background: "#fff",
-                  height: "35px",
-                  width: "105px",
-                  border: "1px solid var(--background-color)",
-                  borderRadius: "4px",
-                }}
-                textButton={"5 Sao"}
-                styleTextButton={{
-                  color: "var(--text-color)",
-                  fontSize: "15px",
-                  fontWeight: "400",
-                }}
-              />{" "}
-              <ButtonComponent
-                size={40}
-                styleButton={{
-                  background: "#fff",
-                  height: "35px",
-                  width: "105px",
-                  border: "1px solid var(--background-color)",
-                  borderRadius: "4px",
-                }}
-                textButton={"4 Sao"}
-                styleTextButton={{
-                  color: "var(--text-color)",
-                  fontSize: "15px",
-                  fontWeight: "400",
-                }}
-              />
-              <ButtonComponent
-                size={40}
-                styleButton={{
-                  background: "#fff",
-                  height: "35px",
-                  width: "105px",
-                  border: "1px solid var(--background-color)",
-                  borderRadius: "4px",
-                }}
-                textButton={"3 Sao"}
-                styleTextButton={{
-                  color: "var(--text-color)",
-                  fontSize: "15px",
-                  fontWeight: "400",
-                }}
-              />
-              <ButtonComponent
-                size={40}
-                styleButton={{
-                  background: "#fff",
-                  height: "35px",
-                  width: "105px",
-                  border: "1px solid var(--background-color)",
-                  borderRadius: "4px",
-                }}
-                textButton={"2 Sao"}
-                styleTextButton={{
-                  color: "var(--text-color)",
-                  fontSize: "15px",
-                  fontWeight: "400",
-                }}
-              />
-              <ButtonComponent
-                size={40}
-                styleButton={{
-                  background: "#fff",
-                  height: "35px",
-                  width: "105px",
-                  border: "1px solid var(--background-color)",
-                  borderRadius: "4px",
-                }}
-                textButton={"1 Sao"}
-                styleTextButton={{
-                  color: "var(--text-color)",
-                  fontSize: "15px",
-                  fontWeight: "400",
-                }}
-              />
-              <ButtonComponent
-                size={40}
-                styleButton={{
-                  background: "#fff",
-                  height: "35px",
-                  width: "105px",
-                  border: "1px solid var(--background-color)",
-                  borderRadius: "4px",
-                }}
-                textButton={"Có hình ảnh"}
-                styleTextButton={{
-                  color: "var(--text-color)",
-                  fontSize: "15px",
-                  fontWeight: "400",
-                }}
-              />
+              <div className={clsx(styles.buttonRating, {
+          [styles.active]: selectedNavItem === "Tất cả"})}
+                onClick={() => {setRatingPoint("") 
+                setHasImg("")
+                setSelectedNavItem("Tất cả")}
+              }
+            
+               
+              >Tất cả</div>
+              <div className={clsx(styles.buttonRating, {
+          [styles.active]: selectedNavItem === "5 Sao"})}
+                onClick={() => {setRatingPoint(5) 
+                  setHasImg("")
+                setSelectedNavItem("5 Sao")}}
+            
+               
+              >5 Sao</div>{" "}
+              <div className={clsx(styles.buttonRating, {
+          [styles.active]: selectedNavItem === "4 Sao"})}
+                onClick={() => {setRatingPoint(4) 
+                  setHasImg("")
+                setSelectedNavItem("4 Sao")}}
+            
+               
+              >4 Sao</div>
+              <div className={clsx(styles.buttonRating, {
+          [styles.active]: selectedNavItem === "3 Sao"})}
+                onClick={() => {setRatingPoint(3) 
+                  setHasImg("")
+                setSelectedNavItem("3 Sao")}}
+            
+               
+              >3 Sao</div>
+              <div className={clsx(styles.buttonRating, {
+          [styles.active]: selectedNavItem === "2 Sao"})}
+                onClick={() => {setRatingPoint(2) 
+                  setHasImg("")
+                setSelectedNavItem("2 Sao")}}
+            
+               
+              >2 Sao</div>
+              <div className={clsx(styles.buttonRating, {
+          [styles.active]: selectedNavItem === "1 Sao"})}
+                onClick={() => {setRatingPoint(1) 
+                  setHasImg("")
+                setSelectedNavItem("1 Sao")}}
+              >1 Sao</div>
+              <div className={clsx(styles.buttonRating, {
+          [styles.active]: selectedNavItem === "Có hình ảnh"})}
+                onClick={() => {
+                  setRatingPoint('')
+                  setHasImg(true)
+                  setSelectedNavItem("Có hình ảnh")
+                }
+                }
+            
+              >Có hình ảnh</div>
             </div>
           </div>
 
@@ -440,39 +396,3 @@ const ProductDetailComp = ({ idProduct }) => {
 
 export default ProductDetailComp;
 
-// import React, { useEffect } from 'react';s
-// import { useDispatch, useSelector } from 'react-redux';
-// import ReviewComponent from './ReviewComponent';
-// import { getReviewsByProduct } from '../services/reviewService';
-
-// const ProductDetailComponent = ({ productId }) => {
-//   const dispatch = useDispatch();
-//   const reviews = useSelector((state) => state.reviews.reviews);
-
-//   useEffect(() => {
-//     const fetchReviews = async () => {
-//       const reviewsData = await getReviewsByProduct(productId);
-//       dispatch({ type: 'SET_REVIEWS', payload: reviewsData });
-//     };
-
-//     fetchReviews();
-//   }, [dispatch, productId]);
-
-//   return (
-//     <div>
-//       {/* Hiển thị thông tin sản phẩm */}
-//       <h2>Đánh giá và Bình luận</h2>
-//       <ReviewComponent productId={productId} />
-
-//       {/* Hiển thị đánh giá và bình luận */}
-//       {reviews.map((review) => (
-//         <div key={review._id}>
-//           <p>{`Đánh giá: ${review.rating}`}</p>
-//           <p>{`Bình luận: ${review.comment}`}</p>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-
-// export default ProductDetailComponent;
