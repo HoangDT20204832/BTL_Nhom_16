@@ -22,7 +22,7 @@ const HomePage = () => {
 const productSearch = useSelector((state) => state.product.search)
 // const refSearch = useRef()
 // const [stateProduct, setStateProduct] = useState([])
-const searchDebounce = useDebounce(productSearch, 300)
+const searchDebounce = useDebounce(productSearch, 300)   // Go~ bo tim kiem
 const [limit, setLimit] = useState(5)
 const [page, setPage] = useState(0)
 console.log("productSearch", productSearch)

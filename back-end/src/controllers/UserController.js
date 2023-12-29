@@ -182,6 +182,7 @@ const logoutUser = async (req, res) => {
   }
 };
 
+// Người dùng cập nhật mật khẩu mới
 const updateUserPassword = async(req, res) => {
   try {
    const userId = req.params.id;
