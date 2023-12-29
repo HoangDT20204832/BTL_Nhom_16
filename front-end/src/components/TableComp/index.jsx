@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 // import Loading from '../../components/LoadingComponent/Loading'
 // import { Excel } from "antd-table-saveas-excel";
 import { useMemo } from 'react';
-
+import "./styles.css"
 const TableComponent = (props) => {
   const { selectionType = 'checkbox', data:dataSource = [], columns = [] } = props
   // const [rowSelectedKeys, setRowSelectedKeys] = useState([])
@@ -40,6 +40,16 @@ const [pageSize, setPageSize] = useState(7);
 const handlePageSizeChange = (newPageSize) => {
   setPageSize(newPageSize);
 };
+const columnsWithWidth = columns.map(column => {
+  if (column.dataIndex === 'name') {
+    return {
+      ...column,
+      className: 'name-column', // Thêm lớp CSS cho cột "Name"
+      // width: column.width || 200, // Đặt chiều rộng mặc định là 200px cho cột "Name"
+    };
+  }
+  return column;
+});
   
   return (
     <div>
@@ -62,12 +72,14 @@ const handlePageSizeChange = (newPageSize) => {
           type: selectionType,
           ...rowSelection,
         }}
-        columns={columns}
+        columns={columnsWithWidth}
         dataSource={dataSource}
         pagination={{
           pageSize: pageSize,
         }}
         {...props}
+        // className={styles.customTable}
+        className='custom-table'
       />
        <Pagination style={{display:"none"}}
         pageSize={pageSize}

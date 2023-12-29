@@ -23,7 +23,7 @@ const TypeProductPage = (type) => {
   const [panigate, setPanigate] = useState({
     page: 0,
     limit: 5,
-    totalPages: 1,
+    totalItems: 5,
   });
 
   // const fetchProductType = async(context) =>{
@@ -45,9 +45,6 @@ const TypeProductPage = (type) => {
     // panigate.page = current -1;
     // panigate.limit = pageSize
   };
-  // const {data: productsType} = useQuery(['product-type', state,panigate.page, panigate.limit ], fetchProductType)
-
-  // console.log("productType", productsType)
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [price, setPrice] = useState("");
@@ -76,8 +73,10 @@ const TypeProductPage = (type) => {
 
     const response = await productService.getProductsByType(queryString);
     const dataPro = response.data;
-    console.log("dataPro: ", dataPro);
+    console.log("res1", response.total)
+    // console.log("dataPro: ", dataPro);
     setProductsType(dataPro);
+    setPanigate({...panigate, totalItems: response.total} )
   };
 
   useEffect(() => {
@@ -109,31 +108,31 @@ const TypeProductPage = (type) => {
                 <div>
                   <NavbarOriginRadio
                     type="radio"
-                    value="Việt Nam"
-                    checked={origin === "Việt Nam"}
+                    value="Hà Nội"
+                    checked={origin === "Hà Nội"}
                     onChange={(e) => setOrigin(e.target.value)}
                   />
-                  Việt Nam
+                  Hà Nội
                 </div>
 
                 <div>
                   <NavbarOriginRadio
                     type="radio"
-                    value="Mỹ"
-                    checked={origin === "Mỹ"}
+                    value="Hồ Chí Minh"
+                    checked={origin === "Hồ Chí Minh"}
                     onChange={(e) => setOrigin(e.target.value)}
                   />
-                  Mỹ
+                  Hồ Chí Minh
                 </div>
 
                 <div>
                   <NavbarOriginRadio
                     type="radio"
-                    value="Vĩnh Phúc"
-                    checked={origin === "Vĩnh Phúc"}
+                    value="Nước ngoài"
+                    checked={origin === "Nước ngoài"}
                     onChange={(e) => setOrigin(e.target.value)}
                   />
-                  Vĩnh Phúc
+                  Nước ngoài
                 </div>
               </NavbarItemOrigin>
             </NavbarItem>
@@ -212,11 +211,11 @@ const TypeProductPage = (type) => {
 
           <Pagination
             defaultCurrent={panigate.page + 1}
-            // total={panigate.totalPages}
-            total={100}
+            total={panigate.totalItems}
+            // total={100}
             // pageSize={5}
             defaultPageSize={5}
-            pageSizeOptions={[5, 10, 15]}
+            pageSizeOptions={[5, 10, 15 ]}
             onChange={onChange}
             style={{ textAlign: "center", padding: "20px 0" }}
           />

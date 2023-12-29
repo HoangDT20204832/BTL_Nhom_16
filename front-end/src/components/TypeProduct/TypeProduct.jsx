@@ -11,6 +11,10 @@ const handleTypeImg = () =>{
       return "https://cdn.tgdd.vn/Products/Images/42/303833/iphone-15-pro-blue-thumbnew-600x600.jpg"
     case "Ipad":
       return "https://laptop88.vn/media/news/2910_hinhanhmaytinhxachtay4.jpg"
+    case "Tai nghe":
+    return "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lld91enbttqg1f"
+    case "Chuột":
+      return "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-ll0wnc8fmevf01"
     default:
       return  "https://cdn.tgdd.vn/Products/Images/42/303833/iphone-15-pro-blue-thumbnew-600x600.jpg"
   }

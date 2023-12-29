@@ -71,6 +71,28 @@ const ProductDetailComp = ({ idProduct }) => {
     }
   };
 
+  const handleBuyOrderProduct = () => {
+    if (!user?.id) {
+      navigate("/sign-in", { state: location?.pathname }); //truyền thêm state khi login
+    } else {
+      dispatch(
+        addOrderProduct({
+          orderItem: {
+            name: productDetail?.name,
+            amount: numberProductBye,
+            image: productDetail?.image,
+            priceOld: productDetail?.priceOld,
+            priceNew: productDetail?.priceNew,
+            discount: productDetail?.discount,
+            product: productDetail?._id,
+            countInStock: productDetail?.countInStock,
+          },
+        })
+      );
+      navigate('/order');
+    }
+  };
+
   const { data: productDetail } = useQuery(["product-detail", idProduct],fetchGetDetailProduct,
     { enabled: !!idProduct }
   );
@@ -268,6 +290,7 @@ const ProductDetailComp = ({ idProduct }) => {
             </div>
             <ButtonComponent
               size={40}
+              onClick={handleBuyOrderProduct}
               styleButton={{
                 background: "rgb(255, 57, 69)",
                 height: "48px",

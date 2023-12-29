@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import * as message from '../../components/MessageComp/index'
 import ReviewComponent from '../../components/ReviewComp';
+import {Col} from "antd"
 
 
 const MyOrderPage = () => {
@@ -134,9 +135,8 @@ console.log("dataOrder", data)
 //  console.log('reviewedOrders', reviewedOrders)
   return (
     // <Loading isLoading={isLoading || isLoadingCancel}>
-      <WrapperContainer>
-        <div style={{height: '100%', width: '1270px', margin: '0 auto'}}>
-          <h4>Đơn hàng của tôi</h4>
+    <Col span={20}>
+        <div style={{height: '100%',width:"100%", margin: '0 auto'}}>
           <WrapperListOrder>
             {data?.map((order) => {
               return (
@@ -243,7 +243,8 @@ console.log("dataOrder", data)
           <ModalOverlay ></ModalOverlay>
           <ReviewComponent orderReview={orderReview} onClose={closeReviewModal}  /></div>}
 
-      </WrapperContainer>
+    </Col>
+      
     // </Loading>
   )
 }
