@@ -198,6 +198,31 @@ const cancelOrderDetails = (id, data) => {
   })
 }
 
+const  updateOrderDetails= (orderId, data) => {
+  return new Promise(async(resolve, reject) => {
+    try {
+      console.log("orderId: ", orderId)
+      const checkOrder = await Order.findOne({_id: orderId})
+      // console.log("checkUser", checkUser)
+      if(checkOrder === null){
+        resolve({ 
+          status: 'OK',
+          message: "ĐƠn hàng không tồn tại"
+        })
+      }
+      const updateOrderData = await Order.findByIdAndUpdate(orderId, data, {new: true})
+      // { new: true } được sử dụng để trả về tài liệu được cập nhật sau khi thực hiện phương thức update
+      resolve({ 
+        status: 'OK',
+        message: "Cập nhật thông tin đơn hàng thành công",
+        data: updateOrderData
+      })
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 const getAllOrder = () => {
   return new Promise(async (resolve, reject) => {
       try {
@@ -218,6 +243,7 @@ module.exports = {
   getAllOrderDetails,
   getOrderDetails,
   cancelOrderDetails,
+  updateOrderDetails,
   getAllOrder
 
 };

@@ -25,7 +25,7 @@ const AccountComp = () => {
   const options2 = [];
   for (let i = 1; i <= 12; i++) {
     options2.push({
-      value: `Tháng ${i}`,
+      value: `Tháng ${i}`, 
       label: `Tháng ${i}`,
     });
   }

@@ -27,3 +27,8 @@ export const getOrderByUserId = async (id) => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/order/get-all-order`)
     return res.data
   }
+
+  export const updateOrderDetails = async (orderId, data) => {
+    const res = await axios.put(`${process.env.REACT_APP_API_URL}/order/update-order/${orderId}`, data)
+    return res.data
+  }

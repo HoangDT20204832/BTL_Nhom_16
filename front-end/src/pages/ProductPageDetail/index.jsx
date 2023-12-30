@@ -12,7 +12,7 @@ const ProductPageDetail = () => {
             <div className="grid">
             <h4><span onClick={() => navigate("/")}>Trang chủ</span> > Chi tiết sản phẩm</h4>
             <ProductDetailComp idProduct= {id} />
-            <WrapperRatingComp />
+            {/* <WrapperRatingComp /> */}
             </div>
         
         </div>

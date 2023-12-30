@@ -39,7 +39,7 @@ export const WrapperListOrder = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-top: 20px;
+  // padding-top: 20px;
 `
 export const WrapperFooterItem = styled.div`
   display: flex;
@@ -80,4 +80,13 @@ export const WrapperStatus = styled.div`
   padding-bottom: 10px;
   border-bottom: 1px solid rgb(235, 235, 240);
   flex-direction:column;
+`
+
+export const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 `

@@ -72,13 +72,25 @@ const getAllProduct = async (req, res) => {
     }
   };
 
+  const getProductsByType = async (req, res) => {
+    try {
+      const {type, name, priceNew, rating, origin, limit, page, sort} = req.query
+      const response = await productService.getProductsByType(type,name, priceNew,rating,origin,Number(limit) , Number(page) || 0,  sort );
+      return res.status(200).json(response);
+    } catch (e) {
+      return res.status(404).json({
+        message: e,
+      });
+    }
+  };
+
 const getDetailProduct = async (req, res) => {
 try {
     const productId = req.params.id;
 
     if (!productId) {
     return res.status(200).json({
-        status: "ERR",
+        status: "ERROR",
         message: "productId là bắt buộc",
     });
     }
@@ -110,5 +122,6 @@ module.exports = {
     getDetailProduct,
     deleteProduct,
     getAllProduct,
-    getAllTypeProduct
+    getAllTypeProduct,
+    getProductsByType
 };

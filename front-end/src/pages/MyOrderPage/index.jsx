@@ -1,28 +1,37 @@
 import React,{ useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query';
 import * as OrderService from '../../services/orderService'
+// import * as ReviewService from '../../services/reviewService'
 import { useSelector } from 'react-redux';
-import { WrapperItemOrder, WrapperListOrder, WrapperHeaderItem, WrapperFooterItem, WrapperContainer, WrapperStatus } from './style';
+import { WrapperItemOrder, WrapperListOrder, WrapperHeaderItem, WrapperFooterItem, WrapperContainer, WrapperStatus,
+  ModalOverlay } from './style';
 import ButtonComponent from '../../components/ButtonComp/index';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import * as message from '../../components/MessageComp/index'
+import ReviewComponent from '../../components/ReviewComp';
+import {Col} from "antd"
+
 
 const MyOrderPage = () => {
   const location = useLocation()
   const { state } = location
   const navigate = useNavigate()
+
   const fetchMyOrder = async () => {
     const res = await OrderService.getOrderByUserId(state?.id)
     return res.data
   }
   const user = useSelector((state) => state.user)
+  const idsOrderReviewed = useSelector((state) => state.order.idsOrderReviewed)
+  console.log("idsOrderReviewed",idsOrderReviewed)
+  const [isOpenReview, setIsOpenReview] = useState(false)
+  const [orderReview, setOrderReview] = useState('')
 
   const queryOrder = useQuery({ queryKey: ['orders'], queryFn: fetchMyOrder }, {
     enabled: state?.id   // enabled trong useQuery giúp kiểm soát xem query nên tự động thực hiện hay không, dựa trên một điều kiện cụ thể
   })
   const { isLoading, data } = queryOrder
-
   const handleDetailsOrder = (id) => {
     navigate(`/details-order/${id}`    // Chuyen den Order Page
     // , {
@@ -36,9 +45,7 @@ const MyOrderPage = () => {
   const mutation = useMutationHooks(
     (data) => {
       const { id , orderItems, userId } = data
-      // const { id, token , orderItems, userId } = data
       const res = OrderService.cancelOrder(id,orderItems, userId)
-      // const res = OrderService.cancelOrder(id, token,orderItems, userId)
       return res
     }
   )
@@ -86,11 +93,50 @@ const MyOrderPage = () => {
           })
   }
 
+  //các code xử lý khi ấn vào button đã nhận hàng thì sẽ cập nhật lại thông tin đơn hàng
+  const mutationUpdate = useMutationHooks(
+    (data) => {
+      console.log("haha", data)
+      const res = OrderService.updateOrderDetails(data.id, data)
+      return res
+    }
+  )
+  const handlReceiveOrder = (order) =>{
+    console.log("1704", order._id)
+    mutationUpdate.mutate({orderId : order._id, isDelivered: true, isPaid: true }, {
+      onSuccess: () => {
+        queryOrder.refetch()
+      },
+    })     
+  }
+
+  const {data: dataUpdate} = mutationUpdate
+  // console.log("dataUpdate", dataUpdate)
+
+  useEffect(() => {
+    if (dataUpdate?.status === 'OK') {
+      message.success("Đã nhận hàng")
+    }
+  }, [dataUpdate?.status])
+
+
+console.log("dataOrder", data)
+//code xử lý đánh giá sanmr phẩm
+  const handleReviewOrder = (order) =>{
+      setIsOpenReview(true)
+      setOrderReview(order)
+  }
+
+  const closeReviewModal = ()=>{
+    setIsOpenReview(false)
+  }
+
+  // const [reviewedOrders, setReviewedOrders] = useState([]);
+//  console.log('reviewedOrders', reviewedOrders)
   return (
     // <Loading isLoading={isLoading || isLoadingCancel}>
-      <WrapperContainer>
-        <div style={{height: '100%', width: '1270px', margin: '0 auto'}}>
-          <h4>Đơn hàng của tôi</h4>
+    <Col span={20}>
+        <div style={{height: '100%',width:"100%", margin: '0 auto'}}>
           <WrapperListOrder>
             {data?.map((order) => {
               return (
@@ -115,7 +161,24 @@ const MyOrderPage = () => {
                       >{(order?.totalPrice)?.toLocaleString()}đ</span>
                     </div>
                     <div style={{display: 'flex', gap: '10px'}}>
-                    <ButtonComponent
+                    {(order?.isDelivered &&  order?.isPaid && !idsOrderReviewed.includes(order?._id))  &&  
+                     <ButtonComponent
+                        onClick={() => handleReviewOrder(order)}
+                        size={40}
+                        styleButton={{
+                            height: '36px',
+                            border: '1px solid #9255FD',
+                            borderRadius: '4px',
+                            background: "var(--active-color)"
+                        }}
+                        textButton={'Đánh giá'}
+                        styleTextButton={{ color: 'var(--white-color)', fontSize: '14px' }}
+                      >
+                      </ButtonComponent>}
+
+                    {/* nếu đơn hàng đã giao và đã thanh toán thì sẽ bỏ nút huy đơn hàng đi */}
+                     {(order?.isDelivered ===false  || order?.isPaid === false)  &&  
+                     <ButtonComponent
                         onClick={() => handleCanceOrder(order)}
                         size={40}
                         styleButton={{
@@ -126,7 +189,36 @@ const MyOrderPage = () => {
                         textButton={'Hủy đơn hàng'}
                         styleTextButton={{ color: '#9255FD', fontSize: '14px' }}
                       >
-                      </ButtonComponent>
+                      </ButtonComponent>}
+                      {(order?.isDelivered ===false  || order?.isPaid === false)
+                      ?(<ButtonComponent
+                        onClick={() => handlReceiveOrder(order)}
+                        size={40}
+                        styleButton={{
+                            height: '36px',
+                            border: '1px solid #9255FD',
+                            borderRadius: '4px',
+                            background: "var(--active-color)"
+                        }}
+                        textButton={'Đã nhận hàng'}
+                        styleTextButton={{ color: '#fff', fontSize: '14px' }}
+                      >
+                      </ButtonComponent>)
+                      :<ButtonComponent
+                      onClick={() => navigate(`/product-detail/${order?.orderItems[0]?.product}`)}
+                      size={40}
+                      styleButton={{
+                          height: '36px',
+                          border: '1px solid #9255FD',
+                          borderRadius: '4px',
+                          background: "var(--active-color)"
+                      }}
+                      textButton={'Mua lại'}
+                      styleTextButton={{ color: '#fff', fontSize: '14px' }}
+                    >
+                    </ButtonComponent>
+                      }
+                      
                       <ButtonComponent
                         onClick={() => handleDetailsOrder(order?._id)}
                         size={40}
@@ -145,8 +237,14 @@ const MyOrderPage = () => {
               )
             })}
           </WrapperListOrder>
+
         </div>
-      </WrapperContainer>
+        { isOpenReview && <div>
+          <ModalOverlay ></ModalOverlay>
+          <ReviewComponent orderReview={orderReview} onClose={closeReviewModal}  /></div>}
+
+    </Col>
+      
     // </Loading>
   )
 }

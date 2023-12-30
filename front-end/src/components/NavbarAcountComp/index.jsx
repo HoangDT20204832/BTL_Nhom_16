@@ -82,11 +82,16 @@ const NavbarAcountComp = () => {
                    Đổi mật khẩu
               </div>
             </div>
-            <div className={styles.navbarBodyItem}>
+            <div className={clsx(styles.navbarBodyItem, {[styles.active]: selectedNavItem === "Đơn mua"})}
+                    onClick={() => {
+                      navigate('/my-order')
+                      setSelectedNavItem("Đơn mua")
+                  }}>
               <div className={styles.navbarIcon}>
                 <ShopOutlined />
               </div>
               <span>Đơn mua</span>
+              
             </div>
             <div className={styles.navbarBodyItem}>
               <div className={styles.navbarIcon}>

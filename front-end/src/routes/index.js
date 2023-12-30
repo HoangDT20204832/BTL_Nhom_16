@@ -55,6 +55,8 @@ export const routers = [
         path: '/my-order',
         page: MyOrderPage,
         isShowHeader: true,
+        isShowNavbar: true
+
     },
     {
         path: '/details-order/:id',

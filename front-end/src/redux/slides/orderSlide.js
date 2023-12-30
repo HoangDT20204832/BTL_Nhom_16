@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     orderItems: [],
     orderItemsSelected :[],
+    idsOrderReviewed : [],
     shippingAddress: {                                          // giao hàng
         // fullName: { type: String, required: true },             //tên người nhận
         // address: { type: String, required: true },              //địa chỉ giao hàng
@@ -94,11 +95,19 @@ export const orderSlide = createSlice({
         state.orderItemsSelected = orderSelected
     })
     },
+
+    updateIdsOrderReviewed: (state , action) => {
+        console.log("action.payload", action.payload)
+        const idOrdered = action.payload
+        state.idsOrderReviewed= [...state.idsOrderReviewed, idOrdered ]
+        console.log("updateIdsOrderReviewed",state?.idsOrderReviewed )
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
 export const { addOrderProduct,increaseAmount, decreaseAmount, 
-    removeOrderProduct,removeAllOrderProduct ,selectOrder} = orderSlide.actions
+    removeOrderProduct,removeAllOrderProduct ,selectOrder,
+    updateIdsOrderReviewed} = orderSlide.actions
 
 export default orderSlide.reducer 

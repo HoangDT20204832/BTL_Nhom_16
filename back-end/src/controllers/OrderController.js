@@ -74,12 +74,32 @@ const cancelOrderDetails = async (req, res) => {
       return res.status(200).json(response)
   } catch (e) {
       // console.log(e)
-      return res.status(404).json({
+      return res.status(404).json({  
           message: e
       })
   }
 }
 
+
+const updateOrderDetails = async (req, res) => {
+    try {
+        const data= req.body
+        const {orderId, ...rest} = data
+        if (!orderId) {
+            return res.status(200).json({
+                status: 'ERROR',
+                message: ' orderId là bắt buộc'
+            })
+        }
+        const response = await orderService.updateOrderDetails(orderId, rest)
+        return res.status(200).json(response)
+    } catch (e) {
+        // console.log(e)
+        return res.status(404).json({  
+            message: e
+        })
+    }
+  }
 const getAllOrder = async (req, res) => {
   try {
       const data = await orderService.getAllOrder()
@@ -98,5 +118,6 @@ module.exports = {
     getDetailsOrder,
     getAllOrderDetails,    
     cancelOrderDetails,
+    updateOrderDetails,
     getAllOrder
 };

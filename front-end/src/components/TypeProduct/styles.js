@@ -4,7 +4,7 @@ export const WrapperImg = styled.img`
     width: 100px;
     height: 100px;
     border-radius:50%;
-    padding:20px 20px 10px 20px;
+    padding:10px 10px 10px 10px;
 `
 export const WrapperProduct = styled.div`
     text-align: center;

@@ -16,6 +16,7 @@ const orderSchema = new mongoose.Schema({
             },
         },
     ],
+
     shippingAddress: {                                          // giao hàng
         fullName: { type: String, required: true },             //tên người nhận
         address: { type: String, required: true },              //địa chỉ giao hàng

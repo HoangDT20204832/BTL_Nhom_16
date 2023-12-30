@@ -1,6 +1,6 @@
-.headerCart-wrap:hover .headerCartList{
+/* .headerCart-wrap:hover .headerCartList{
     display: block;
-}
+} */
 .headerCartList{
     position: absolute;
     top: calc(100% + 10px);
