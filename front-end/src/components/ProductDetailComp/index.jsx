@@ -9,9 +9,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { addOrderProduct } from "../../redux/slides/orderSlide";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import clsx from "clsx";
-
+import LoadingComp from "../LoadingComp";
+import * as messagee from "../MessageComp"
 const ProductDetailComp = ({ idProduct }) => {
   const navigate = useNavigate();
   const location = useLocation(); //để lấy ra pathname trong location(đường dẫn của trang productdetail)
@@ -19,8 +20,8 @@ const ProductDetailComp = ({ idProduct }) => {
   const dispatch = useDispatch();
   const [numberProductBye, setNumberProductBye] = useState(1);
   const [ratingPoint, setRatingPoint] = useState("");
-  const [dataReviews,setDataReviews] = useState(null)
-  const [hasImg, setHasImg] = useState('')
+  const [dataReviews, setDataReviews] = useState(null);
+  const [hasImg, setHasImg] = useState("");
   const user = useSelector((state) => state.user);
   console.log("hi user: ", user);
   const [selectedNavItem, setSelectedNavItem] = useState("Tất cả"); // Thêm state mới
@@ -28,6 +29,7 @@ const ProductDetailComp = ({ idProduct }) => {
   const onChange = (value) => {
     setNumberProductBye(value);
   };
+  const [loading, setLoading] = useState(false);
 
   const handleChangeCount = (type, limited) => {
     if (type === "decrease") {
@@ -68,6 +70,7 @@ const ProductDetailComp = ({ idProduct }) => {
           },
         })
       );
+      messagee.success("Thêm sản phẩm vào giỏ hàng thành công")
     }
   };
 
@@ -89,41 +92,68 @@ const ProductDetailComp = ({ idProduct }) => {
           },
         })
       );
-      navigate('/order');
+      messagee.success("Thêm sản phẩm vào giỏ hàng thành công")
+
+      navigate("/order");
     }
   };
 
-  const { data: productDetail } = useQuery(["product-detail", idProduct],fetchGetDetailProduct,
+  const { data: productDetail, isLoading } = useQuery(
+    ["product-detail", idProduct],
+    fetchGetDetailProduct,
     { enabled: !!idProduct }
   );
-  console.log("productDetail", productDetail);
+  // console.log("productDetail", productDetail);
 
-  const fetchReviewProduct =async() =>{
-    const res = await reviewService.getReviewsByProduct(idProduct, ratingPoint,hasImg)
-    setDataReviews(res.data)
+  const fetchReviewProduct = async () => {
+    setLoading(true);
+    const res = await reviewService.getReviewsByProduct(
+      idProduct,
+      ratingPoint,
+      hasImg
+    );
+    if (res.status === "OK") {
+      setDataReviews(res.data);
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
     // return res.data
-  }
-  console.log("hello", dataReviews)
+  };
+  // console.log("hello", dataReviews);
 
-  useEffect(() =>{
-    fetchReviewProduct()
-  },[ratingPoint, hasImg])
+  useEffect(() => {
+    fetchReviewProduct();
+  }, [ratingPoint, hasImg]);
 
-  const fetchReviewAllProduct =async(contex) =>{
-    const idProduct = contex?.queryKey[1]
-    const res = await reviewService.getReviewsByProduct(idProduct, ratingPoint,hasImg)
-    setDataReviews(res.data)
-    return res.data
-  }
-  const queryReiew = useQuery(['reviews',idProduct], fetchReviewAllProduct)
-  const {data: dataReviewsAll} = queryReiew
-  console.log("dataReviewAll", dataReviewsAll)
-  
-    // Tính trung bình rating
-    const totalRating = dataReviewsAll?.reduce((sum, review) => sum + review.rating, 0);
-    const averageRating = Number((dataReviewsAll?.length > 0 ? totalRating / dataReviewsAll?.length : 0).toFixed(1));
+  const fetchReviewAllProduct = async (contex) => {
+    const idProduct = contex?.queryKey[1];
+    const res = await reviewService.getReviewsByProduct(
+      idProduct,
+      ratingPoint,
+      hasImg
+    );
+    setDataReviews(res.data);
+
+    return res.data;
+  };
+  const queryReiew = useQuery(["reviews", idProduct], fetchReviewAllProduct);
+  const { data: dataReviewsAll } = queryReiew;
+  // console.log("dataReviewAll", dataReviewsAll);
+
+  // Tính trung bình rating
+  const totalRating = dataReviewsAll?.reduce(
+    (sum, review) => sum + review.rating,
+    0
+  );
+  const averageRating = Number(
+    (dataReviewsAll?.length > 0
+      ? totalRating / dataReviewsAll?.length
+      : 0
+    ).toFixed(1)
+  );
   return (
-    <>
+    <LoadingComp isLoading={isLoading}>
       <Row className={styles.wrapp}>
         <Col span={10} className={styles.wrapImgProduct}>
           <Image
@@ -135,35 +165,35 @@ const ProductDetailComp = ({ idProduct }) => {
           <Row className={styles.wrapImgsSmall}>
             <Col span={4} className={styles.imgSmall}>
               <Image
-                src="https://down-vn.img.susercontent.com/file/sg-11134201-22110-snojb4c74gkvbf"
+                src={process.env.REACT_APP_IS_LOCAL ? "https://down-vn.img.susercontent.com/file/sg-11134201-22110-snojb4c74gkvbf" : window.location.href}
                 alt="img small "
                 preview={false}
               />
             </Col>
             <Col span={4} className={styles.imgSmall}>
               <Image
-                src="https://down-vn.img.susercontent.com/file/sg-11134201-22110-snojb4c74gkvbf"
+                src={process.env.REACT_APP_IS_LOCAL ? "https://down-vn.img.susercontent.com/file/sg-11134201-22110-snojb4c74gkvbf" : window.location.href}
                 alt="img small "
                 preview={false}
               />
             </Col>
             <Col span={4} className={styles.imgSmall}>
               <Image
-                src="https://down-vn.img.susercontent.com/file/sg-11134201-22110-snojb4c74gkvbf"
+                src={process.env.REACT_APP_IS_LOCAL ? "https://down-vn.img.susercontent.com/file/sg-11134201-22110-snojb4c74gkvbf" : window.location.href}
                 alt="img small "
                 preview={false}
               />
             </Col>
             <Col span={4} className={styles.imgSmall}>
               <Image
-                src="https://down-vn.img.susercontent.com/file/sg-11134201-22110-snojb4c74gkvbf"
+                src={process.env.REACT_APP_IS_LOCAL ? "https://down-vn.img.susercontent.com/file/sg-11134201-22110-snojb4c74gkvbf" : window.location.href}
                 alt="img small "
                 preview={false}
               />
             </Col>
             <Col span={4} className={styles.imgSmall}>
               <Image
-                src="https://down-vn.img.susercontent.com/file/sg-11134201-22110-snojb4c74gkvbf"
+                src={process.env.REACT_APP_IS_LOCAL ? "https://down-vn.img.susercontent.com/file/sg-11134201-22110-snojb4c74gkvbf" : window.location.href}
                 alt="img small "
                 preview={false}
               />
@@ -175,12 +205,7 @@ const ProductDetailComp = ({ idProduct }) => {
           <h1 className={styles.nameProduct}>{productDetail?.name}</h1>
           <div>
             {/* <StarFilled className={styles.star} /> */}
-            <Rate
-              allowHalf
-              disabled
-              defaultValue={5}
-              value={averageRating}
-            />
+            <Rate allowHalf disabled defaultValue={5} value={averageRating} />
             <span className={styles.textSell}>
               {" "}
               | Đã bán {productDetail?.selled} sản phẩm
@@ -308,7 +333,6 @@ const ProductDetailComp = ({ idProduct }) => {
           </div>
         </Col>
       </Row>
-
       <div className={styles.wrapperProductRating}>
         <div className={styles.wrapperProductRatingHeader}>
           ĐÁNH GIÁ SẢN PHẨM
@@ -322,100 +346,152 @@ const ProductDetailComp = ({ idProduct }) => {
                 </span>
                 <span className={styles.productRatingOverview5}> trên 5</span>
               </div>
-              <Rate style={{ fontSize: "16px", color:"var(--active-color)" }} allowHalf disabled  defaultValue= {5} value={averageRating} />
+              <Rate
+                style={{ fontSize: "16px", color: "var(--active-color)" }}
+                allowHalf
+                disabled
+                defaultValue={5}
+                value={averageRating}
+              />
             </div>
             <div className={styles.productRatingOverviewList}>
-              <div className={clsx(styles.buttonRating, {
-          [styles.active]: selectedNavItem === "Tất cả"})}
-                onClick={() => {setRatingPoint("") 
-                setHasImg("")
-                setSelectedNavItem("Tất cả")}
-              }
-            
-               
-              >Tất cả</div>
-              <div className={clsx(styles.buttonRating, {
-          [styles.active]: selectedNavItem === "5 Sao"})}
-                onClick={() => {setRatingPoint(5) 
-                  setHasImg("")
-                setSelectedNavItem("5 Sao")}}
-            
-               
-              >5 Sao</div>{" "}
-              <div className={clsx(styles.buttonRating, {
-          [styles.active]: selectedNavItem === "4 Sao"})}
-                onClick={() => {setRatingPoint(4) 
-                  setHasImg("")
-                setSelectedNavItem("4 Sao")}}
-            
-               
-              >4 Sao</div>
-              <div className={clsx(styles.buttonRating, {
-          [styles.active]: selectedNavItem === "3 Sao"})}
-                onClick={() => {setRatingPoint(3) 
-                  setHasImg("")
-                setSelectedNavItem("3 Sao")}}
-            
-               
-              >3 Sao</div>
-              <div className={clsx(styles.buttonRating, {
-          [styles.active]: selectedNavItem === "2 Sao"})}
-                onClick={() => {setRatingPoint(2) 
-                  setHasImg("")
-                setSelectedNavItem("2 Sao")}}
-            
-               
-              >2 Sao</div>
-              <div className={clsx(styles.buttonRating, {
-          [styles.active]: selectedNavItem === "1 Sao"})}
-                onClick={() => {setRatingPoint(1) 
-                  setHasImg("")
-                setSelectedNavItem("1 Sao")}}
-              >1 Sao</div>
-              <div className={clsx(styles.buttonRating, {
-          [styles.active]: selectedNavItem === "Có hình ảnh"})}
+              <div
+                className={clsx(styles.buttonRating, {
+                  [styles.active]: selectedNavItem === "Tất cả",
+                })}
                 onClick={() => {
-                  setRatingPoint('')
-                  setHasImg(true)
-                  setSelectedNavItem("Có hình ảnh")
-                }
-                }
-            
-              >Có hình ảnh</div>
+                  setRatingPoint("");
+                  setHasImg("");
+                  setSelectedNavItem("Tất cả");
+                }}
+              >
+                Tất cả
+              </div>
+              <div
+                className={clsx(styles.buttonRating, {
+                  [styles.active]: selectedNavItem === "5 Sao",
+                })}
+                onClick={() => {
+                  setRatingPoint(5);
+                  setHasImg("");
+                  setSelectedNavItem("5 Sao");
+                }}
+              >
+                5 Sao
+              </div>{" "}
+              <div
+                className={clsx(styles.buttonRating, {
+                  [styles.active]: selectedNavItem === "4 Sao",
+                })}
+                onClick={() => {
+                  setRatingPoint(4);
+                  setHasImg("");
+                  setSelectedNavItem("4 Sao");
+                }}
+              >
+                4 Sao
+              </div>
+              <div
+                className={clsx(styles.buttonRating, {
+                  [styles.active]: selectedNavItem === "3 Sao",
+                })}
+                onClick={() => {
+                  setRatingPoint(3);
+                  setHasImg("");
+                  setSelectedNavItem("3 Sao");
+                }}
+              >
+                3 Sao
+              </div>
+              <div
+                className={clsx(styles.buttonRating, {
+                  [styles.active]: selectedNavItem === "2 Sao",
+                })}
+                onClick={() => {
+                  setRatingPoint(2);
+                  setHasImg("");
+                  setSelectedNavItem("2 Sao");
+                }}
+              >
+                2 Sao
+              </div>
+              <div
+                className={clsx(styles.buttonRating, {
+                  [styles.active]: selectedNavItem === "1 Sao",
+                })}
+                onClick={() => {
+                  setRatingPoint(1);
+                  setHasImg("");
+                  setSelectedNavItem("1 Sao");
+                }}
+              >
+                1 Sao
+              </div>
+              <div
+                className={clsx(styles.buttonRating, {
+                  [styles.active]: selectedNavItem === "Có hình ảnh",
+                })}
+                onClick={() => {
+                  setRatingPoint("");
+                  setHasImg(true);
+                  setSelectedNavItem("Có hình ảnh");
+                }}
+              >
+                Có hình ảnh
+              </div>
             </div>
           </div>
-
-          <div className={styles.productRatingDetailsList}>
-            {dataReviews?.map((dataReview) =>{
+          <LoadingComp isLoading={loading}>
+            <div className={styles.productRatingDetailsList}>
+              {dataReviews?.map((dataReview) => {
                 const createdAtDate = new Date(dataReview?.createdAt);
                 return (
-                    <div className={styles.productRatingDetailsItem}>
-                        <div className={styles.productRatingDetailsHeader}>
-                            <img src={dataReview?.userId?.avatar}/>
-                            <div>
-                                <div>{dataReview?.userId?.name}</div>
-                                <Rate style={{ fontSize: "14px", color:"var(--active-color)" }} allowHalf disabled  defaultValue= {5} value={dataReview?.rating} />
-                            </div>
-                        </div>
-                        <div className={styles.productRatingDetailsBody}>
-                            <div>Thời gian đánh giá:<span>{format(createdAtDate, 'dd/MM/yyyy HH:mm')}</span></div>
-                            <div>Chất lượng sản phẩm:<span>đúng</span></div>
-                            <div>Đúng với mô tả: <span>OK</span></div>
-                            <div>{dataReview?.comment}</div>
-                            {dataReview?.images?.map((image) => (
-                              <img key={image._id} src={image.imageUrl} alt="Review" />
-                            ))}
-                        </div>
+                  <div className={styles.productRatingDetailsItem}>
+                    <div className={styles.productRatingDetailsHeader}>
+                      <img src={dataReview?.userId?.avatar} />
+                      <div>
+                        <div>{dataReview?.userId?.name}</div>
+                        <Rate
+                          style={{
+                            fontSize: "14px",
+                            color: "var(--active-color)",
+                          }}
+                          allowHalf
+                          disabled
+                          defaultValue={5}
+                          value={dataReview?.rating}
+                        />
+                      </div>
                     </div>
-                )
-            })}
-            
-          </div>
+                    <div className={styles.productRatingDetailsBody}>
+                      <div>
+                        Thời gian đánh giá:
+                        <span>{format(createdAtDate, "dd/MM/yyyy HH:mm")}</span>
+                      </div>
+                      <div>
+                        Chất lượng sản phẩm:<span>đúng</span>
+                      </div>
+                      <div>
+                        Đúng với mô tả: <span>OK</span>
+                      </div>
+                      <div>{dataReview?.comment}</div>
+                      {dataReview?.images?.map((image) => (
+                        <img
+                          key={image._id}
+                          src={image.imageUrl}
+                          alt="Review"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </LoadingComp>
         </div>
       </div>
-    </>
+    </LoadingComp>
   );
 };
 
 export default ProductDetailComp;
-

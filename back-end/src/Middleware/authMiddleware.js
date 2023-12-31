@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 const authMiddleware = (req, res, next) =>{
     const token = req.headers.token.split(' ')[1]
-    console.log('token', token)
+    // console.log('token', token)
     //Middleware verifyToken được sử dụng để kiểm tra tính hợp lệ của access token và thời gian sống của nó.
     //nếu  process.env.ACCESS_TOKEN ko đúng thì hàm sẽ trẻ về err; nếu đúng thì trả về thoogn tin mình muốn( dưới cụ thể là user)
     // nếu access_token với id là của Admin thì sẽ cho đi tiếp next() đến userControler để thực hiện các lệnh;
@@ -31,7 +31,7 @@ const authMiddleware = (req, res, next) =>{
 const authUserMiddleware = (req, res, next) =>{
     const token = req.headers.token.split(' ')[1]
     const userId = req.params.id;
-    console.log('token', token)
+    // console.log('token', token)
     jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
         if (err) {
             return res.status(200).json({

@@ -37,7 +37,7 @@ const AccountComp = () => {
     });
   }
   const handleChange = (value) => {
-    console.log(`Selected: ${value}`);
+    // console.log(`Selected: ${value}`);
   };
   const [size, setSize] = useState("middle");
   const handleSizeChange = (e) => {
@@ -56,7 +56,7 @@ const AccountComp = () => {
   const mutation = useMutationHooks(
     ( data) =>{ 
       const {id, ...rest} = data;
-      console.log("test datta", data)
+      // console.log("test datta", data)
       const res = userService.updateUserInfor(id, rest)
       return res
     }
@@ -65,7 +65,7 @@ const AccountComp = () => {
 // console.log("mutationUser", mutation)
 
   const handleChangeSex = ({ target: { value } }) => {
-    console.log("radio1 checked", value);
+    // console.log("radio1 checked", value);
     setSex(value);
   };
   useEffect(() =>{
@@ -90,13 +90,13 @@ const AccountComp = () => {
 
   const handleGetDetailUser = async(id, access_token) =>{
     const res = await userService.getDetailUser(id, access_token)
-    console.log("res", res) // gồm data, status, message
+    // console.log("res", res) // gồm data, status, message
     dispatch(updateUser({...res?.data, access_token}))
 }
 
   const handleChangeName = (e) =>{
     setName(e.target.value)
-    console.log(e.target.value)
+    // console.log(e.target.value)
   }
   const handleChangeEmail = (e) =>{
     setEmail(e.target.value)
@@ -129,7 +129,7 @@ const AccountComp = () => {
 
   const handleUpdateUser = () =>{
     mutation.mutate({id: user?.id, name, email, phone, address, avatar, sex});
-    console.log('update user', name, email, phone, address, avatar, sex)
+    // console.log('update user', name, email, phone, address, avatar, sex)
   }
 
   return (

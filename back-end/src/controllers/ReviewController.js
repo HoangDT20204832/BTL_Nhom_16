@@ -36,7 +36,7 @@ const createReview = async (req, res) => {
   try {
     const data = req.body
     const { userId, productId, rating, comment, images } = data;
-    console.log("dataReview", data);
+    // console.log("dataReview", data);
     const reviewProduct = await ReviewService.createReview(data);
     return res.status(200).json( reviewProduct);
   } catch (e) {

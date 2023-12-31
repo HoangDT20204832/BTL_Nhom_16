@@ -25,7 +25,7 @@ function App() {
       if(decoded?.id){ //nếu tồn tại id của user thì gọi handleGetDetailUser để gọi api getDetailUser lấy thông tin người dùng lên  
         handleGetDetailUser(decoded?.id, storgateData)
       }
-    console.log("storgateData",storgateData)
+    // console.log("storgateData",storgateData)
     }
   ,[])
 //hàm đọc và giải mã dữ liệu từ localStorage(cụ thể là dữ liệu access_token) 
@@ -37,7 +37,7 @@ function App() {
       storgateData= JSON.parse(storgateData);
       //jwtDecodeđể giải mã đối tượng từ access_token(storgateData) => trả về thông tin user ứng vowis access_token đó. 
       decoded = jwtDecode(storgateData);
-      console.log("decoded",decoded);
+      // console.log("decoded",decoded);
     }
     return {decoded, storgateData};
   }
@@ -60,7 +60,7 @@ function App() {
 
   const handleGetDetailUser = async(id, access_token) =>{
     const res = await userService.getDetailUser(id, access_token)
-    console.log("res", res) // gồm data, status, message
+    // console.log("res", res) // gồm data, status, message
     dispatch(updateUser({...res?.data, access_token}))
 }
 

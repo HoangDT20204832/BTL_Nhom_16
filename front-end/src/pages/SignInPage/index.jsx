@@ -10,6 +10,7 @@ import * as message from "../../components/MessageComp"
 import { jwtDecode } from "jwt-decode";
 import {useDispatch} from "react-redux"
 import { updateUser } from '../../redux/slides/userSlide';
+import LoadingComp from '../../components/LoadingComp';
 
 const SignInPage = () => {
 
@@ -17,13 +18,13 @@ const SignInPage = () => {
   const[password, setPassword] = useState('') 
   const dispatch = useDispatch()
   const location = useLocation()
-  console.log("locationLogin", location)
+  // console.log("locationLogin", location)
 
   const mutation = useMutationHooks(
      (data) => userService.loginUser(data)
   )
-  const {data} = mutation
-  console.log("mutation", mutation)
+  const {data, isLoading} = mutation
+  // console.log("mutation", mutation)
  const statusData = data?.status
 
   useEffect(()=>{
@@ -43,7 +44,7 @@ const SignInPage = () => {
 
       if(data?.access_token) {
         const decoded = jwtDecode(data?.access_token);
-        console.log("decoded",decoded);
+        // console.log("decoded",decoded);
         if(decoded?.id){
           handleGetDetailUser(decoded?.id, data?.access_token)
         }
@@ -53,7 +54,6 @@ const SignInPage = () => {
  }, [statusData])
  const handleGetDetailUser = async(id, access_token) =>{
       const res = await userService.getDetailUser(id, access_token)
-      console.log("res", res) // gồm data, status, message
       dispatch(updateUser({...res?.data, access_token}))
  }
 
@@ -66,7 +66,6 @@ const SignInPage = () => {
 // hàm xử lý gọi API(mutation) với các tham số truyền đi email, password
   const handleSignIn = () =>{
     mutation.mutate({email, password})
-    console.log('signIn', email, password)
   }
   const navigate = useNavigate()
   const handleNavgSignUp = () =>{
@@ -111,6 +110,7 @@ const SignInPage = () => {
         </div>
 
         {data?.status ==="ERROR" && <span style={{color:"red"}}>{data?.message}</span>}
+          <LoadingComp isLoading={isLoading}>
           <ButtonComponent
             disabled={!email.length || !password.length }
             onClick={handleSignIn}
@@ -126,6 +126,8 @@ const SignInPage = () => {
             textButton={'Đăng nhập'}
             styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
           ></ButtonComponent>
+          </LoadingComp>
+         
         <p className={styles.textLight}>Quên mật khẩu?</p>
         <p>Chưa có tài khoản? 
           <span className={styles.textLight} onClick={handleNavgSignUp}> Tạo tài khoản</span>

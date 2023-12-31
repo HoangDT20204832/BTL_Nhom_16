@@ -24,8 +24,8 @@ const SliderComponent = ({arrImages}) => {
      </SliderImg>
     </Col>
     <Col span={8} className={styles.wrapperImg}>
-      <Image className={styles.imgNextToSlider}  src= "https://cf.shopee.vn/file/vn-50009109-0949ec209e4bf197a9b67c98f3e2172c_xhdpi"/>
-      <Image className={styles.imgNextToSlider} src= "https://cf.shopee.vn/file/vn-50009109-0949ec209e4bf197a9b67c98f3e2172c_xhdpi"/>
+      <Image className={styles.imgNextToSlider}  src= {process.env.REACT_APP_IS_LOCAL ? "https://cf.shopee.vn/file/vn-50009109-0949ec209e4bf197a9b67c98f3e2172c_xhdpi" : window.location.href}/>
+      <Image className={styles.imgNextToSlider} src= {process.env.REACT_APP_IS_LOCAL ? "https://cf.shopee.vn/file/vn-50009109-0949ec209e4bf197a9b67c98f3e2172c_xhdpi" : window.location.href}/>
     </Col>
   </Row>
 

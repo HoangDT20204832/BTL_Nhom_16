@@ -56,9 +56,9 @@ const createProduct = (newProduct) => {
 const updateProduct = (productId, data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("productId: ", productId);
+      // console.log("productId: ", productId);
       const checkProduct = await Product.findOne({ _id: productId });
-      console.log("checkProduct", checkProduct);
+      // console.log("checkProduct", checkProduct);
       if (checkProduct === null) {
         resolve({
           status: "OK",

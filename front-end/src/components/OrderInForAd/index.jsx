@@ -46,7 +46,6 @@ const [rowSelected,setRowSelected] = useState("")
 
   const queryOrder = useQuery(['orders'],getAllOrder)
   const { data: orders } = queryOrder
-  console.log('queryOrder',orders)
 
   // console.log('products', products)
   const renderAction = () => {
@@ -60,7 +59,6 @@ const [rowSelected,setRowSelected] = useState("")
 
 const fetchGetDetailProduct = async(rowSelected) => {
     const res = await orderService.getDetailsOrder(rowSelected) //rowSelected: id sản phẩm
-    console.log("resOrder", res)
     if(res?.data){
       setStateOrderDetail({
         userName: res?.data?.shippingAddress?.fullName , 

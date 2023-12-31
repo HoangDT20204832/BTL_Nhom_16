@@ -26,7 +26,7 @@ import InputComponent from "../../components/InputComponent/InputComponent";
 
 const AccountComp = () => {
   const handleChange = (value) => {
-    console.log(`Selected: ${value}`);
+    // console.log(`Selected: ${value}`);
   };
   const [size, setSize] = useState("middle");
   const handleSizeChange = (e) => {
@@ -38,7 +38,7 @@ const AccountComp = () => {
 
   const mutation = useMutationHooks((data) => {
     const { id, ...rest } = data;
-    console.log("test datta", data);
+    // console.log("test datta", data);
     const res = userService.updateUserInfor(id, rest);
     return res;
   });
@@ -70,7 +70,6 @@ const AccountComp = () => {
 
   const handleGetDetailUser = async (id, access_token) => {
     const res = await userService.getDetailUser(id, access_token);
-    console.log("res", res); // gồm data, status, message
     dispatch(updateUser({ ...res?.data, access_token }));
   };
 
@@ -116,7 +115,6 @@ const AccountComp = () => {
     }
   }, [isOpenUpdateInfor]);
 
-  console.log("stateMent", stateUserDetail);
   const handleOnChangeInputDetail = (e) => {
     setStateUserDetail({
       ...stateUserDetail,

@@ -12,13 +12,15 @@ import * as userService from "../../services/userService"
 import * as messagee from "../../components/MessageComp"
 import { updateUser } from '../../redux/slides/userSlide';
 import {useNavigate} from "react-router-dom"
+import LoadingComp from "../../components/LoadingComp";
 
 const OrderPage = () => {
   const navigate = useNavigate()
   const order = useSelector((state) => state.order)
   const [listChecked, setListChecked] = useState([])
   const user = useSelector((state) => state.user)
-
+  const idUser = user?.id
+  // const [loading, setLoading] = useState(false)
   const[isOpenUpdateInfor, setIsOpenUpdateInfor] = useState(false)
   const dispatch = useDispatch()
   const onChange = (e) => {
@@ -30,7 +32,6 @@ const OrderPage = () => {
     }
     // console.log(`checked = ${e.target.value}`)
   };
-  console.log("listChecked", listChecked)
   const [stateUserDetail, setStateUserDetail] = useState({
     name: "" , 
     phone : "",
@@ -80,7 +81,6 @@ const OrderPage = () => {
       dispatch(selectOrder({listChecked}))
   },[listChecked])
 
-  console.log("orderChecked", order)
   const priceMemo = useMemo(() =>{
       const result = order?.orderItemsSelected?.reduce(
         (total, item) => total + (item.priceNew * item.amount)
@@ -104,16 +104,15 @@ const OrderPage = () => {
 const totalPriceMemo = useMemo(() =>{
       return priceMemo + transportPriceMemo
 },[priceMemo,transportPriceMemo])
-console.log("type of price", typeof(totalPriceMemo))
 
 // udpdate thông tin user khi ko đủ thoogn tin để giao hàng
 const mutationUpdate = useMutationHooks(
   ( data) =>{ 
+    // setLoading(true)
     const {id ,  ...rest } = data;
-    console.log("test datta", data)
     const res = userService.updateUserInfor(id, {...rest} )
     return res
-    },
+    }
 )
 const {data: dataUpdated, isSuccess: isSuccessUpdated, isError:isErrorUpdated} = mutationUpdate
 
@@ -159,7 +158,7 @@ const handleCancelUpdate = () =>{
     city : "",
     // sex : "",
     })
-    form.resetFields()
+  form.resetFields()
   setIsOpenUpdateInfor(false)
 }
 
@@ -168,17 +167,21 @@ const handleUpdateInforUser = () =>{
   if(name&&phone&&address&&city){ 
     mutationUpdate.mutate({id: user?.id , ...stateUserDetail},{
       onSuccess: ()=>{
-        dispatch(updateUser({...user, name, phone, address, city}))
+        dispatch(updateUser({...user, _id: user?.id,name, phone, address, city}))
         setIsOpenUpdateInfor(false)
+        messagee.success("Cập nhật địa chỉ thành công")
       }
     })
 }
+// form.resetFields()
 }
+
 
 const handleOnchaneAddress = () =>{
   setIsOpenUpdateInfor(true)
 }
   return (
+    // <LoadingComp isLoading={loading}>
     <>
     <div className={styles.cartCompWrap} >
       <div className={styles.headerCart}>
@@ -344,8 +347,8 @@ const handleOnchaneAddress = () =>{
         </Form.Item> */}
         </Form>
     </Modal>
-
     </>
+    // </LoadingComp>
   )
 }
 

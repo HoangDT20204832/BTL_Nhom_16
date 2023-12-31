@@ -14,7 +14,7 @@ const ReviewComponent = ({ orderReview, onClose }) => {
   const productReview = orderReview?.orderItems[0]
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user)
-  console.log("userReview", user)
+  // console.log("userReview", user)
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -34,13 +34,13 @@ const ReviewComponent = ({ orderReview, onClose }) => {
   const mutationCreate = useMutationHooks(
     ( data) =>{ 
     //   const {id, ...rest} = data;
-      console.log("test datta", data)
+      // console.log("test datta", data)
       const res = reviewService.createReview(data)
       return res
     }
  )
      const {data: dataReview} = mutationCreate
-     console.log("dataReview1", dataReview)
+    //  console.log("dataReview1", dataReview)
 
      useEffect(() =>{
       if(dataReview?.status==="OK"){
@@ -95,7 +95,7 @@ if (!file.url && !file.preview) {
 
 const handleChangeAvatar =({ fileList: newFileList }) => setFileList(newFileList)
 
-console.log("fileImg", fileList)
+// console.log("fileImg", fileList)
   return (     
         <div className={styles.wrapperReview}>
           <div className={styles.reviewHeader}>Đánh giá sản phẩm</div>

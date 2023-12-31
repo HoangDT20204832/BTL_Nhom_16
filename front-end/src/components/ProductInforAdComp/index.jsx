@@ -11,6 +11,7 @@ import {useQuery} from "@tanstack/react-query"
 import { PlusOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 import DrawerComp from "../DrawerComp";
 import {useSelector} from "react-redux"
+import LoadingComp from "../LoadingComp";
 
 
 const ProductInForAd = () => {
@@ -40,6 +41,7 @@ const [rowSelected,setRowSelected] = useState("")
 
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
   const [isOpenDrawer2, setIsOpenDrawer2] = useState(false)
+  const [isModalOpenDelete, setIsModalOpenDelete] = useState(false)
 
   const [form] = Form.useForm()
 
@@ -47,7 +49,7 @@ const [rowSelected,setRowSelected] = useState("")
     ( data) =>{ 
       const {   name , image ,type ,priceOld ,priceNew ,countInStock,rating ,
       description ,discount ,selled,trademark, origin } = data;
-      console.log("test datta", data)
+      // console.log("test datta", data)
       const res = productService.createProduct({name , image ,type ,priceOld ,priceNew ,countInStock ,rating ,
         description ,discount ,selled,trademark, origin })
       return res
@@ -56,7 +58,7 @@ const [rowSelected,setRowSelected] = useState("")
  const mutationUpdate = useMutationHooks(
   ( data) =>{ 
     const {id ,  ...rest } = data;
-    console.log("test datta", data)
+    // console.log("test datta", data)
     const res = productService.updateProductInfor(id, {...rest} )
     return res
     },
@@ -65,7 +67,7 @@ const [rowSelected,setRowSelected] = useState("")
 const mutationDelete = useMutationHooks(
   ( data) =>{ 
     const {id ,  ...rest } = data;
-    console.log("test datta delete", data)
+    // console.log("test datta delete", data)
     const res = productService.deleteProductInfor(id, {...rest} )
     return res
     },
@@ -80,8 +82,8 @@ const mutationDelete = useMutationHooks(
 
   const {data, isSuccess, isError} = mutationCreate
   const {data: dataUpdated, isSuccess: isSuccessUpdated, isError:isErrorUpdated} = mutationUpdate
-  console.log("mutationUpdate", mutationUpdate)
-  const {data: dataDeleted, isSuccess: isSuccessDeleted, isError:isErrorDeleted} = mutationDelete
+  // console.log("mutationUpdate", mutationUpdate)
+  const {data: dataDeleted,isLoading: isLoadingDeleted, isSuccess: isSuccessDeleted, isError:isErrorDeleted} = mutationDelete
 
 
   // const {data: products } = useQuery(['products'],getAllProduct)
@@ -95,7 +97,7 @@ const mutationDelete = useMutationHooks(
     return (
       <div>
         <Button style={{ color: 'red', fontSize: '14px', cursor: 'pointer', marginRight:'5px' }} onClick={onDetailProduct} >Chi tiết </Button>
-        <Button style={{ color: 'red', fontSize: '14px', cursor: 'pointer', marginRight:'5px' }} onClick={onDeleteProduct} >Xóa </Button>
+        <Button style={{ color: 'red', fontSize: '14px', cursor: 'pointer', marginRight:'5px' }} onClick={() => setIsModalOpenDelete(true)} >Xóa </Button>
         <Button style={{ color: 'orange', fontSize: '14px', cursor: 'pointer' }} onClick={handleGetDetailProduct} > Sửa</Button>
         {/* <DeleteOutlined style={{ color: 'red', fontSize: '30px', cursor: 'pointer' }} onClick={() => setIsModalOpenDelete(true)} />
         <EditOutlined style={{ color: 'orange', fontSize: '30px', cursor: 'pointer' }} onClick={handleDetailsProduct} /> */}
@@ -106,7 +108,7 @@ const mutationDelete = useMutationHooks(
 
 const fetchGetDetailProduct = async(rowSelected) => {
     const res = await productService.getDetailProduct(rowSelected) //rowSelected: id sản phẩm
-    console.log("res", res)
+    // console.log("res", res)
     if(res?.data){
       setStateProductDetail({
         name: res?.data.name , 
@@ -125,7 +127,7 @@ const fetchGetDetailProduct = async(rowSelected) => {
     }
 }
 
-console.log("heli", stateProductDetail)
+// console.log("heli", stateProductDetail)
 
 
 useEffect(() =>{
@@ -146,7 +148,7 @@ useEffect(()=> {
 },[form, stateProductDetail,isModalOpen])
 
 
-console.log("resProduct", stateProductDetail)
+// console.log("resProduct", stateProductDetail)
 
 
   const handleGetDetailProduct = () =>{
@@ -333,7 +335,7 @@ const handleChangeAvatarDetail = async ({fileList}) => {
 }
 
 const onFinishSubmit =() =>{
-  console.log('onFinishSubmit',stateProduct )
+  // console.log('onFinishSubmit',stateProduct )
   mutationCreate.mutate(stateProduct, {
     onSettled: () => {
       queryProduct.refetch()
@@ -364,13 +366,20 @@ const onDetailProduct = () =>{
   // }
   setIsOpenDrawer2(true)
 }
-const onDeleteProduct = () =>{
+
+const handleCancelDelete = () => {
+  setIsModalOpenDelete(false)
+}
+
+const handleDeleteProduct = () =>{
 
   mutationDelete.mutate({id: rowSelected },{
     onSettled: () =>{
       queryProduct.refetch()
     }
   })
+  setIsModalOpenDelete(false)
+
  }
 
 
@@ -799,6 +808,12 @@ const onDeleteProduct = () =>{
         </Form.Item>
         </Form>
       </DrawerComp>
+
+      <Modal title="Xóa sản phẩm" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={handleDeleteProduct}>
+        <LoadingComp isLoading={isLoadingDeleted}>
+          <div>Bạn có chắc xóa sản phẩm này không?</div>
+        </LoadingComp>
+      </Modal>
 
     </div>
   );

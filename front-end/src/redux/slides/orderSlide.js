@@ -62,7 +62,6 @@ export const orderSlide = createSlice({
     },
 
     removeOrderProduct: (state, action) =>{
-        console.log("remove", state, action)
         const {idProduct} = action.payload
         const itemOrder = state?.orderItems?.filter((item) => item?.product !== idProduct) //lấy ra những sản phẩm trong đơn hàng ko có idProduct trùng với id của sản phẩm đã xóa
         const itemOrderSelected = state?.orderItemsSelected?.filter((item) => item?.product !== idProduct) //lấy ra những sản phẩm trong đơn hàng đã "selected" ko có idProduct trùng với id của sản phẩm đã xóa khi selected
@@ -71,7 +70,7 @@ export const orderSlide = createSlice({
     },
 
     removeAllOrderProduct: (state, action) =>{
-        console.log("remove", state, action)
+        // console.log("remove", state, action)
         const {listChecked} = action.payload
         const itemOrders = state?.orderItems?.filter((item) => {
             return (!listChecked.includes(item.product))
@@ -85,7 +84,7 @@ export const orderSlide = createSlice({
     },
 
     selectOrder: (state, action) =>{
-        console.log("select", state, action)
+        // console.log("select", state, action)
         const orderSelected = []
         const {listChecked} = action.payload
         state.orderItems.forEach((order) =>{
@@ -97,10 +96,10 @@ export const orderSlide = createSlice({
     },
 
     updateIdsOrderReviewed: (state , action) => {
-        console.log("action.payload", action.payload)
+        // console.log("action.payload", action.payload)
         const idOrdered = action.payload
         state.idsOrderReviewed= [...state.idsOrderReviewed, idOrdered ]
-        console.log("updateIdsOrderReviewed",state?.idsOrderReviewed )
+        // console.log("updateIdsOrderReviewed",state?.idsOrderReviewed )
     }
   },
 })

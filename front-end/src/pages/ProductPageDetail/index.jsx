@@ -5,7 +5,6 @@ import WrapperRatingComp from "../../components/WrapperRatingComp";
 import { useParams, useNavigate } from "react-router-dom";
 const ProductPageDetail = () => {
     const {id} = useParams() // dùng để lấy được id trên thanh params của web
-    console.log("params: ", id)
     const navigate = useNavigate()
     return (
         <div className={styles.wrapProductDetail}>

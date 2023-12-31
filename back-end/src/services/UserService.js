@@ -69,7 +69,7 @@ const  loginUser= (userLogin) => {
         isAdmin: checkUser.isAdmin,
       })
 
-      console.log(access_token)
+      // console.log(access_token)
       resolve({ 
         status: 'OK',
         message: "Thành công",
@@ -85,9 +85,9 @@ const  loginUser= (userLogin) => {
 const  updateUser= (userId, data) => {
   return new Promise(async(resolve, reject) => {
     try {
-      console.log("userId: ", userId)
+      // console.log("userId: ", userId)
       const checkUser = await User.findOne({_id: userId})
-      console.log("checkUser", checkUser)
+      // console.log("checkUser", checkUser)
       if(checkUser === null){
         resolve({ 
           status: 'OK',

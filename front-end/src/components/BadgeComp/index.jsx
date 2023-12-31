@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom"
 const BadgeComp = () => {
   const order = useSelector((state) => state.order);
   const navigate = useNavigate()
-  console.log("orderBadge", order);
+  // console.log("orderBadge", order);
   return (
     <div className={styles.headerCartList}>
       <img src="" alt="" className={styles.headerCartnocartimg} />

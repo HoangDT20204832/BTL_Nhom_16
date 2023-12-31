@@ -11,6 +11,7 @@ import { useMutationHooks } from '../../hooks/useMutationHook';
 import * as message from '../../components/MessageComp/index'
 import ReviewComponent from '../../components/ReviewComp';
 import {Col} from "antd"
+import LoadingComp from "../../components/LoadingComp";
 
 
 const MyOrderPage = () => {
@@ -24,7 +25,6 @@ const MyOrderPage = () => {
   }
   const user = useSelector((state) => state.user)
   const idsOrderReviewed = useSelector((state) => state.order.idsOrderReviewed)
-  console.log("idsOrderReviewed",idsOrderReviewed)
   const [isOpenReview, setIsOpenReview] = useState(false)
   const [orderReview, setOrderReview] = useState('')
 
@@ -57,7 +57,7 @@ const MyOrderPage = () => {
       },
     })
   }
-  const { isSuccess: isSuccessCancel, isError: isErrorCancle, data: dataCancel } = mutation
+  const { isLoading: isLoadingCancel, isSuccess: isSuccessCancel, isError: isErrorCancle, data: dataCancel } = mutation
 
   useEffect(() => {
     if (isSuccessCancel && dataCancel?.status === 'OK') {
@@ -96,13 +96,11 @@ const MyOrderPage = () => {
   //các code xử lý khi ấn vào button đã nhận hàng thì sẽ cập nhật lại thông tin đơn hàng
   const mutationUpdate = useMutationHooks(
     (data) => {
-      console.log("haha", data)
       const res = OrderService.updateOrderDetails(data.id, data)
       return res
     }
   )
   const handlReceiveOrder = (order) =>{
-    console.log("1704", order._id)
     mutationUpdate.mutate({orderId : order._id, isDelivered: true, isPaid: true }, {
       onSuccess: () => {
         queryOrder.refetch()
@@ -120,7 +118,6 @@ const MyOrderPage = () => {
   }, [dataUpdate?.status])
 
 
-console.log("dataOrder", data)
 //code xử lý đánh giá sanmr phẩm
   const handleReviewOrder = (order) =>{
       setIsOpenReview(true)
@@ -134,7 +131,7 @@ console.log("dataOrder", data)
   // const [reviewedOrders, setReviewedOrders] = useState([]);
 //  console.log('reviewedOrders', reviewedOrders)
   return (
-    // <Loading isLoading={isLoading || isLoadingCancel}>
+    <LoadingComp isLoading={isLoading || isLoadingCancel}>
     <Col span={20}>
         <div style={{height: '100%',width:"100%", margin: '0 auto'}}>
           <WrapperListOrder>
@@ -245,7 +242,7 @@ console.log("dataOrder", data)
 
     </Col>
       
-    // </Loading>
+     </LoadingComp>
   )
 }
 
