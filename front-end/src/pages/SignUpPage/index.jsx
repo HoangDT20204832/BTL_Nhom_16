@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom"
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import * as userService from "../../services/userService"
 import * as message from "../../components/MessageComp"
+import LoadingComp from '../../components/LoadingComp';
 
 const SignUpPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false)
@@ -19,8 +20,7 @@ const SignUpPage = () => {
     (data) => userService.signUpUser(data)   
  )
 
- console.log("mutation", mutation)
- const {data, isSuccess,isError} = mutation
+ const {data, isSuccess,isError, isLoading} = mutation
  const statusData = data?.status
  useEffect(()=>{
 
@@ -44,7 +44,6 @@ const SignUpPage = () => {
 
   const handleSignUp = () =>{
     mutation.mutate({email, password, confirmPassword})
-    console.log('signUp', email, password, confirmPassword)
   }
 
   const navigate = useNavigate()
@@ -115,8 +114,8 @@ const SignUpPage = () => {
 
         {data?.status ==="ERROR" && <span style={{color:"red"}}>{data?.message}</span>}
 
-        
-          <ButtonComponent
+        <LoadingComp isLoading={isLoading}>
+        <ButtonComponent
           //disabled : khi ko thõa mãn các điều kiện trong disabled thì nút có disabled sẽ ko ấn được(bị vô hiệu hóa) 
             disabled={!email.length || !password.length || !confirmPassword.length}
             onClick={handleSignUp}
@@ -132,6 +131,8 @@ const SignUpPage = () => {
             textButton={'Đăng ký'}
             styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
           ></ButtonComponent>
+        </LoadingComp>
+          
         <p>Bạn đã có tài khoản? 
           <span className={styles.textLight} onClick={handleNavgSignIn}> Đăng nhập </span>
         </p>

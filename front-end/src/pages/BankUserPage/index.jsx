@@ -36,7 +36,7 @@ import {
           </Col>
 
           <Col span={10}>
-            <img className={styles.containerContentImg} src="https://chuyentiennhanh.org/wp-content/uploads/2019/03/the-paypal-la-gi.jpg"/>
+            <img className={styles.containerContentImg} src={process.env.REACT_APP_IS_LOCAL ? "https://chuyentiennhanh.org/wp-content/uploads/2019/03/the-paypal-la-gi.jpg" : window.location.href}/>
           </Col>
           </Row>
         

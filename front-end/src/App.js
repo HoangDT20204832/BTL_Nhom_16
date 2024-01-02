@@ -12,7 +12,7 @@ import { isJsonString } from "./utils";
 import { jwtDecode } from "jwt-decode";
 import * as userService from "./services/userService";
 import {useDispatch, useSelector} from "react-redux"
-import { updateUser } from "./redux/slides/userSlide";
+import {resetUser,  updateUser } from "./redux/slides/userSlide";
 
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
       if(decoded?.id){ //nếu tồn tại id của user thì gọi handleGetDetailUser để gọi api getDetailUser lấy thông tin người dùng lên  
         handleGetDetailUser(decoded?.id, storgateData)
       }
-    console.log("storgateData",storgateData)
+    // console.log("storgateData",storgateData)
     }
   ,[])
 //hàm đọc và giải mã dữ liệu từ localStorage(cụ thể là dữ liệu access_token) 
@@ -37,31 +37,49 @@ function App() {
       storgateData= JSON.parse(storgateData);
       //jwtDecodeđể giải mã đối tượng từ access_token(storgateData) => trả về thông tin user ứng vowis access_token đó. 
       decoded = jwtDecode(storgateData);
-      console.log("decoded",decoded);
+      // console.log("decoded",decoded);
     }
     return {decoded, storgateData};
   }
   //hàm này được sử dụng để thực hiện một số hành động trước khi một yêu cầu HTTP được gửi đi.
   //kiểm tra xem nếu access_token hết hạn thì sẽ gọi đến refreshToken để cấp lại access_token mới rồi cập nhật vào config.headers['token']. mà ko cần đăng nhập lại
   userService.axiosJWT.interceptors.request.use(async function (config) {
-    const currentTime = new Date()
-    const { decoded} = handleDecoded()
-    //nếu "decoded.exp" là thời điểm hết hạn của acccess_token < thời gian hiện tại thì sẽ gọi  userService.refreshToken() 
-    // để lấy thông tin mới từ máy chủ và cập nhật access_token mới vào config.headers['token']
-    if(decoded?.exp < currentTime.getTime() / 1000){
-      const data = await userService.refreshToken()
+  //   const currentTime = new Date()
+  //   const { decoded} = handleDecoded()
+  //   //nếu "decoded.exp" là thời điểm hết hạn của acccess_token < thời gian hiện tại thì sẽ gọi  userService.refreshToken() 
+  //   // để lấy thông tin mới từ máy chủ và cập nhật access_token mới vào config.headers['token']
+  //   if(decoded?.exp < currentTime.getTime() / 1000){
+  //     const data = await userService.refreshToken()
+  //     config.headers['token'] = `Bearer ${data?.access_token}`
+  //   }
+  //   return config;
+  // }, function (error) {
+  //   // Do something with request error
+  //   return Promise.reject(error);
+  const currentTime = new Date()
+  const { decoded } = handleDecoded()
+  let storageRefreshToken = localStorage.getItem('refresh_token')
+  const refreshToken = JSON.parse(storageRefreshToken)
+  const decodedRefreshToken =  jwtDecode(refreshToken)
+  if (decoded?.exp < currentTime.getTime() / 1000) {
+    if(decodedRefreshToken?.exp > currentTime.getTime() / 1000) {
+      const data = await userService.refreshToken(refreshToken)
       config.headers['token'] = `Bearer ${data?.access_token}`
+    }else {
+      dispatch(resetUser())
     }
-    return config;
-  }, function (error) {
-    // Do something with request error
-    return Promise.reject(error);
+  }
+  return config;
+}, (err) => {
+  return Promise.reject(err)
   });
 
   const handleGetDetailUser = async(id, access_token) =>{
+    let storageRefreshToken = localStorage.getItem('refresh_token')
+    const refreshToken = JSON.parse(storageRefreshToken)
     const res = await userService.getDetailUser(id, access_token)
-    console.log("res", res) // gồm data, status, message
-    dispatch(updateUser({...res?.data, access_token}))
+    // console.log("res", res) // gồm data, status, message
+    dispatch(updateUser({...res?.data, access_token, refreshToken: refreshToken}))
 }
 
   return (
@@ -78,7 +96,7 @@ function App() {
                 <Route
                   key={route.path}
                   //path: chỉ đường dẫn hướng tới trang của element={<Page/>}
-                  path={isCheckAuth && route.path}
+                  path={isCheckAuth ? route.path : "/"}
                   // element để chỉ trang hiển thị
                   element={
                     <Layout>

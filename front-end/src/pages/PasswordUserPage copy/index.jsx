@@ -31,12 +31,10 @@ const PasswordUserPage = () => {
   };
   const mutation = useMutationHooks((data) => {
     const { id, ...rest } = data;
-    console.log("test datta", data);
     const res = userService.updateUserPassword(id, rest);
     return res;
   });
   const { data: dataPass } = mutation;
-  console.log("dataPass", dataPass);
 
   const handleSave = () => {
     mutation.mutate({
@@ -140,7 +138,7 @@ const PasswordUserPage = () => {
         <Col span={10}>
           <img
             className={styles.containerContentImg}
-            src="https://giaohangtietkiem.vn/wp-content/uploads/2019/06/mat-khau-mac-dinh-tren-dau-ghi-hikvision.jpg"
+            src={process.env.REACT_APP_IS_LOCAL ? "https://giaohangtietkiem.vn/wp-content/uploads/2019/06/mat-khau-mac-dinh-tren-dau-ghi-hikvision.jpg" : window.location.href}
           />
         </Col>
       </Row>

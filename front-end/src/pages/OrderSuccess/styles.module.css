@@ -14,14 +14,15 @@
 .headerCart{
   background-color: #fff;
   display: flex;
-  height: 90px;
+  height: 60px;
   align-items: center;
+  justify-content: center;
   padding-left:30px ;
   margin-bottom: 20px;
 }
-.headerCart :first-child{
+/* .headerCart :first-child{
  border-right: solid 2px var(--primary-color);
-}
+} */
 
 .headerCartItem{
   font-size: 18px;

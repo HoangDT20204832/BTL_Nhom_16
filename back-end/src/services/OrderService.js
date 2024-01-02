@@ -77,7 +77,7 @@ const createOrder = (newOrder) => {
           isPaid,
           paidAt,
         });
-        console.log("my-order", createdOrder)
+        // console.log("my-order", createdOrder)
         resolve({
               status: "OK",
               message: "success",
@@ -95,6 +95,8 @@ const createOrder = (newOrder) => {
     }
   });
 };
+
+
 
 const getAllOrderDetails = (id) => {
   return new Promise(async (resolve, reject) => {
@@ -201,7 +203,7 @@ const cancelOrderDetails = (id, data) => {
 const  updateOrderDetails= (orderId, data) => {
   return new Promise(async(resolve, reject) => {
     try {
-      console.log("orderId: ", orderId)
+      // console.log("orderId: ", orderId)
       const checkOrder = await Order.findOne({_id: orderId})
       // console.log("checkUser", checkUser)
       if(checkOrder === null){

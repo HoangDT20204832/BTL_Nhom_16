@@ -11,6 +11,7 @@ import {useQuery} from "@tanstack/react-query"
 // import { PlusOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 import DrawerComp from "../DrawerComp";
 import {useSelector} from "react-redux"
+import LoadingComp from "../LoadingComp";
 
 
 const UserInforAd = () => {
@@ -43,6 +44,7 @@ const [rowSelected,setRowSelected] = useState("")
 
   const [isOpenDrawer, setIsOpenDrawer] = useState(false)
   const [isOpenDrawer2, setIsOpenDrawer2] = useState(false)
+  const [isModalOpenDelete, setIsModalOpenDelete] = useState(false)
 
   const [form] = Form.useForm()
 
@@ -57,7 +59,7 @@ const [rowSelected,setRowSelected] = useState("")
  const mutationUpdate = useMutationHooks(
   ( data) =>{ 
     const {id ,  ...rest } = data;
-    console.log("test datta", data)
+    // console.log("test datta", data)
     const res = userService.updateUserInfor(id, {...rest} )
     return res
     },
@@ -66,7 +68,7 @@ const [rowSelected,setRowSelected] = useState("")
 const mutationDelete = useMutationHooks(
   ( data) =>{ 
     const {id ,  ...rest } = data;
-    console.log("test datta delete", data)
+    // console.log("test datta delete", data)
     const res = userService.deleteUserInfor(id, {...rest} )
     return res
     },
@@ -81,8 +83,8 @@ const mutationDelete = useMutationHooks(
 
   // const {data, isSuccess, isError} = mutationCreate
   const {data: dataUpdated, isSuccess: isSuccessUpdated, isError:isErrorUpdated} = mutationUpdate
-  console.log("mutationUpdate", mutationUpdate)
-  const {data: dataDeleted, isSuccess: isSuccessDeleted, isError:isErrorDeleted} = mutationDelete
+  // console.log("mutationUpdate", mutationUpdate)
+  const {data: dataDeleted,isLoading: isLoadingDeleted, isSuccess: isSuccessDeleted, isError:isErrorDeleted} = mutationDelete
 
 
   // const {data: products } = useQuery(['products'],getAllProduct)
@@ -96,7 +98,7 @@ const mutationDelete = useMutationHooks(
     return (
       <div>
         <Button style={{ color: 'red', fontSize: '14px', cursor: 'pointer', marginRight:'5px' }} onClick={onDetailUser} >Chi tiết </Button>
-        <Button style={{ color: 'red', fontSize: '14px', cursor: 'pointer', marginRight:'5px' }} onClick={onDeleteUser} >Xóa </Button>
+        <Button style={{ color: 'red', fontSize: '14px', cursor: 'pointer', marginRight:'5px' }} onClick={() => setIsModalOpenDelete(true)} >Xóa </Button>
         <Button style={{ color: 'orange', fontSize: '14px', cursor: 'pointer' }} onClick={handleGetDetailUser} > Sửa</Button>
         {/* <DeleteOutlined style={{ color: 'red', fontSize: '30px', cursor: 'pointer' }} onClick={() => setIsModalOpenDelete(true)} />
         <EditOutlined style={{ color: 'orange', fontSize: '30px', cursor: 'pointer' }} onClick={handleDetailsProduct} /> */}
@@ -107,7 +109,6 @@ const mutationDelete = useMutationHooks(
 
 const fetchGetDetailUser = async(rowSelected) => {
     const res = await userService.getDetailUser(rowSelected) //rowSelected: id user
-    console.log("res", res)
     if(res?.data){
  
 
@@ -138,11 +139,10 @@ useEffect(()=> {
 },[form, stateUserDetail])
 
 
-console.log("resProduct", stateUserDetail)
+// console.log("resProduct", stateUserDetail)
 
 
   const handleGetDetailUser = () =>{
-    console.log('GetDetailProduct', rowSelected)
     // if(rowSelected){
     //   fetchGetDetailUser()
     // }
@@ -268,14 +268,7 @@ console.log("resProduct", stateUserDetail)
       form.resetFields()
     };
   
-  // const handleOnChangeInput = (e) =>{
-  //     // console.log("e.target.value", e.target.value);
-  //     // console.log("e.target.name", e.target.name);
-  //     setStateUser({
-  //       ...stateUser,
-  //       [e.target.name]: e.target.value
-  //     })
-  // }
+
 
   const handleOnChangeInputDetail = (e) =>{
     // console.log("e.target.value", e.target.value);
@@ -348,12 +341,19 @@ const onDetailUser = () =>{
   // }
   setIsOpenDrawer2(true)
 }
-const onDeleteUser = () =>{
+
+const handleCancelDelete = () => {
+  setIsModalOpenDelete(false)
+}
+
+const handleDeleteProduct = () =>{
   mutationDelete.mutate({id: rowSelected },{
     onSettled: () =>{
       queryUser.refetch()
     }
   })
+  setIsModalOpenDelete(false)
+
 }
 
 
@@ -590,6 +590,12 @@ const onDeleteUser = () =>{
         </Form.Item> */}
         </Form>
       </DrawerComp>
+
+      <Modal title="Xóa sản phẩm" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={handleDeleteProduct}>
+        <LoadingComp isLoading={isLoadingDeleted}>
+          <div>Bạn có chắc xóa sản phẩm này không?</div>
+        </LoadingComp>
+      </Modal>
 
     </div>
   );

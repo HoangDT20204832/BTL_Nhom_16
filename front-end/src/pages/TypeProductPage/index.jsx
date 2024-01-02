@@ -2,23 +2,33 @@ import React, { useEffect, useState } from "react";
 import NavbarComp from "../../components/NavbarComp";
 import CardProductComp from "../../components/CardProductComp";
 import { Col, Pagination } from "antd";
-import { WrapperProductType, WrapperNavbar, WrapperProducts,NavbarHeader,
+import {
+  WrapperProductType,
+  WrapperNavbar,
+  WrapperProducts,
+  NavbarHeader,
   NavbarItem,
   NavbarItemLable,
-  NavbarItemPrice,NavbarItemOrigin,
-  NavbarOriginRadio,NavbarItemPriceBtn,NavbarItemSelect } from "./styles";
+  NavbarItemPrice,
+  NavbarItemOrigin,
+  NavbarOriginRadio,
+  NavbarItemPriceBtn,
+  NavbarItemSelect,
+} from "./styles";
 import { useLocation } from "react-router-dom";
 import * as productService from "../../services/productService";
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { useDebounce } from "../../hooks/useDebounce";
+import LoadingComp from "../../components/LoadingComp";
 
 const TypeProductPage = (type) => {
   const location = useLocation();
-  console.log("location: ", location);
+  // console.log("location: ", location);
   const { state } = location;
   const productSearch = useSelector((state) => state.product.search);
   const searchDebounce = useDebounce(productSearch, 500);
+  const [loading, setLoading] = useState(false);
 
   const [panigate, setPanigate] = useState({
     page: 0,
@@ -39,8 +49,8 @@ const TypeProductPage = (type) => {
   //   }
   // }
   const onChange = (current, pageSize) => {
-    console.log("PageSize", current, pageSize);
     setPanigate({ ...panigate, page: current - 1, limit: pageSize });
+    setLoading(true);
     // setPanigate({...panigate,limit:pageSize})
     // panigate.page = current -1;
     // panigate.limit = pageSize
@@ -59,6 +69,7 @@ const TypeProductPage = (type) => {
     setPrice(`${minPrice}-${maxPrice}`);
   };
   const fetchData = async () => {
+    setLoading(true);
     const queryParams = [];
 
     if (price) queryParams.push(`priceNew=${price}`);
@@ -73,10 +84,13 @@ const TypeProductPage = (type) => {
 
     const response = await productService.getProductsByType(queryString);
     const dataPro = response.data;
-    console.log("res1", response.total)
-    // console.log("dataPro: ", dataPro);
-    setProductsType(dataPro);
-    setPanigate({...panigate, totalItems: response.total} )
+    if (response?.status === "OK") {
+      setLoading(false);
+      setProductsType(dataPro);
+      setPanigate({ ...panigate, totalItems: response.total });
+    } else {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -84,67 +98,73 @@ const TypeProductPage = (type) => {
   }, [price, productSearch, origin, rating, panigate.page, panigate.limit]);
   // const {data: productsType} = useQuery(['product-type',price, name, origin, rating,panigate.page,panigate.limit ], fetchData)
   //  const productsType = fetchData()
-  console.log("productsType", productsType);
+  // console.log("productsType", productsType);
 
   return (
     <div style={{ backgroundColor: "var(--background-color)" }}>
       <WrapperProductType className="grid">
         <WrapperNavbar span={4}>
           {/* <NavbarComp /> */}
-            <NavbarHeader>BỘ LỌC TÌM KIẾM</NavbarHeader>
-            
-            <NavbarItem>
-              <NavbarItemLable>Nơi bán</NavbarItemLable>
-              <NavbarItemOrigin>
-                <div>
-                  <NavbarOriginRadio
-                    type="radio"
-                    value=""
-                    checked={origin === ""}
-                    onChange={(e) => setOrigin(e.target.value)}
-                  />
-                  All
-                </div>
-                <div>
-                  <NavbarOriginRadio
-                    type="radio"
-                    value="Hà Nội"
-                    checked={origin === "Hà Nội"}
-                    onChange={(e) => setOrigin(e.target.value)}
-                  />
-                  Hà Nội
-                </div>
+          <NavbarHeader>BỘ LỌC TÌM KIẾM</NavbarHeader>
 
-                <div>
-                  <NavbarOriginRadio
-                    type="radio"
-                    value="Hồ Chí Minh"
-                    checked={origin === "Hồ Chí Minh"}
-                    onChange={(e) => setOrigin(e.target.value)}
-                  />
-                  Hồ Chí Minh
-                </div>
+          <NavbarItem>
+            <NavbarItemLable>Nơi bán</NavbarItemLable>
+            <NavbarItemOrigin>
+              <div>
+                <NavbarOriginRadio
+                  type="radio"
+                  value=""
+                  checked={origin === ""}
+                  onChange={(e) => setOrigin(e.target.value)}
+                />
+                All
+              </div>
+              <div>
+                <NavbarOriginRadio
+                  type="radio"
+                  value="Hà Nội"
+                  checked={origin === "Hà Nội"}
+                  onChange={(e) => setOrigin(e.target.value)}
+                />
+                Hà Nội
+              </div>
 
-                <div>
-                  <NavbarOriginRadio
-                    type="radio"
-                    value="Nước ngoài"
-                    checked={origin === "Nước ngoài"}
-                    onChange={(e) => setOrigin(e.target.value)}
-                  />
-                  Nước ngoài
-                </div>
-              </NavbarItemOrigin>
-            </NavbarItem>
+              <div>
+                <NavbarOriginRadio
+                  type="radio"
+                  value="Hồ Chí Minh"
+                  checked={origin === "Hồ Chí Minh"}
+                  onChange={(e) => setOrigin(e.target.value)}
+                />
+                Hồ Chí Minh
+              </div>
 
-            <NavbarItem>
-              <NavbarItemLable>Khoảng giá</NavbarItemLable>
-             <div style={{display:"flex", justifyContent:"space-between",fontSize:"1.3rem"}}>
-             <NavbarItemPrice
+              <div>
+                <NavbarOriginRadio
+                  type="radio"
+                  value="Nước ngoài"
+                  checked={origin === "Nước ngoài"}
+                  onChange={(e) => setOrigin(e.target.value)}
+                />
+                Nước ngoài
+              </div>
+            </NavbarItemOrigin>
+          </NavbarItem>
+
+          <NavbarItem>
+            <NavbarItemLable>Khoảng giá</NavbarItemLable>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "1.3rem",
+              }}
+            >
+              <NavbarItemPrice
                 type="number"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
-                style={{ appearance: 'textfield'}}
+                style={{ appearance: "textfield" }}
               />
               -
               <NavbarItemPrice
@@ -152,62 +172,66 @@ const TypeProductPage = (type) => {
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
               />
-             </div>
-              <NavbarItemPriceBtn onClick={handleClickPrice}>ÁP DỤNG</NavbarItemPriceBtn>
-              {/* <label>Name:</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} /> */}
-            </NavbarItem>
+            </div>
+            <NavbarItemPriceBtn onClick={handleClickPrice}>
+              ÁP DỤNG
+            </NavbarItemPriceBtn>
+            {/* <label>Name:</label>
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} /> */}
+          </NavbarItem>
 
-            <NavbarItem>
-              <NavbarItemLable>Đánh giá</NavbarItemLable>
-              <NavbarItemSelect
-                value={rating}
-                onChange={(e) => setRating(e.target.value)}
-              >
-                <option value="">Chọn đánh giá</option>
-                <option value="1">1 sao trở lên</option>
-                <option value="2">2 sao trở lên</option>
-                <option value="3">3 sao trở lên</option>
-                <option value="4">4 sao trở lên</option>
-                <option value="5">5 sao </option>
-              </NavbarItemSelect>
-            </NavbarItem>
+          <NavbarItem>
+            <NavbarItemLable>Đánh giá</NavbarItemLable>
+            <NavbarItemSelect
+              value={rating}
+              onChange={(e) => setRating(e.target.value)}
+            >
+              <option value="">Chọn đánh giá</option>
+              <option value="1">1 sao trở lên</option>
+              <option value="2">2 sao trở lên</option>
+              <option value="3">3 sao trở lên</option>
+              <option value="4">4 sao trở lên</option>
+              <option value="5">5 sao </option>
+            </NavbarItemSelect>
+          </NavbarItem>
         </WrapperNavbar>
         <Col span={20} style={{ backgroundColor: "#fff" }}>
-          <WrapperProducts>
-            {productsType
-              ?.filter((product) => {
-                if (searchDebounce === "") {
-                  return product;
-                } else if (
-                  product?.name
-                    ?.toLowerCase()
-                    ?.includes(searchDebounce?.toLowerCase())
-                ) {
-                  return product;
-                }
-              })
-              ?.map((productType, index) => {
-                return (
-                  <CardProductComp
-                    key={productType._id}
-                    countInStock={productType.countInStock}
-                    description={productType.description}
-                    discount={productType.discount}
-                    image={productType.image}
-                    name={productType.name}
-                    priceOld={productType.priceOld}
-                    priceNew={productType.priceNew}
-                    rating={productType.rating}
-                    selled={productType.selled}
-                    type={productType.type}
-                    id={productType._id}
-                    trademark={productType.trademark}
-                    origin={productType.origin}
-                  />
-                );
-              })}
-          </WrapperProducts>
+          <LoadingComp isLoading={loading}>
+            <WrapperProducts>
+              {productsType
+                ?.filter((product) => {
+                  if (searchDebounce === "") {
+                    return product;
+                  } else if (
+                    product?.name
+                      ?.toLowerCase()
+                      ?.includes(searchDebounce?.toLowerCase())
+                  ) {
+                    return product;
+                  }
+                })
+                ?.map((productType, index) => {
+                  return (
+                    <CardProductComp
+                      key={productType._id}
+                      countInStock={productType.countInStock}
+                      description={productType.description}
+                      discount={productType.discount}
+                      image={productType.image}
+                      name={productType.name}
+                      priceOld={productType.priceOld}
+                      priceNew={productType.priceNew}
+                      rating={productType.rating}
+                      selled={productType.selled}
+                      type={productType.type}
+                      id={productType._id}
+                      trademark={productType.trademark}
+                      origin={productType.origin}
+                    />
+                  );
+                })}
+            </WrapperProducts>
+          </LoadingComp>
 
           <Pagination
             defaultCurrent={panigate.page + 1}
@@ -215,7 +239,7 @@ const TypeProductPage = (type) => {
             // total={100}
             // pageSize={5}
             defaultPageSize={5}
-            pageSizeOptions={[5, 10, 15 ]}
+            pageSizeOptions={[5, 10, 15]}
             onChange={onChange}
             style={{ textAlign: "center", padding: "20px 0" }}
           />

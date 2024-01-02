@@ -9,7 +9,7 @@ export const productSlide = createSlice({
   initialState,
   reducers: {
     searchProduct: (state, action) =>{
-        console.log("actionProduct", action)
+        // console.log("actionProduct", action)
         state.search = action.payload
     },
   },

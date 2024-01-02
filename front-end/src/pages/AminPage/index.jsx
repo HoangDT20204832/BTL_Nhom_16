@@ -49,7 +49,7 @@ const handleOnClickMenu = ({key}) =>{
     // console.log('onClickMenu',{item, key, keyPath, domEvent})
     setKeySelected(key)
    }
-  console.log('keySelected',keySelected)
+  // console.log('keySelected',keySelected)
   return (
     <div style={{display:"flex"}}>
       <Menu

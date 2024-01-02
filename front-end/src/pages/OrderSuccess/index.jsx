@@ -11,14 +11,15 @@ const OrderSuccess = () => {
   const {state} = location
 
   return (
-    <>
+    <div className="grid">
       {/* <div>OrderSuccess</div> */}
       <div className={styles.cartCompWrap}>
-        <div className={styles.headerCart}>
-          <div className={styles.headerCartItem}>SHOP BÁN HÀNG</div>
-          <div className={styles.headerCartItem}>ĐƠN HÀNG ĐÃ ĐĂT HÀNG THÀNH CÔNG</div>
-        </div>
+        
         <div className={styles.cartComp}>
+          <div className={styles.headerCart}>
+            {/* <div className={styles.headerCartItem}>SHOP BÁN HÀNG</div> */}
+            <div className={styles.headerCartItem}>ĐƠN HÀNG ĐÃ ĐẶT HÀNG THÀNH CÔNG</div>
+          </div>
           <div className={styles.containerCart}>
             <div className={styles.containerCartLeft}>
             <div className={styles.containerCartLeftWrapperInfo}>
@@ -73,7 +74,7 @@ const OrderSuccess = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

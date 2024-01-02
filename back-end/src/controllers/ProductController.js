@@ -4,7 +4,7 @@ const JwtService = require("../services/JwtService");
 //Hàm xử lý yêu cầu POST để tạo mới một sản phẩm.//
 const createProduct = async (req, res) => {
   try {
-    console.log("req.body", req.body);
+    // console.log("req.body", req.body);
     const { name, image, type, priceOld, priceNew,countInStock,rating, 
            description,discount,selled, trademark, origin} = req.body;
     if (!name || !image || !type || !priceOld || !priceNew || !countInStock || !rating) {

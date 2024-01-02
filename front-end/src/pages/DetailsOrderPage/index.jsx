@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { orderContant } from '../../contant'
 // import { convertPrice } from '../../utils'
 import { useMemo } from 'react'
+import LoadingComp from "../../components/LoadingComp";
 
 const DetailsOrderPage = () => {
   const params = useParams()
@@ -24,8 +25,13 @@ const DetailsOrderPage = () => {
   const queryOrder = useQuery({ queryKey: ['orders-details'], queryFn: fetchDetailsOrder }, {
     enabled: id
   })
+
+  const { data,isLoading } = queryOrder
+
+
   const { data } = queryOrder
     // Gia don hang
+
   const priceMemo = useMemo(() => {
     const result = data?.orderItems?.reduce((total, cur) => {
       return total + ((cur.priceNew * cur.amount))
@@ -34,7 +40,7 @@ const DetailsOrderPage = () => {
   },[data])
 
   return (
-  //  <Loading isLoading={isLoading}>
+   <LoadingComp isLoading={isLoading}>
      <div style={{width: '100%', height: '100vh', background: '#f5f5fa'}}>
       <div style={{ width: '1200px', margin: '0 auto', height: '1200px'}}>
         <h4>Chi tiết đơn hàng</h4>
@@ -120,7 +126,7 @@ const DetailsOrderPage = () => {
       </WrapperStyleContent>
       </div>
     </div>
-  //  </Loading>
+  </LoadingComp>
   )
 }
 

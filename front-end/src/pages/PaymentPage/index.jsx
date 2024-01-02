@@ -15,6 +15,7 @@ import { updateUser } from "../../redux/slides/userSlide";
 import { useNavigate } from "react-router-dom";
 import { PayPalButton } from "react-paypal-button-v2";
 import * as PaymentService from '../../services/PaymentService'
+import LoadingComp from "../../components/LoadingComp";
 
 
 const PaymentPage = () => {
@@ -61,18 +62,15 @@ const PaymentPage = () => {
   const totalPriceMemo = useMemo(() => {
     return priceMemo + transportPriceMemo;
   }, [priceMemo, transportPriceMemo]);
-  // console.log("type of price", typeof totalPriceMemo);
-  console.log("order", order);
 
   // udpdate thông tin user khi ko đủ thoogn tin để giao hàng
   const mutationUpdate = useMutationHooks((data) => {
     const { id, ...rest } = data;
-    console.log("test datta", data);
     const res = userService.updateUserInfor(id, { ...rest });
     return res;
   });
 
-  const {
+  const {isLoading,
     data: dataUpdated,
     isSuccess: isSuccessUpdated,
     isError: isErrorUpdated,
@@ -80,11 +78,10 @@ const PaymentPage = () => {
 
   const mutationAddOrder = useMutationHooks((data) => {
     const { ...rest } = data;
-    console.log("test datta", data);
     const res = orderService.createOrder({ ...rest });
     return res;
   });
-  const { data: dataOrder } = mutationAddOrder;
+  const { data: dataOrder, isLoading:isLoadingAddOrder } = mutationAddOrder;
   const statusOrder = dataOrder?.status;
 
   useEffect(() => {
@@ -173,14 +170,13 @@ const PaymentPage = () => {
         { id: user?.id, ...stateUserDetail },
         {
           onSuccess: () => {
-            dispatch(updateUser({ ...user, name, phone, address, city }));
+            dispatch(updateUser({ ...user,_id: user?.id,  name, phone, address, city }));
             setIsOpenUpdateInfor(false);
           },
         }
       );
     }
   };
-  console.log("user3", user);
 
   //xử lý pần chon thanht phương thcws giao hàng và thanh toán
   const handleOnchaneAddress = () => {
@@ -243,140 +239,143 @@ const PaymentPage = () => {
   return (
     <>
       {/* <div>PaymentPage</div> */}
-      <div className={styles.cartCompWrap}>
-        <div className={styles.headerCart}>
-          <div className={styles.headerCartItem}>SHOP BÁN HÀNG</div>
-          <div className={styles.headerCartItem}>THANH TOÁN </div>
-        </div>
-        <div className={styles.cartComp}>
-          <div className={styles.containerCart}>
-            <div className={styles.containerCartLeft}>
-              <div className={styles.containerCartLeftWrapperInfo}>
-                <div>
-                  <div className={styles.containerCartLeftLable}>
-                    Chọn phương thức giao hàng
-                  </div>
-                  <Radio.Group
-                    className={styles.containerCartLeftRadio}
-                    onChange={handleDilivery}
-                    value={delivery}
-                  >
-                    <Radio value="fast">
-                      <span style={{ color: "#ea8500", fontWeight: "bold" }}>
-                        FAST
-                      </span>{" "}
-                      Giao hàng tiết kiệm
-                    </Radio>
-                    <Radio value="gojek">
-                      <span style={{ color: "#ea8500", fontWeight: "bold" }}>
-                        GO_JEK
-                      </span>{" "}
-                      Giao hàng tiết kiệm
-                    </Radio>
-                  </Radio.Group>
-                </div>
-              </div>
-              <div className={styles.containerCartLeftWrapperInfo}>
-                <div>
-                  <div className={styles.containerCartLeftLable}>
-                    Chọn phương thức thanh toán
-                  </div>
-                  <Radio.Group
-                    className={styles.containerCartLeftRadio}
-                    onChange={handlePayment}
-                    value={payment}
-                  >
-                    <Radio value="later_money">
-                      {" "}
-                      Thanh toán tiền mặt khi nhận hàng
-                    </Radio>
-                    <Radio value="paypal"> Thanh toán bằng paypal</Radio>
-                  </Radio.Group>
-                </div>
-              </div>
-            </div>
-            <div className={styles.containerCartRight}>
-              <div style={{ width: "100%" }}>
-                <div className={styles.containerCartRightInfor}>
+      <LoadingComp isLoading={isLoadingAddOrder}>
+        <div className={styles.cartCompWrap}>
+          <div className={styles.headerCart}>
+            {/* <div className={styles.headerCartItem}>SHOP BÁN HÀNG</div> */}
+            <div className={styles.headerCartItem}>THANH TOÁN </div>
+          </div>
+          <div className={styles.cartComp}>
+            <div className={styles.containerCart}>
+              <div className={styles.containerCartLeft}>
+                <div className={styles.containerCartLeftWrapperInfo}>
                   <div>
-                    <span>Đia chỉ: </span>
-                    <span
-                      style={{ color: "var(--active-color)", margin: "0 5px" }}
-                    >{`${user?.address} - ${user?.city}`}</span>
-                    <span
-                      onClick={handleOnchaneAddress}
-                      style={{ color: "blue", cursor: "pointer" }}
+                    <div className={styles.containerCartLeftLable}>
+                      Chọn phương thức giao hàng
+                    </div>
+                    <Radio.Group
+                      className={styles.containerCartLeftRadio}
+                      onChange={handleDilivery}
+                      value={delivery}
                     >
-                      Thay đổi{" "}
-                    </span>
+                      <Radio value="fast">
+                        <span style={{ color: "#ea8500", fontWeight: "bold" }}>
+                          NHANH
+                        </span>{" "}
+                        Giao hàng tiết kiệm
+                      </Radio>
+                      <Radio value="gojek">
+                        <span style={{ color: "#ea8500", fontWeight: "bold" }}>
+                          HỎA TỐC
+                        </span>{" "}
+                        Giao hàng tiết kiệm
+                      </Radio>
+                    </Radio.Group>
                   </div>
                 </div>
-
-                <div className={styles.containerCartRightInfor}>
-                  <div className={styles.containerCartRightInforItem}>
-                    <span>Tạm tính</span>
-                    <span className={styles.containerCartRightInforPrice}>
-                      {priceMemo.toLocaleString()}đ
-                    </span>
-                  </div>
-
-                  <div className={styles.containerCartRightInforItem}>
-                    <span>Phí vận chuyển</span>
-                    <span className={styles.containerCartRightInforPrice}>
-                      {transportPriceMemo.toLocaleString()}đ
-                    </span>
-                  </div>
-                </div>
-                <div className={styles.containerCartRightTotal}>
-                  <span>Tổng tiền</span>
-                  <span style={{ display: "flex", flexDirection: "column" }}>
-                    <span
-                      style={{
-                        color: "rgb(254, 56, 52)",
-                        fontSize: "24px",
-                        fontWeight: "bold",
-                      }}
+                <div className={styles.containerCartLeftWrapperInfo}>
+                  <div>
+                    <div className={styles.containerCartLeftLable}>
+                      Chọn phương thức thanh toán
+                    </div>
+                    <Radio.Group
+                      className={styles.containerCartLeftRadio}
+                      onChange={handlePayment}
+                      value={payment}
                     >
-                      {totalPriceMemo.toLocaleString()}đ
-                    </span>
-                    {/* <span style={{color: '#000', fontSize: '11px'}}>(Đã bao gồm VAT nếu có)</span> */}
-                  </span>
+                      <Radio value="later_money">
+                        {" "}
+                        Thanh toán tiền mặt khi nhận hàng
+                      </Radio>
+                      <Radio value="paypal"> Thanh toán bằng paypal</Radio>
+                    </Radio.Group>
+                  </div>
                 </div>
               </div>
-              {payment === "paypal"  && sdkReady ? (
-                 <div style={{width: '320px'}}>
-                 <PayPalButton
-                   amount={Math.round(totalPriceMemo / 30000)}
-                   // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
-                   onSuccess={onSuccessPaypal}
-                   onError={() => {
-                     alert('Error')
-                   }}
-                 />
-               </div>
-              ) : (
-                <ButtonComponent
-                  onClick={() => handleAddOrder()}
-                  size={40}
-                  styleButton={{
-                    background: "rgb(255, 57, 69)",
-                    height: "48px",
-                    width: "220px",
-                    border: "none",
-                    borderRadius: "4px",
-                  }}
-                  textButton={"Đặt hàng"}
-                  styleTextButton={{
-                    color: "#fff",
-                    fontSize: "15px",
-                    fontWeight: "700",
-                  }}
-                ></ButtonComponent>
-              )}
+              <div className={styles.containerCartRight}>
+                <div style={{ width: "100%" }}>
+                  <div className={styles.containerCartRightInfor}>
+                    <div>
+                      <span>Đia chỉ: </span>
+                      <span
+                        style={{ color: "var(--active-color)", margin: "0 5px" }}
+                      >{`${user?.address} - ${user?.city}`}</span>
+                      <span
+                        onClick={handleOnchaneAddress}
+                        style={{ color: "blue", cursor: "pointer" }}
+                      >
+                        Thay đổi{" "}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={styles.containerCartRightInfor}>
+                    <div className={styles.containerCartRightInforItem}>
+                      <span>Tạm tính</span>
+                      <span className={styles.containerCartRightInforPrice}>
+                        {priceMemo.toLocaleString()}đ
+                      </span>
+                    </div>
+
+                    <div className={styles.containerCartRightInforItem}>
+                      <span>Phí vận chuyển</span>
+                      <span className={styles.containerCartRightInforPrice}>
+                        {transportPriceMemo.toLocaleString()}đ
+                      </span>
+                    </div>
+                  </div>
+                  <div className={styles.containerCartRightTotal}>
+                    <span>Tổng tiền</span>
+                    <span style={{ display: "flex", flexDirection: "column" }}>
+                      <span
+                        style={{
+                          color: "rgb(254, 56, 52)",
+                          fontSize: "24px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {totalPriceMemo.toLocaleString()}đ
+                      </span>
+                      {/* <span style={{color: '#000', fontSize: '11px'}}>(Đã bao gồm VAT nếu có)</span> */}
+                    </span>
+                  </div>
+                </div>
+                {payment === "paypal"  && sdkReady ? (
+                  <div style={{width: '320px'}}>
+                  <PayPalButton
+                    amount={Math.round(totalPriceMemo / 30000)}
+                    // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                    onSuccess={onSuccessPaypal}
+                    onError={() => {
+                      alert('Error')
+                    }}
+                  />
+                </div>
+                ) : (
+                  <ButtonComponent
+                    onClick={() => handleAddOrder()}
+                    size={40}
+                    styleButton={{
+                      background: "rgb(255, 57, 69)",
+                      height: "48px",
+                      width: "220px",
+                      border: "none",
+                      borderRadius: "4px",
+                    }}
+                    textButton={"Đặt hàng"}
+                    styleTextButton={{
+                      color: "#fff",
+                      fontSize: "15px",
+                      fontWeight: "700",
+                    }}
+                  ></ButtonComponent>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </LoadingComp>
+      
 
       <Modal
         forceRender

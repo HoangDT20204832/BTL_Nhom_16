@@ -3,7 +3,7 @@ const JwtService = require("../services/JwtService");
 // hàm xử lý khi một yêu cầu POST được gửi đến endpoint tương ứng để tạo một đơn đặt hàng mới.//
 const createOrder = async (req, res) => {   
   try {
-    console.log("req.body", req.body);
+    // console.log("req.body", req.body);
     const {orderItems, paymentMethod,deliveryMethod, itemsPrice, shippingPrice, totalPrice, fullName,address, 
         city,phone,user} = req.body;
     if ( !paymentMethod ||!deliveryMethod|| !itemsPrice  || !totalPrice || !fullName || !address || 

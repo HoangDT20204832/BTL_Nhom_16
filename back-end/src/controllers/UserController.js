@@ -4,7 +4,7 @@ const JwtService = require("../services/JwtService");
 // Đăng ký người dùng mới
 const createUser = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const { name, email, password, confirmPassword, phone } = req.body;
     const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
     const isCheckEmail = reg.test(email);
@@ -24,7 +24,7 @@ const createUser = async (req, res) => {
         message: "password và confirmPassword phải giống nhau",
       });
     }
-    console.log("test email", isCheckEmail);
+    // console.log("test email", isCheckEmail);
 
     const response = await userService.createUser(req.body);
     return res.status(200).json(response);
@@ -39,7 +39,7 @@ const createUser = async (req, res) => {
 //Người dùng đăng nhập
 const loginUser = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const { email, password } = req.body;
     const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
     const isCheckEmail = reg.test(email);
@@ -54,10 +54,10 @@ const loginUser = async (req, res) => {
         message: "Địa chỉ email không đúng",
       });
     } 
-    console.log("test email", isCheckEmail);
+    // console.log("test email", isCheckEmail);
     const response = await userService.loginUser(req.body);
     const {refresh_token, ...newResponse} = response
-    console.log("response", response);
+    // console.log("response", response);
     //set giá trị cookie = refresh_token
     res.cookie('refresh_token', refresh_token,{
       httpOnly: true,
@@ -148,8 +148,8 @@ const refreshToken = async (req, res) => {
   try {
 
     // console.log("req.cookie", req.cookies)
-    // let token  = req.headers.token.split(" ")[1];
-    let token  = req.cookies.refresh_token //gán giá trị token cho refresh_token lưu ở cookie
+    let token  = req.headers.token.split(" ")[1];
+    // let token  = req.cookies.refresh_token //gán giá trị token cho refresh_token lưu ở cookie
 
     if (!token) {
      return res.status(200).json({
@@ -186,7 +186,7 @@ const logoutUser = async (req, res) => {
 const updateUserPassword = async(req, res) => {
   try {
    const userId = req.params.id;
-   console.log("userId: " , userId);
+  //  console.log("userId: " , userId);
    const data = req.body;
    const { oldPassword, newPassword, confirmPassword} = data;
    if (!userId) {

@@ -38,7 +38,7 @@ function HeaderComponent() {
   const [isOpenPopover, setIsOpenPopover] = useState(false)
   const [isHovered, setHovered] = useState(false);
   const user = useSelector((state) => state.user);
-  console.log("user",user);
+  // console.log("user",user);
   const dispatch = useDispatch();
   const [namee, setNamee] = useState('')
   const [avatarr, setAvatarr] = useState('')
@@ -108,7 +108,7 @@ function HeaderComponent() {
   const [search, setSearch] = useState("")
 
   const onSearch = (e) =>{
-    console.log("input", e.target.value)
+    // console.log("input", e.target.value)
     setSearch(e.target.value)
     // dispatch(searchProduct(e.target.value))
   }
@@ -126,14 +126,14 @@ const onClickSearch = () =>{
           <WrapperHeaderNavbarItem>
             <span>Kết nối</span>
             <a
-              href="https://www.facebook.com/"
+              href={process.env.REACT_APP_IS_LOCAL ? "https://www.facebook.com/" : window.location.href}
               style={{ display: "block", margin: "0 5px" }}
             >
               <FacebookOutlined style={{ color: "#fff", fontSize: "16px" }} />
             </a>
 
             <a
-              href="https://www.instagram.com/Shopee_VN"
+              href={process.env.REACT_APP_IS_LOCAL ? "https://www.instagram.com/Shopee_VN" : window.location.href}
               style={{ display: "block" }}
             >
               <InstagramOutlined style={{ color: "#fff", fontSize: "16px" }} />

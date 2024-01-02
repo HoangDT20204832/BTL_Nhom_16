@@ -41,7 +41,7 @@ const AccountPage = () => {
   }
   // Xu ly lua chon
   const handleChange = (value) => {
-    console.log(`Selected: ${value}`);
+    // console.log(`Selected: ${value}`);
   };
   const [size, setSize] = useState("middle");
   const handleSizeChange = (e) => {
@@ -60,7 +60,7 @@ const AccountPage = () => {
   const mutation = useMutationHooks(
     ( data) =>{ 
       const {id, ...rest} = data;
-      console.log("test datta", data)
+      // console.log("test datta", data)
       const res = userService.updateUserInfor(id, rest)
       return res
     }
@@ -70,7 +70,7 @@ const AccountPage = () => {
 
     // Option thay doi gioi tinh
   const handleChangeSex = ({ target: { value } }) => {
-    console.log("radio1 checked", value);
+    // console.log("radio1 checked", value);
     setSex(value);
   };
   useEffect(() =>{
@@ -95,13 +95,13 @@ const AccountPage = () => {
 
   const handleGetDetailUser = async(id, access_token) =>{
     const res = await userService.getDetailUser(id, access_token)
-    console.log("res", res) // gồm data, status, message
+    // console.log("res", res) // gồm data, status, message
     dispatch(updateUser({...res?.data, access_token}))
 }
   // Option thay doi ten
   const handleChangeName = (e) =>{
     setName(e.target.value)
-    console.log(e.target.value)
+    // console.log(e.target.value)
   }
   // Option thay doi Email
   const handleChangeEmail = (e) =>{
@@ -134,7 +134,7 @@ const AccountPage = () => {
   // Option Update thong tin ca nhan
   const handleUpdateUser = () =>{
     mutation.mutate({id: user?.id, name, email, phone, address, avatar, sex});
-    console.log('update user', name, email, phone, address, avatar, sex)
+    // console.log('update user', name, email, phone, address, avatar, sex)
   }
 
   return (
