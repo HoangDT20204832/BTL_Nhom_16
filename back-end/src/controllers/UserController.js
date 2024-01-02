@@ -94,7 +94,7 @@ const updateUser = async (req, res) => {
     });
   }
 };
-
+//Hàm này xử lý yêu cầu DELETE để xóa một người dùng//
 const deleteUser = async (req, res) => {
   try {
    const userId = req.params.id;
@@ -113,7 +113,7 @@ const deleteUser = async (req, res) => {
     });
   }
 };
-
+//Hàm này xử lý yêu cầu GET để lấy danh sách tất cả người dùng.//
 const getAllUser = async (req, res) => {
   try {
     const response = await userService.getAllUser();
@@ -124,7 +124,7 @@ const getAllUser = async (req, res) => {
     });
   }
 };
-
+//Hàm này xử lý yêu cầu GET để lấy thông tin chi tiết của một người dùng//
 const getDetailsUser = async (req, res) => {
   try {
     const userId = req.params.id;
