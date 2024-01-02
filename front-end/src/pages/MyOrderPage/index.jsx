@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import * as OrderService from "../../services/orderService";
-// import * as ReviewService from '../../services/reviewService'
 import { useSelector } from "react-redux";
 import {
   WrapperItemOrder,
@@ -26,6 +25,7 @@ const MyOrderPage = () => {
   const navigate = useNavigate();
 
   const fetchMyOrder = async () => {
+
     const res = await OrderService.getOrderByUserId(state?.id);
     return res.data;
   };
@@ -57,6 +57,38 @@ const MyOrderPage = () => {
     const res = OrderService.cancelOrder(id, orderItems, userId);
     return res;
   });
+
+    const res = await OrderService.getOrderByUserId(state?.id)
+    return res.data
+  }
+  const user = useSelector((state) => state.user)
+  const idsOrderReviewed = useSelector((state) => state.order.idsOrderReviewed)
+  console.log("idsOrderReviewed",idsOrderReviewed)
+  const [isOpenReview, setIsOpenReview] = useState(false)
+  const [orderReview, setOrderReview] = useState('')
+
+  const queryOrder = useQuery({ queryKey: ['orders'], queryFn: fetchMyOrder }, {
+    enabled: state?.id   // enabled trong useQuery giúp kiểm soát xem query nên tự động thực hiện hay không, dựa trên một điều kiện cụ thể
+  })
+  const { isLoading, data } = queryOrder
+  const handleDetailsOrder = (id) => {
+    navigate(`/details-order/${id}`    // Chuyen den Order Page
+    // , {
+    //   state: {
+    //     token: state?.token
+    //   }
+    // }
+    )
+  }
+  // Xu ly mutation hooks
+  const mutation = useMutationHooks(
+    (data) => {
+      const { id , orderItems, userId } = data
+      const res = OrderService.cancelOrder(id,orderItems, userId)
+      return res
+    }
+  )
+    // Xu ly xoa Order
 
   const handleCanceOrder = (order) => {
     mutation.mutate(

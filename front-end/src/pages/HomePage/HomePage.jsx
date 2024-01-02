@@ -22,6 +22,7 @@ import LoadingComp from "../../components/LoadingComp";
 const HomePage = () => {
   
 
+
   const productSearch = useSelector((state) => state.product.search);
   // const refSearch = useRef()
   // const [stateProduct, setStateProduct] = useState([])
@@ -39,6 +40,24 @@ const HomePage = () => {
     // panigate.page = current -1;
     // panigate.limit = pageSize
   };
+
+const productSearch = useSelector((state) => state.product.search)
+// const refSearch = useRef()
+// const [stateProduct, setStateProduct] = useState([])
+const searchDebounce = useDebounce(productSearch, 300)   // Go~ bo tim kiem
+const [limit, setLimit] = useState(5)
+const [page, setPage] = useState(0)
+console.log("productSearch", productSearch)
+const [typeProduct, setTypeProduct] = useState([])
+const onChange = (current, pageSize) => {
+  console.log("PageSize", current, pageSize)
+  setPage( current -1)
+  setLimit((limit) => (limit = pageSize))
+  // setPanigate({...panigate,limit:pageSize})
+  // panigate.page = current -1;
+  // panigate.limit = pageSize
+};
+
 
   const fetchProductAll = async (context) => {
     setLoading(true);

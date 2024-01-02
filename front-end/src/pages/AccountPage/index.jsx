@@ -15,6 +15,7 @@ import NavbarAcountComp from "../../components/NavbarAcountComp/index";
 
 const AccountPage = () => {
 
+  // Lua chon 1
   const options1 = [];
   for (let i = 1; i <= 31; i++) {
     options1.push({
@@ -22,6 +23,7 @@ const AccountPage = () => {
       label: i,
     });
   }
+  // Lua chon 2
   const options2 = [];
   for (let i = 1; i <= 12; i++) {
     options2.push({
@@ -29,6 +31,7 @@ const AccountPage = () => {
       label: `Tháng ${i}`,
     });
   }
+  // Lua chon 3
   const options3 = [];
   for (let i = 1910; i <= 2023; i++) {
     options3.push({
@@ -36,6 +39,7 @@ const AccountPage = () => {
       label: `Năm ${i}`,
     });
   }
+  // Xu ly lua chon
   const handleChange = (value) => {
     // console.log(`Selected: ${value}`);
   };
@@ -64,6 +68,7 @@ const AccountPage = () => {
   const {data: dataUser} = mutation
 // console.log("mutationUser", mutation)
 
+    // Option thay doi gioi tinh
   const handleChangeSex = ({ target: { value } }) => {
     // console.log("radio1 checked", value);
     setSex(value);
@@ -93,15 +98,16 @@ const AccountPage = () => {
     // console.log("res", res) // gồm data, status, message
     dispatch(updateUser({...res?.data, access_token}))
 }
-
+  // Option thay doi ten
   const handleChangeName = (e) =>{
     setName(e.target.value)
     // console.log(e.target.value)
   }
+  // Option thay doi Email
   const handleChangeEmail = (e) =>{
     setEmail(e.target.value)
   }
-
+  // Option thay doi SDT
   const handleChangePhone = (e) =>{
       setPhone(e.target.value)
   }
@@ -117,7 +123,7 @@ const AccountPage = () => {
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-
+  // Option thay doi avata 
   const handleChangeAvatar = async ({fileList}) => {
     const file = fileList[0]
     if (!file.url && !file.preview) {
@@ -125,8 +131,7 @@ const AccountPage = () => {
     }
     setAvatar(file.preview)
 }
-
-
+  // Option Update thong tin ca nhan
   const handleUpdateUser = () =>{
     mutation.mutate({id: user?.id, name, email, phone, address, avatar, sex});
     // console.log('update user', name, email, phone, address, avatar, sex)

@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 dotenv.config()
+
+// xác nhận người dùng
+
 const authMiddleware = (req, res, next) =>{
     const token = req.headers.token.split(' ')[1]
     // console.log('token', token)

@@ -15,7 +15,7 @@ const DetailsOrderPage = () => {
   // const location = useLocation()
   // const { state } = location
   const { id } = params
-
+    // Lay chi tiet dat hang
   const fetchDetailsOrder = async () => {
     const res = await OrderService.getDetailsOrder(id)
     // const res = await OrderService.getDetailsOrder(id, state?.token)
@@ -25,7 +25,12 @@ const DetailsOrderPage = () => {
   const queryOrder = useQuery({ queryKey: ['orders-details'], queryFn: fetchDetailsOrder }, {
     enabled: id
   })
+
   const { data,isLoading } = queryOrder
+
+
+  const { data } = queryOrder
+    // Gia don hang
 
   const priceMemo = useMemo(() => {
     const result = data?.orderItems?.reduce((total, cur) => {

@@ -1,5 +1,7 @@
 const userService = require("../services/UserService");
 const JwtService = require("../services/JwtService");
+
+// Đăng ký người dùng mới
 const createUser = async (req, res) => {
   try {
     // console.log(req.body);
@@ -33,6 +35,8 @@ const createUser = async (req, res) => {
   }
 };
 
+
+//Người dùng đăng nhập
 const loginUser = async (req, res) => {
   try {
     // console.log(req.body);
@@ -70,7 +74,7 @@ const loginUser = async (req, res) => {
 };
 
 
-
+// Cập nhật thông tin người dùng
 const updateUser = async (req, res) => {
   try {
    const userId = req.params.id;
@@ -90,7 +94,7 @@ const updateUser = async (req, res) => {
     });
   }
 };
-
+//Hàm này xử lý yêu cầu DELETE để xóa một người dùng//
 const deleteUser = async (req, res) => {
   try {
    const userId = req.params.id;
@@ -109,7 +113,7 @@ const deleteUser = async (req, res) => {
     });
   }
 };
-
+//Hàm này xử lý yêu cầu GET để lấy danh sách tất cả người dùng.//
 const getAllUser = async (req, res) => {
   try {
     const response = await userService.getAllUser();
@@ -120,7 +124,7 @@ const getAllUser = async (req, res) => {
     });
   }
 };
-
+//Hàm này xử lý yêu cầu GET để lấy thông tin chi tiết của một người dùng//
 const getDetailsUser = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -178,6 +182,7 @@ const logoutUser = async (req, res) => {
   }
 };
 
+// Người dùng cập nhật mật khẩu mới
 const updateUserPassword = async(req, res) => {
   try {
    const userId = req.params.id;

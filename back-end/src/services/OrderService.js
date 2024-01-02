@@ -47,8 +47,7 @@ const createOrder = (newOrder) => {
           };
         }
       });
-      const results = await Promise.all(promises);//Promise.all để đợi tất cả các Promise trong mảng promises hoàn thành. Kết quả trả về là một mảng chứa kết quả của tất cả các Promise. 
-      //newData: 1 mảng chứa các sản phẩm với id không đủ hàng từ kết quả cập nhật trước đó.
+      const results = await Promise.all(promises);
       const newData = results && results.filter((item) => item.id);
       
       if (newData.length) {

@@ -32,6 +32,8 @@ const ReviewService = require('../services/ReviewService');
 //       });
 //     }
 //   };
+
+//Hàm này xử lý yêu cầu POST để tạo một đánh giá mới cho một sản phẩm.//
 const createReview = async (req, res) => {
   try {
     const data = req.body
@@ -46,7 +48,7 @@ const createReview = async (req, res) => {
       });
   }
 };
-
+//Hàm này xử lý yêu cầu GET để lấy tất cả đánh giá của một sản phẩm //
 const getReviewsByProduct = async (req, res) => {
   try {
     const productId = req.params.productId;

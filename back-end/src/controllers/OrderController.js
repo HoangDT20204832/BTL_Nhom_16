@@ -1,5 +1,6 @@
 const orderService = require("../services/OrderService");
 const JwtService = require("../services/JwtService");
+// hàm xử lý khi một yêu cầu POST được gửi đến endpoint tương ứng để tạo một đơn đặt hàng mới.//
 const createOrder = async (req, res) => {   
   try {
     // console.log("req.body", req.body);
@@ -22,7 +23,7 @@ const createOrder = async (req, res) => {
     });
   }
 };
-
+// Hàm xử lý yêu cầu GET để lấy chi tiết của một đơn đặt hàng//
 const getDetailsOrder = async (req, res) => {
   try {
       const orderId = req.params.id
@@ -41,6 +42,7 @@ const getDetailsOrder = async (req, res) => {
       })
   }
 }
+//Hàm xử lý yêu cầu GET để lấy chi tiết của tất cả các đơn đặt hàng//
 const getAllOrderDetails = async (req, res) => {
   try {
       const userId = req.params.id
@@ -59,7 +61,7 @@ const getAllOrderDetails = async (req, res) => {
       })
   }
 }
-
+//Hàm xử lý yêu cầu POST để hủy chi tiết một đơn đặt hàng.//
 const cancelOrderDetails = async (req, res) => {
   try {
       const data= req.body.orderItems
@@ -80,7 +82,7 @@ const cancelOrderDetails = async (req, res) => {
   }
 }
 
-
+// Hàm xử lý yêu cầu PUT để cập nhật chi tiết của một đơn đặt hàng//
 const updateOrderDetails = async (req, res) => {
     try {
         const data= req.body
@@ -100,6 +102,7 @@ const updateOrderDetails = async (req, res) => {
         })
     }
   }
+// Hàm xử lý yêu cầu GET để lấy tất cả các đơn đặt hàng trong hệ thống//
 const getAllOrder = async (req, res) => {
   try {
       const data = await orderService.getAllOrder()

@@ -68,11 +68,12 @@ const AccountComp = () => {
     // }
   }, [dataUser]);
 
+  // Get thong tin nguoi dung
   const handleGetDetailUser = async (id, access_token) => {
     const res = await userService.getDetailUser(id, access_token);
     dispatch(updateUser({ ...res?.data, access_token }));
   };
-
+  // Update thong tin nguoi dung
   const handleUpdateInforUser = () => {
     const { name, phone, address, city } = stateUserDetail;
     if (name && phone && address && city) {
@@ -89,7 +90,7 @@ const AccountComp = () => {
   };
 
   const [form] = Form.useForm();
-
+  // thya doi Xoa Update
   const handleCancelUpdate = () => {
     setStateUserDetail({
       name: "",

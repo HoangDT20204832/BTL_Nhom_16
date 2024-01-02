@@ -31,6 +31,7 @@ const AdminPage = () => {
 //       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
 //     }
 //   };
+  // Xuat Page
 const renderPage = (key) =>{
     switch(key){
         case 'user':
@@ -43,6 +44,7 @@ const renderPage = (key) =>{
             return <></>
     }
 }   
+  // Xu ly Click menu
 const handleOnClickMenu = ({key}) =>{
     // console.log('onClickMenu',{item, key, keyPath, domEvent})
     setKeySelected(key)
