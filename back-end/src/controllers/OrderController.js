@@ -2,7 +2,7 @@ const orderService = require("../services/OrderService");
 const JwtService = require("../services/JwtService");
 const createOrder = async (req, res) => {   
   try {
-    console.log("req.body", req.body);
+    // console.log("req.body", req.body);
     const {orderItems, paymentMethod,deliveryMethod, itemsPrice, shippingPrice, totalPrice, fullName,address, 
         city,phone,user} = req.body;
     if ( !paymentMethod ||!deliveryMethod|| !itemsPrice  || !totalPrice || !fullName || !address || 

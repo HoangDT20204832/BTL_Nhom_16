@@ -144,8 +144,8 @@ const refreshToken = async (req, res) => {
   try {
 
     // console.log("req.cookie", req.cookies)
-    // let token  = req.headers.token.split(" ")[1];
-    let token  = req.cookies.refresh_token //gán giá trị token cho refresh_token lưu ở cookie
+    let token  = req.headers.token.split(" ")[1];
+    // let token  = req.cookies.refresh_token //gán giá trị token cho refresh_token lưu ở cookie
 
     if (!token) {
      return res.status(200).json({
